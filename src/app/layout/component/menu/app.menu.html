@@ -1,0 +1,36 @@
+<ul class="layout-menu">
+    <li>
+        <div class="min-h-8 pt-4 pb-4">
+            <div class="flex gap-4 items-center">
+                <a routerLink="/">
+                    <img [src]="layoutService.layoutConfig().darkTheme ? 'assets/latestWhite.svg' : 'assets/latestBlack.svg'" alt="logo" width="150" />
+                </a>
+            </div>
+        </div>
+    </li>
+    @for (item of sideNavItems(); track item.label) {
+    <li>
+        @if (item.routerLink && item.visible !== false) {
+        <a class="menu-link" (click)="item.command" [routerLink]="item.routerLink" routerLinkActive="active-route" [routerLinkActiveOptions]="{ exact: true, queryParams: 'subset' }">
+            <i [ngClass]="item.icon" class="layout-menuitem-icon"></i>
+            <span class="layout-menuitem-text">{{ item.label }}</span>
+        </a>
+        }
+    </li>
+    }
+    <div class="last-items mb-2">
+        <li>
+            <a class="menu-link" [routerLink]="'settings'" routerLinkActive="active-route" [routerLinkActiveOptions]="{ exact: true }">
+                <i [ngClass]="settingsItem.icon" class="layout-menuitem-icon"></i>
+                <span class="layout-menuitem-text">{{ settingsItem.label }}</span>
+            </a>
+        </li>
+        <li>
+            <a class="menu-link" (click)="deconnect()" routerLinkActive="active-route" [routerLinkActiveOptions]="{ exact: true }">
+                <i [ngClass]="deconnecionItem.icon" class="layout-menuitem-icon"></i>
+                <span class="layout-menuitem-text">{{ deconnecionItem.label }}</span>
+            </a>
+        </li>
+        <!-- <li [ngStyle]="{padding: '25px'}"></li> -->
+    </div>
+</ul>

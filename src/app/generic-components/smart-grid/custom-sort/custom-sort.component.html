@@ -1,0 +1,3 @@
+<button type="button" class="sort-button" (click)="onSortClick()" [attr.aria-label]="sortValue() === 1 ? 'Sort ascending' : sortValue() === -1 ? 'Sort descending' : 'Sort'">
+    <i [class]="getIconClass()"></i>
+</button>

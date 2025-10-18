@@ -1,0 +1,61 @@
+<div class="more-container">
+    <app-smart-section [editMode]="editMode()" title="Paramètres des utilisateurs">
+        <ng-template #main> </ng-template>
+    </app-smart-section>
+    <app-smart-section [editMode]="false" title="Paramètres des rôles">
+        <!-- <ng-template #right>
+            <button pButton class="p-button-sm" outlined>
+                <i class="pi pi-plus" pButtonIcon></i>
+            </button>
+        </ng-template> -->
+        <ng-template #main>
+            <app-smart-grid
+                [title]="'Liste des rôles'"
+                [(data)]="roles"
+                [columns]="colDefsRoles()"
+                [(tableState)]="tableStateRoles"
+                [(totalRecords)]="totalRecordsRoles"
+                [(loading)]="loadingRoles"
+                [(customComponents)]="customComponents"
+            ></app-smart-grid>
+        </ng-template>
+    </app-smart-section>
+    <app-smart-section [editMode]="editMode()" title="Paramètres des statuts" [buttonIcon]="'pi pi-plus'" (onAddClick)="onAddClickStatus()">
+        <ng-template #main>
+            <app-smart-grid
+                [(data)]="statusesAccount"
+                [columns]="colDefsStatusesAccount()"
+                [(tableState)]="tableStateStatusesAccount"
+                [(totalRecords)]="totalRecordsStatusesAccount"
+                [(loading)]="loadingStatusesAccount"
+                [(customComponents)]="customComponents"
+                [title]="'Liste des statuts'"
+            ></app-smart-grid>
+        </ng-template>
+    </app-smart-section>
+    <app-smart-section [editMode]="editMode()" title="Paramètres des langues" (onAddClick)="onCreateClickLanguage()" [buttonIcon]="'pi pi-plus'">
+        <ng-template #main>
+            <app-smart-grid
+                [(data)]="languages"
+                [columns]="colDefsLanguages()"
+                [(tableState)]="tableStateLanguages"
+                [(totalRecords)]="totalRecordsLanguages"
+                [(loading)]="loadingLanguages"
+                [(customComponents)]="customComponents"
+                [editMode]="editModeLanguages()"
+                [title]="'Liste des langues'"
+            ></app-smart-grid>
+        </ng-template>
+    </app-smart-section>
+</div>
+
+<!-- modals  -->
+@if (showEditModalLanguage()) {
+    <app-modal-create-language [(visible)]="showEditModalLanguage" (onSubmit)="onSubmitLanguage()" [language]="selectedLanguage()"></app-modal-create-language>
+}
+@if (showEditModalRole()) {
+    <app-modal-edit-role [(visible)]="showEditModalRole" (onSubmit)="onSubmitRole()" [role]="selectedRole()"></app-modal-edit-role>
+}
+@if (showEditModalStatus()) {
+    <app-modal-create-edit-status [(visible)]="showEditModalStatus" (onSubmit)="onSubmitStatus()" [status]="selectedStatus()"></app-modal-create-edit-status>
+}

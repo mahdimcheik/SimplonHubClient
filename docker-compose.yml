@@ -1,0 +1,10 @@
+services:
+  skill-hive:
+    image: mahdimcheik/skillhive:prod
+    ports:
+      - 80:80
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - skill-hive-network
+# useless comment

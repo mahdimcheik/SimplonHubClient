@@ -1,0 +1,41 @@
+/* You can add global styles to this file, and also import other style files */
+@use './tailwind.css';
+@use './assets/layout/layout.scss';
+@use 'primeicons/primeicons.css';
+@use './assets/demo/demo.scss';
+
+* {
+    user-select: none;
+    caret-color: transparent;
+}
+
+input,
+textarea {
+    caret-color: auto;
+}
+
+.scrollbar-off {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+.first:hover {
+    transform: scale(1.5);
+}
+
+// full calendar style
+.fc {
+    min-height: 500px;
+    height: calc(100vh - 100px) !important;
+    max-height: 800px;
+
+    width: 100%;
+    overflow: hidden !important;
+}

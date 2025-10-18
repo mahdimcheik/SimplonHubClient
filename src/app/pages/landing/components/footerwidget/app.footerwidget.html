@@ -1,0 +1,13 @@
+<div class="py-2 px-12 mx-0 mt-20 lg:mx-20">
+    <div class="flex flex-col justify-center items-center">
+        <a (click)="router.navigate(['/'])" class="flex flex-wrap items-center justify-center md:justify-start md:mb-0 mb-6 cursor-pointer">
+            <img [src]="layoutService.layoutConfig().darkTheme ? 'assets/latestWhite.svg' : 'assets/latestBlack.svg'" alt="logo" width="100" />
+        </a>
+
+        <div class="flex flex-col items-center justify-center mt-4">
+            <p-button variant="text" [routerLink]="'/mentions-legales'">Mentions légales</p-button>
+
+            <h4 class="font-medium text-2xl leading-normal mb-6 text-surface-900 dark:text-surface-0 !mt-0">2 Bois Charles, Clérac, 17270.</h4>
+        </div>
+    </div>
+</div>

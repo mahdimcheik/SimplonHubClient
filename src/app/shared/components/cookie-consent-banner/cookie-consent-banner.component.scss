@@ -1,0 +1,150 @@
+.cookie-consent-banner {
+    /* Ensure banner stays above other content */
+    z-index: 9999;
+
+    /* Smooth slide-up animation */
+    animation: slideUp 0.3s ease-out;
+
+    /* Add subtle backdrop filter for better readability */
+    backdrop-filter: blur(8px);
+
+    /* Add border gradient for visual appeal */
+    background: linear-gradient(to bottom, rgba(var(--surface-0), 0.95), rgba(var(--surface-0), 0.98));
+
+    /* Dark mode support */
+    &.dark {
+        background: linear-gradient(to bottom, rgba(var(--surface-800), 0.95), rgba(var(--surface-800), 0.98));
+    }
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.cookie-category {
+    transition: all 0.2s ease;
+
+    &:hover {
+        border-color: var(--primary-color);
+        box-shadow: 0 2px 8px rgba(var(--primary-color), 0.1);
+    }
+
+    /* Add visual feedback for checkbox interaction */
+    p-checkbox {
+        .p-checkbox-box {
+            transition: all 0.2s ease;
+        }
+
+        &:hover .p-checkbox-box {
+            border-color: var(--primary-color);
+        }
+    }
+}
+
+/* Custom styles for better mobile experience */
+@media (max-width: 768px) {
+    .cookie-consent-banner {
+        padding: 1rem;
+
+        .flex-col {
+            gap: 1rem;
+        }
+
+        .order-1 {
+            order: 1;
+        }
+
+        .order-2 {
+            order: 2;
+        }
+
+        .order-3 {
+            order: 3;
+        }
+    }
+}
+
+/* Ensure dialog is properly styled */
+::ng-deep {
+    .p-dialog .p-dialog-content {
+        padding: 1.5rem;
+    }
+
+    .p-dialog .p-dialog-header {
+        background: var(--surface-0);
+        border-bottom: 1px solid var(--surface-200);
+    }
+
+    .p-dialog .p-dialog-footer {
+        background: var(--surface-0);
+        border-top: 1px solid var(--surface-200);
+    }
+
+    /* Dark mode dialog styles */
+    .p-dialog-mask .p-dialog {
+        .p-dialog-header,
+        .p-dialog-footer {
+            background: var(--surface-800);
+            border-color: var(--surface-600);
+        }
+    }
+}
+
+/* Accessibility improvements */
+.cookie-consent-banner {
+    /* Focus management */
+    &:focus-within {
+        outline: 2px solid var(--primary-color);
+        outline-offset: 2px;
+    }
+
+    /* High contrast support */
+    @media (prefers-contrast: high) {
+        border-width: 2px;
+        border-color: var(--text-color);
+    }
+
+    /* Reduce motion support */
+    @media (prefers-reduced-motion: reduce) {
+        animation: none;
+    }
+}
+
+/* Cookie category specific styling */
+.cookie-category {
+    /* Visual hierarchy */
+    h4 {
+        color: var(--text-color);
+        font-weight: 600;
+    }
+
+    /* Icon styling */
+    i {
+        font-size: 1.1rem;
+    }
+
+    /* Checkbox alignment */
+    p-checkbox {
+        align-self: flex-start;
+        margin-top: 0.25rem;
+    }
+}
+
+/* Button group improvements */
+.flex.gap-2 {
+    /* Better button spacing on mobile */
+    @media (max-width: 640px) {
+        flex-direction: column;
+
+        p-button {
+            width: 100%;
+        }
+    }
+}

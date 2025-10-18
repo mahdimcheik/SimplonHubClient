@@ -1,0 +1,20 @@
+<!-- Adresses -->
+<app-smart-section [title]="title" [editMode]="editMode()" [buttonIcon]="buttonIcon()" (onAddClick)="openModal()">
+    <ng-template #main>
+        @for (address of addresses(); track address.id) {
+            <app-address [address]="address" [editMode]="editMode()"></app-address>
+        }
+    </ng-template>
+
+    <ng-template #empty>
+        <div class="text-center">
+            <i class="pi pi-map-marker text-gray-400 text-4xl mb-4"></i>
+            <p class="text-gray-500">Pas d'adresses fournies</p>
+            <button pButton label="Ajouter votre première adresse" class="mt-3 p-button-outlined" (click)="openModal()"></button>
+        </div>
+    </ng-template>
+</app-smart-section>
+
+@if (showEditModal()) {
+    <app-modal-address [(showEditModal)]="showEditModal" (onClose)="cancel()"></app-modal-address>
+}

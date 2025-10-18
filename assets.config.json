@@ -1,0 +1,22 @@
+{
+  "android": {
+    "icon": {
+      "sources": ["assets/icon.png"],
+      "generator": "@capacitor/assets"
+    },
+    "splash": {
+      "sources": ["assets/splash.png"],
+      "generator": "@capacitor/assets"
+    }
+  },
+  "ios": {
+    "icon": {
+      "sources": ["assets/icon.png"],
+      "generator": "@capacitor/assets"
+    },
+    "splash": {
+      "sources": ["assets/splash.png"],
+      "generator": "@capacitor/assets"
+    }
+  }
+}

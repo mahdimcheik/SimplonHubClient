@@ -1,0 +1,17 @@
+<main [class]="`p-2 min-h-[100px] flex items-center   rounded-lg bg-white dark:bg-[var(--primary-contrast-color)]`" [style]="`box-shadow: inset 4px 0 0 0 ${innerColor()};`">
+    <div class="start flex-1">
+        @if (mainContent()) {
+            <ng-container [ngTemplateOutlet]="mainContent()"></ng-container>
+        }
+    </div>
+    <div class="flex gap-2 p-2">
+        @if (editMode()) {
+            <button pButton class="p-button-sm" outlined (click)="onDeleteClick.emit()" severity="danger">
+                <i [class]="deleteButtonIcon()" pButtonIcon></i>
+            </button>
+            <button pButton class="p-button-sm" (click)="onEditClick.emit()">
+                <i [class]="editButtonIcon()" pButtonIcon></i>
+            </button>
+        }
+    </div>
+</main>

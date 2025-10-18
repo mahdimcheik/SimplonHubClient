@@ -1,0 +1,19 @@
+<div class="w-full lg:w-1/2 p-6 left-side scrollbar-off">
+    <div class="mt-12 flex flex-col items-center w-full">
+        <h1 class="text-2xl xl:text-3xl font-extrabold">Bienvenu(e)</h1>
+
+        <p-fluid class="flex justify-center">
+            <div class="flex flex-col items-center justify-center" class="w-full sm:w-4/5 mt-8 md:w-3/5">
+                <div class="gap-4 flex flex-col items-center">
+                    <h1 class="text-surface-900 dark:text-surface-0 font-bold text-5xl mb-2">Chez Skill Hive</h1>
+                    <span class="text-surface-600 dark:text-surface-0 font-semibold text-3xl mb-2">Votre compte a été crée avec succès.</span>
+                    <span class="text-muted-color mb-8" RequiredAsterisk>Pensez à l'activer (regardez les emails indésirables).</span>
+                    <img src="./assets/welcome.svg" alt="Error" class="mb-8" width="80%" />
+                    <div class="col-span-12 mt-8 text-center">
+                        <a pButton label="Connexion" [routerLink]="'/auth/login'" severity="success"></a>
+                    </div>
+                </div>
+            </div>
+        </p-fluid>
+    </div>
+</div>

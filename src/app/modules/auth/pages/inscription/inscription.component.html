@@ -1,0 +1,13 @@
+<div class="mt-12 flex flex-col items-center w-full lg:w-[50vw]">
+    <app-logo />
+    <app-configurable-form [structure]="inscriptionFormStructure" #formComponent (onFormSubmit)="submit($event)" (onCancel)="router.navigate(['/auth/login'])"> </app-configurable-form>
+    <div class="flex items-center justify-between mb-8 gap-8">
+        <span class="font-medium no-underline ml-2 text-right cursor-pointer text-primary" [routerLink]="'/auth/login'">Connexion</span>
+
+        <span class="font-medium no-underline ml-2 text-right cursor-pointer text-primary" [routerLink]="'/auth/forgot-password'">Mot de passe oublié?</span>
+    </div>
+    <div class="flex justify-center w-full gap-2">
+        <p-button outlined label="Accueil" styleClass="w-full sm:w-auto" (onClick)="router.navigate(['/'])"></p-button>
+        <p-button label="Inscription" styleClass="w-full sm:w-auto" (onClick)="formComponent.onSubmit()"></p-button>
+    </div>
+</div>

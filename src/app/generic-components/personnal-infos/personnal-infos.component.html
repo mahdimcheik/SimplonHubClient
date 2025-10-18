@@ -1,0 +1,47 @@
+<app-smart-section [title]="'Profil Utilisateur'" [editMode]="editMode()" (onAddClick)="EditPersonnalInfos()">
+    <ng-template #main>
+        <div class="space-y-4">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <div class="flex items-center gap-4 max-w-6xl w-6xl">
+                    <p-image src="https://primefaces.org/cdn/primeng/images/galleria/galleria10.jpg" alt="Image" [preview]="true" class="w-20 h-20 rounded-full" />
+                    <div>
+                        <h4 class="text-xl font-bold !mb-0">{{ user().firstName }} {{ user().lastName }}</h4>
+                        <p class="text-gray-600 !mb-0">{{ user().roles?.join(', ') }}</p>
+                        <p class="text-sm text-gray-500 !mb-0">{{ user().email }}</p>
+                    </div>
+                </div>
+
+                <div class="p-4 rounded-lg">
+                    <label class="text-sm font-semibold text-gray-600 dark:text-gray-50">Langages</label>
+                    <app-chips-list [chips]="programmingLanguages()"></app-chips-list>
+                </div>
+            </div>
+
+            <div class="grid gap-4">
+                <label class="text-sm font-semibold text-gray-600">Description</label>
+                <p>{{ user().description }}</p>
+            </div>
+        </div>
+    </ng-template>
+</app-smart-section>
+<!-- modal edit infos -->
+@if (editPersonnalInfosDialogVisible()) {
+    <p-drawer
+        header="Editer les informations personnelles"
+        position="right"
+        [visible]="editPersonnalInfosDialogVisible()"
+        [style]="{ width: '50vw' }"
+        [modal]="true"
+        [closable]="true"
+        (closeOnEscape)="(true)"
+        (onHide)="editPersonnalInfosDialogVisible.set(false)"
+    >
+        <div class="p-fluid formgrid grid">
+            <app-configurable-form [structure]="personnalInfosFormConfig()" (onFormSubmit)="submit($event)" (onCancel)="cancel()"></app-configurable-form>
+        </div>
+        <p-footer>
+            <button pButton type="button" label="Annuler" icon="pi pi-times" class="p-button-text" (click)="editPersonnalInfosDialogVisible.set(false)"></button>
+            <button pButton type="button" label="Enregistrer" icon="pi pi-check" (click)="editPersonnalInfosDialogVisible.set(false)"></button>
+        </p-footer>
+    </p-drawer>
+}

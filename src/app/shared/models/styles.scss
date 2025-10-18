@@ -1,0 +1,141 @@
+@layer tailwind-base, primeng, tailwind-utilities;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import 'primeicons/primeicons.css';
+@import './variables.scss';
+
+// $primary-color: var(--primary-color);
+// $primary-color-text: var(--primary-color-text);
+// $secondary-color: var(--surface-b);
+// $secondary-color-text: var(--text-color-secondary);
+// $accent-color: var(--primaryDark);
+// $text-color: var(
+//   --text-color
+// ); // fonctionne avec surface et proche de $secondary-color-text
+// $padding: 16px;
+$surface-a: var(--surface-a);
+// $surface-b: var(--surface-b);
+// $surface-c: var(--surface-c);
+// $surface-d: var(--surface-d);
+// $surface-e: var(--surface-e);
+// $surface-f: var(--surface-f);
+
+html {
+    width: 100%;
+}
+.text-truncate {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    margin: 0 auto;
+}
+
+.scrollbar-off {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+* {
+    box-sizing: border-box;
+}
+.dropdown {
+    min-width: 100%;
+    height: 2.5rem;
+}
+// buttons
+.p-button-primary {
+    outline: 2px solid $primary-color;
+    padding: 4px;
+}
+.p-button-secondary {
+    outline: 2px solid $secondary-color-text;
+    padding: 4px;
+}
+.p-button-danger {
+    outline-width: 2px;
+    outline-style: solid;
+    padding: 4px;
+}
+
+.p-button-cancel {
+    outline: 2px solid $secondary-color-text;
+    padding: 4px;
+}
+.p-button-success {
+    outline: 2px solid $primary-color;
+    padding: 4px;
+}
+.p-button-warning {
+    outline: 2px solid $surface-a;
+    padding: 4px;
+}
+.p-button-info {
+    outline: 2px solid $surface-a;
+    padding: 4px;
+}
+.btn-save {
+    background-color: $primary-color;
+    border: 2px solid $primary-color-text;
+    color: $primary-color-text;
+    width: 100%;
+}
+
+// inputs
+.p-calendar .p-inputtext {
+    padding-left: 6px;
+}
+
+.p-dropdown {
+    width: 100%;
+    .p-dropdown-label {
+        padding-left: 6px;
+    }
+}
+.input {
+    outline-width: 2px;
+}
+.input-field {
+    min-width: 350px;
+}
+// fieldset
+.p-fieldset {
+    outline: 2px solid $primary-color;
+}
+
+// badge
+.p-badge {
+    position: relative;
+    top: -14px;
+    left: -0.5rem;
+}
+.item-number {
+    position: relative;
+    font-size: 16px;
+    top: -0.5rem;
+    left: -14px;
+}
+
+.fieldset-edit {
+    min-width: 300px;
+    margin: 0 auto;
+    padding: 10px;
+    .price-reduction {
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+    }
+}

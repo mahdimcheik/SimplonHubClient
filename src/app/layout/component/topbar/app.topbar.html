@@ -1,0 +1,58 @@
+<header class="layout-topbar">
+    <div class="layout-topbar-logo-container">
+        <button class="layout-menu-button layout-topbar-action" aria-label="Ouvrir le menu de navigation" (click)="layoutService.toggleSidebar()" [attr.aria-expanded]="layoutService.isSidebarActive()">
+            <i class="pi pi-bars"></i>
+        </button>
+        <a class="layout-topbar-logo ml-2" routerLink="/">
+            <img [src]="layoutService.layoutConfig().darkTheme ? 'assets/latestWhite.svg' : 'assets/latestBlack.svg'" alt="logo" width="150" />
+        </a>
+    </div>
+
+    <div class="layout-topbar-actions">
+        <div class="layout-config-menu">
+            <button type="button" class="layout-topbar-action" (click)="toggleDarkMode()">
+                <i [ngClass]="{ 'pi ': true, 'pi-moon': layoutService.isDarkTheme(), 'pi-sun': !layoutService.isDarkTheme() }"></i>
+            </button>
+        </div>
+
+        <button class="layout-topbar-menu-button layout-topbar-action" pStyleClass="@next" enterFromClass="hidden" enterActiveClass="animate-scalein" leaveToClass="hidden" leaveActiveClass="animate-fadeout" [hideOnOutsideClick]="true">
+            <i class="pi pi-ellipsis-v"></i>
+        </button>
+
+        <div class="layout-topbar-menu hidden lg:block">
+            <div class="layout-topbar-menu-content">
+                <a type="button" class="layout-topbar-action h-[50px] flex items-start" [routerLink]="[calendarLink()]">
+                    <i class="pi pi-calendar" style="font-size: 1.5rem"></i>
+                    <span class="pl-2">Réservations</span>
+                </a>
+                @if (user().email && !isAdmin) {
+                <a type="button" class="layout-topbar-action h-[50px] flex items-start" [routerLink]="['/dashboard/reservation/orders-student']">
+                    <div class="relative min-w-[32px]">
+                        <svg width="32" height="32" class="">
+                            <g>
+                                <path
+                                    id="svg_1"
+                                    d="m4,7c-0.55,0 -1,0.45 -1,1s0.45,1 1,1l2.219,0l2.625,10.5c0.222,0.89 1.02,1.5 1.937,1.5l12.469,0c0.902,0 1.668,-0.598 1.906,-1.469l2.594,-9.531l-2.094,0l-2.406,9l-12.469,0l-2.625,-10.5a1.983,1.983 0 0 0 -1.936,-1.5l-2.22,0zm18,14c-1.645,0 -3,1.355 -3,3s1.355,3 3,3s3,-1.355 3,-3s-1.355,-3 -3,-3zm-9,0c-1.645,0 -3,1.355 -3,3s1.355,3 3,3s3,-1.355 3,-3s-1.355,-3 -3,-3zm0,2c0.563,0 1,0.438 1,1c0,0.563 -0.438,1 -1,1c-0.563,0 -1,-0.438 -1,-1c0,-0.563 0.438,-1 1,-1zm9,0c0.563,0 1,0.438 1,1c0,0.563 -0.438,1 -1,1c-0.563,0 -1,-0.438 -1,-1c0,-0.563 0.438,-1 1,-1z"
+                                    fill="currentColor"
+                                />
+                            </g>
+                        </svg>
+                        <p-badge class="absolute bottom-[10px] left-[6px]" [value]="'9+'" severity="info" [style]="{backgroundColor: 'transparent', color: 'var(--primary-color)', fontSize: '16px'}"></p-badge>
+                    </div>
+                    <span class="pl-2">Commandes</span>
+                </a>
+                }
+                <a type="button" class="layout-topbar-action h-[50px] flex items-start" [routerLink]="['/dashboard/profile/me']">
+                    <div class="relative min-w-[32px]">
+                        @if (user().email) {
+                        <p-avatar [image]="''" shape="circle"></p-avatar>
+                        } @else {
+                        <i class="pi pi-user" style="font-size: 1.5rem"></i>
+                        }
+                    </div>
+                    <span class="pl-2">Profil</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</header>

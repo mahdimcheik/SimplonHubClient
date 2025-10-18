@@ -1,0 +1,19 @@
+<app-smart-section [title]="title" [editMode]="editMode()" [buttonIcon]="buttonIcon()" (onAddClick)="openModal()">
+    <ng-template #main>
+        @for (cursus of cursuses(); track cursus.id) {
+            <app-cursus [cursus]="cursus" [editMode]="editMode()"></app-cursus>
+        }
+    </ng-template>
+
+    <ng-template #empty>
+        <div class="text-center">
+            <i class="pi pi-calendar-times text-gray-400 text-4xl mb-4"></i>
+            <p class="text-gray-500">Pas d'expériences fournies</p>
+            <button pButton label="Ajouter votre première expérience" class="mt-3 p-button-outlined"></button>
+        </div>
+    </ng-template>
+</app-smart-section>
+
+@if (showEditModal()) {
+    <app-modal-cursus [(showEditModal)]="showEditModal" (onClose)="cancel()"></app-modal-cursus>
+}

@@ -1,0 +1,8 @@
+<div class="flex">
+    <p>{{ label() }}</p>
+    @if (editMode()) {
+        <input pInputText [disabled]="disabled()" type="text" [value]="value()" (onChange)="onChange.emit($event.target.value)" />
+    } @else {
+        <p>{{ value() }}</p>
+    }
+</div>

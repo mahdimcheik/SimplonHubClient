@@ -1,0 +1,614 @@
+@if (structure(); as structureData) {
+    <div class="w-full max-w-6xl mx-auto overflow-hidden scrollbar-off configurable-form-container" [class]="structureData.styleClass || ''">
+        <!-- Form Header -->
+        <div class="px-6 py-8 pb-2 configurable-form-header">
+            <div class="flex flex-col items-center configurable-form-header-content">
+                @if (structureData.imgUrl) {
+                    <img [src]="structureData.imgUrl" alt="Form Icon" class="w-[350px] h-auto rounded-full" />
+                }
+                <h2 class="text-2xl sm:text-3xl font-bold configurable-form-title self-center">{{ structureData.label || structureData.name }}</h2>
+                @if (structureData.description) {
+                    <p class="text-3xl leading-relaxed configurable-form-description">{{ structureData.description }}</p>
+                }
+            </div>
+        </div>
+
+        <!-- Form Content -->
+        <div class="p-0 lg:p-6 configurable-form-body">
+            <form [formGroup]="form()" (ngSubmit)="onSubmit()" class="space-y-8 configurable-form-content">
+                <!-- Global Validation Errors -->
+                @if (hasGlobalValidationErrors() && isFormTouched()) {
+                    <div class="p-4 bg-red-50 border-l-4 border-red-400 rounded-r-lg shadow-sm configurable-form-global-errors">
+                        <div class="flex items-start gap-3">
+                            <i class="pi pi-exclamation-triangle text-red-500 mt-0.5 flex-shrink-0"></i>
+                            <div class="flex-1">
+                                <p class="text-sm font-medium text-red-800">Erreurs de validation globales :</p>
+                                <ul class="mt-2 space-y-1">
+                                    @for (error of getGlobalValidationErrors(); track error) {
+                                        <li class="text-sm text-red-700 flex items-start gap-2">
+                                            <span class="w-1 h-1 bg-red-400 rounded-full mt-2 flex-shrink-0"></span>
+                                            <span>{{ error }}</span>
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                <!-- Unified form elements (fields and groups in order) -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 configurable-form-elements-container">
+                    @for (element of sortedFormElements(); track trackByElementId($index, element)) {
+                        <!-- Handle individual fields -->
+                        @if (isFormField(element)) {
+                            <div
+                                class="rounded-xl p-6 border border-gray-200 hover:shadow-md transition-shadow duration-200 configurable-form-section configurable-form-direct-fields"
+                                [class.lg:col-span-2]="element.fullWidth || element.type === 'textarea'"
+                                [class.lg:col-span-1]="!element.fullWidth && element.type !== 'textarea'"
+                            >
+                                <div class="space-y-2 configurable-form-field-container configurable-form-field">
+                                    <!-- Field Label -->
+                                    <label [for]="element.id" class="block text-sm font-medium configurable-form-field-label">
+                                        <span class="configurable-form-field-label-text">{{ element.label }}</span>
+                                        @if (element.required) {
+                                            <span class="text-red-500 ml-1 configurable-form-field-required">*</span>
+                                        }
+                                    </label>
+
+                                    <!-- Input Container -->
+                                    <div class="relative configurable-form-input-container">
+                                        <!-- All input types -->
+                                        @if (element.type === 'text' || element.type === 'email') {
+                                            <input
+                                                pInputText
+                                                [id]="element.id"
+                                                [type]="element.type"
+                                                [formControlName]="element.name"
+                                                [placeholder]="element.placeholder || ''"
+                                                [readonly]="element.readonly || false"
+                                                class="w-full configurable-form-input configurable-form-text-input"
+                                                [class.p-invalid]="isDirectFieldInvalid(element.name)"
+                                            />
+                                        }
+
+                                        @if (element.type === 'password') {
+                                            <p-inputgroup>
+                                                <input
+                                                    pInputText
+                                                    [id]="element.id"
+                                                    [type]="getPasswordFieldType(element.id)"
+                                                    [formControlName]="element.name"
+                                                    [placeholder]="element.placeholder || ''"
+                                                    [readonly]="element.readonly || false"
+                                                    class="w-full configurable-form-input configurable-form-text-input"
+                                                    [class.p-invalid]="isDirectFieldInvalid(element.name)"
+                                                />
+                                                <p-inputGroupAddon>
+                                                    <button type="button" class="p-button-icon-only p-button-text" (click)="togglePasswordVisibility(element.id)" [attr.aria-label]="isPasswordVisible(element.id) ? 'Hide password' : 'Show password'">
+                                                        <i [class]="isPasswordVisible(element.id) ? 'pi pi-eye-slash' : 'pi pi-eye'"></i>
+                                                    </button>
+                                                </p-inputGroupAddon>
+                                            </p-inputgroup>
+                                        }
+
+                                        @if (element.type === 'number') {
+                                            <p-inputNumber
+                                                [id]="element.id"
+                                                [formControlName]="element.name"
+                                                [placeholder]="element.placeholder || ''"
+                                                [readonly]="element.readonly || false"
+                                                class="w-full configurable-form-input configurable-form-number-input"
+                                                [class.p-invalid]="isDirectFieldInvalid(element.name)"
+                                            />
+                                        }
+
+                                        @if (element.type === 'date') {
+                                            <p-datepicker
+                                                [timeOnly]="element.timeOnly || false"
+                                                [showTime]="element.showTime || false"
+                                                [id]="element.id"
+                                                [formControlName]="element.name"
+                                                class="w-full configurable-form-input configurable-form-date-input"
+                                                [class.p-invalid]="isDirectFieldInvalid(element.name)"
+                                            />
+                                        }
+
+                                        @if (element.type === 'color') {
+                                            <p-colorpicker [id]="element.id" [formControlName]="element.name" class="configurable-form-input configurable-form-color-input" [class.p-invalid]="isDirectFieldInvalid(element.name)" />
+                                        }
+
+                                        @if (element.type === 'textarea') {
+                                            <textarea
+                                                pTextarea
+                                                [id]="element.id"
+                                                [formControlName]="element.name"
+                                                [placeholder]="element.placeholder || ''"
+                                                [readonly]="element.readonly || false"
+                                                rows="4"
+                                                class="w-full configurable-form-input configurable-form-textarea"
+                                                [class.p-invalid]="isDirectFieldInvalid(element.name)"
+                                            ></textarea>
+                                        }
+
+                                        @if (element.type === 'select') {
+                                            <p-select
+                                                [id]="element.id"
+                                                [formControlName]="element.name"
+                                                [options]="getSelectOptions(element)"
+                                                [optionLabel]="element.displayKey || 'label'"
+                                                [optionValue]="element.compareKey || 'value'"
+                                                [placeholder]="element.placeholder || 'Sélectionnez une option'"
+                                                class="w-full configurable-form-input configurable-form-select"
+                                                [class.p-invalid]="isDirectFieldInvalid(element.name)"
+                                            >
+                                                <ng-template pTemplate="item" let-option>
+                                                    {{ getOptionLabel(option, element) }}
+                                                </ng-template>
+                                                <ng-template pTemplate="selectedItem" let-option>
+                                                    {{ getOptionLabel(option, element) }}
+                                                </ng-template>
+                                            </p-select>
+                                        }
+
+                                        @if (element.type === 'multiselect') {
+                                            <p-multiselect
+                                                [id]="element.id"
+                                                [formControlName]="element.name"
+                                                [options]="getSelectOptions(element)"
+                                                [optionLabel]="element.displayKey || 'label'"
+                                                [optionValue]="element.compareKey || 'value'"
+                                                [placeholder]="element.placeholder || 'Sélectionnez vos options'"
+                                                [selectAll]="true"
+                                                [showToggleAll]="true"
+                                                selectAllLabel="Sélectionner tout"
+                                                class="w-full configurable-form-input configurable-form-select"
+                                                [class.p-invalid]="isDirectFieldInvalid(element.name)"
+                                            >
+                                                <ng-template pTemplate="item" let-option>
+                                                    {{ getOptionLabel(option, element) }}
+                                                </ng-template>
+                                                <ng-template pTemplate="selectedItems" let-value>
+                                                    @for (option of value; track option) {
+                                                        <div class="inline-flex items-center py-0.5 pl-2 pr-1 rounded-full text-sm bg-primary text-primary-contrast mr-2">
+                                                            <span>{{ getOptionLabel(option, element) }}</span>
+                                                        </div>
+                                                    }
+                                                </ng-template>
+                                            </p-multiselect>
+                                        }
+
+                                        @if (element.type === 'checkbox') {
+                                            <div class="flex items-start gap-3 configurable-form-checkbox-container">
+                                                <p-checkbox [inputId]="element.id" [formControlName]="element.name" [binary]="true" class="configurable-form-input configurable-form-checkbox" />
+                                                <label [for]="element.id" class="text-sm leading-relaxed cursor-pointer configurable-form-checkbox-label">
+                                                    {{ element.placeholder || element.label }}
+                                                </label>
+                                            </div>
+                                        }
+
+                                        @if (element.type === 'radio') {
+                                            <div class="space-y-3 configurable-form-radio-container">
+                                                @for (option of getSelectOptions(element); track option) {
+                                                    <div class="flex items-center gap-3 configurable-form-radio-option">
+                                                        <p-radiobutton
+                                                            [id]="element.id + '_' + getOptionValue(option, element)"
+                                                            [formControlName]="element.name"
+                                                            [value]="getOptionValue(option, element)"
+                                                            class="configurable-form-input configurable-form-radio"
+                                                        />
+                                                        <label [for]="element.id + '_' + getOptionValue(option, element)" class="text-sm cursor-pointer configurable-form-radio-label">
+                                                            {{ getOptionLabel(option, element) }}
+                                                        </label>
+                                                    </div>
+                                                }
+                                            </div>
+                                        }
+
+                                        @if (element.type === 'file') {
+                                            <app-custom-upload-file
+                                                [id]="element.id"
+                                                [name]="element.name"
+                                                [formControlName]="element.name"
+                                                [accept]="element.accept || '*'"
+                                                [multiple]="element.multiple || false"
+                                                [maxFileSize]="element.maxFileSize || 1000000"
+                                                [chooseLabel]="element.chooseLabel || 'Choisir'"
+                                                [uploadLabel]="element.uploadLabel || 'Téléverser'"
+                                                [cancelLabel]="element.cancelLabel || 'Annuler'"
+                                                [emptyMessage]="element.emptyMessage || 'Sélectionnez et glissez vos fichiers ici'"
+                                                [mode]="element.mode || 'advanced'"
+                                                [url]="element.url || ''"
+                                                [showUploadButton]="element.showUploadButton !== false"
+                                                [showCancelButton]="element.showCancelButton !== false"
+                                                [auto]="element.auto || false"
+                                                [invalid]="isDirectFieldInvalid(element.name)"
+                                                class="configurable-form-input configurable-form-file-input"
+                                            />
+                                        }
+
+                                        <!-- Field Status Icon -->
+                                        @if (isFormTouched()) {
+                                            <!-- <div class="absolute right-3 top-3 configurable-form-field-status">
+                                                @if (!isDirectFieldInvalid(element.name) && element.type !== 'checkbox' && element.type !== 'radio' && element.type !== 'file') {
+                                                    <i class="pi pi-check-circle text-green-500 text-sm configurable-form-field-status-valid"></i>
+                                                }
+                                                @if (isDirectFieldInvalid(element.name)) {
+                                                    <i class="pi pi-exclamation-circle text-red-500 text-sm configurable-form-field-status-invalid"></i>
+                                                }
+                                            </div> -->
+                                        }
+                                    </div>
+
+                                    <!-- Individual Field Error Message -->
+                                    <!-- @if (getDirectFieldError(element.name); as errorMessage) {
+                                        <div class="flex items-start gap-2 mt-2 configurable-form-field-error">
+                                            <i class="pi pi-exclamation-circle text-red-500 text-sm mt-0.5 flex-shrink-0 configurable-form-field-error-icon"></i>
+                                            <p class="text-sm text-red-600 leading-relaxed configurable-form-field-error-message">{{ errorMessage }}</p>
+                                        </div>
+                                    } -->
+                                </div>
+                            </div>
+                        }
+
+                        <!-- Handle form field groups -->
+                        @if (isFormFieldGroup(element)) {
+                            <div
+                                class="rounded-xl p-6 border border-gray-200 hover:shadow-md transition-shadow duration-200 configurable-form-section configurable-form-field-group lg:col-span-2"
+                                [class]="element.styleClass || ''"
+                                [formGroupName]="element.id"
+                            >
+                                <!-- Group Header -->
+                                <div class="mb-4 configurable-form-section-header configurable-form-field-group-header">
+                                    <div class="flex flex-col configurable-form-section-title-container">
+                                        <div class="flex items-center gap-3 configurable-form-section-title-content">
+                                            @if (element.icon) {
+                                                <div class="flex-shrink-0 p-2 rounded-lg shadow-sm configurable-form-section-icon">
+                                                    <i [class]="element.icon" class="text-lg text-blue-500"></i>
+                                                </div>
+                                            }
+                                            <h3 class="text-lg sm:text-xl p-0 m-0 font-semibold configurable-form-section-title">{{ element.label }}</h3>
+                                        </div>
+                                        @if (element.description) {
+                                            <p class="text-sm leading-relaxed configurable-form-section-description">{{ element.description }}</p>
+                                        }
+
+                                        <!-- Group Validation Status -->
+                                        @let groupValid = isGroupValid(element.id);
+                                        @let groupTouched = isGroupTouched(element.id);
+                                        @let groupValidationErrors = getGroupValidationErrors(element.id);
+                                        @if (groupTouched) {
+                                            <div class="flex-shrink-0 configurable-form-section-status">
+                                                @if (groupValid) {
+                                                    <div class="flex items-center gap-1 px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm configurable-form-section-status-valid">
+                                                        <i class="pi pi-check-circle text-green-500"></i>
+                                                        <span class="hidden sm:inline">Validé</span>
+                                                    </div>
+                                                } @else {
+                                                    @if (groupValidationErrors.length > 0) {
+                                                        <div class="flex items-center gap-1 px-2 py-1 bg-red-100 text-red-700 rounded-full text-sm configurable-form-section-status-invalid">
+                                                            <i class="pi pi-exclamation-triangle text-red-500"></i>
+                                                            <span class="hidden sm:inline">Erreurs</span>
+                                                        </div>
+                                                    }
+                                                }
+                                            </div>
+                                        }
+                                    </div>
+
+                                    <!-- Group-level Validation Errors -->
+                                    @if (hasGroupValidationErrors(element.id) && isGroupTouched(element.id)) {
+                                        <div class="mt-4 p-4 bg-red-50 border-l-4 border-red-400 rounded-r-lg shadow-sm configurable-form-section-errors configurable-form-group-validation-errors">
+                                            <div class="flex items-start gap-3 configurable-form-section-errors-header">
+                                                <i class="pi pi-exclamation-triangle text-red-500 mt-0.5 flex-shrink-0"></i>
+                                                <div class="flex-1 configurable-form-section-errors-content">
+                                                    <p class="text-sm font-medium text-red-800 configurable-form-section-errors-title">Erreurs de validation du groupe :</p>
+                                                    <ul class="mt-2 space-y-1 configurable-form-section-errors-list">
+                                                        @for (error of groupValidationErrors; track error) {
+                                                            <li class="text-sm text-red-700 flex items-start gap-2 configurable-form-section-error-item">
+                                                                <span class="w-1 h-1 bg-red-400 rounded-full mt-2 flex-shrink-0"></span>
+                                                                <span>{{ error }}</span>
+                                                            </li>
+                                                        }
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+
+                                    <!-- Field-level Errors Summary -->
+                                    @if (getGroupErrors(element.id).length > getGroupValidationErrors(element.id).length && isGroupTouched(element.id)) {
+                                        <div class="mt-4 p-4 bg-orange-50 border-l-4 border-orange-400 rounded-r-lg shadow-sm configurable-form-section-field-errors configurable-form-group-errors-summary">
+                                            <div class="flex items-start gap-3 configurable-form-section-field-errors-header">
+                                                <i class="pi pi-info-circle text-orange-500 mt-0.5 flex-shrink-0"></i>
+                                                <div class="flex-1 configurable-form-section-field-errors-content">
+                                                    <p class="text-sm font-medium text-orange-800 configurable-form-section-field-errors-title">Erreurs dans les champs :</p>
+                                                    <ul class="mt-2 space-y-1 configurable-form-section-field-errors-list">
+                                                        @for (error of getGroupErrors(element.id); track error) {
+                                                            @if (!getGroupValidationErrors(element.id).includes(error)) {
+                                                                <li class="text-sm text-orange-700 flex items-start gap-2 configurable-form-section-field-error-item">
+                                                                    <span class="w-1 h-1 bg-orange-400 rounded-full mt-2 flex-shrink-0"></span>
+                                                                    <span>{{ error }}</span>
+                                                                </li>
+                                                            }
+                                                        }
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+
+                                <!-- Fields Grid -->
+                                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 configurable-form-fields-container configurable-form-fields-grid">
+                                    @for (field of getSortedFieldsInGroup(element); track trackByFieldId($index, field)) {
+                                        <div
+                                            class="space-y-2 configurable-form-field-container configurable-form-field"
+                                            [class.lg:col-span-2]="field.fullWidth || field.type === 'textarea'"
+                                            [class.lg:col-span-1]="!field.fullWidth && field.type !== 'textarea'"
+                                        >
+                                            <!-- Field Label -->
+                                            <label [for]="field.id" class="block text-sm font-medium configurable-form-field-label">
+                                                <span class="configurable-form-field-label-text">{{ field.label }}</span>
+                                                @if (field.required) {
+                                                    <span class="text-red-500 ml-1 configurable-form-field-required">*</span>
+                                                }
+                                            </label>
+
+                                            <!-- Input Container -->
+                                            <div class="relative configurable-form-input-container">
+                                                @if (field.type === 'text' || field.type === 'email') {
+                                                    <input
+                                                        #inputField
+                                                        pInputText
+                                                        [id]="field.id"
+                                                        [type]="field.type"
+                                                        [formControlName]="field.name"
+                                                        [placeholder]="field.placeholder || ''"
+                                                        [readonly]="field.readonly || false"
+                                                        class="w-full configurable-form-input configurable-form-text-input"
+                                                        [class.p-invalid]="isFieldInvalid(element.id, field.name)"
+                                                    />
+                                                }
+
+                                                @if (field.type === 'password') {
+                                                    <p-inputgroup>
+                                                        <input
+                                                            #inputField
+                                                            pInputText
+                                                            [id]="field.id"
+                                                            [type]="getPasswordFieldType(field.id)"
+                                                            [formControlName]="field.name"
+                                                            [placeholder]="field.placeholder || ''"
+                                                            [readonly]="field.readonly || false"
+                                                            class="w-full configurable-form-input configurable-form-text-input"
+                                                            [class.p-invalid]="isFieldInvalid(element.id, field.name)"
+                                                        />
+                                                        <p-inputGroupAddon>
+                                                            <button
+                                                                type="button"
+                                                                class="p-button-icon-only p-button-text flex items-center justify-center"
+                                                                (click)="togglePasswordVisibility(field.id)"
+                                                                [attr.aria-label]="isPasswordVisible(field.id) ? 'Hide password' : 'Show password'"
+                                                            >
+                                                                <i [class]="isPasswordVisible(field.id) ? 'pi pi-eye-slash' : 'pi pi-eye'"></i>
+                                                            </button>
+                                                        </p-inputGroupAddon>
+                                                    </p-inputgroup>
+                                                }
+
+                                                <!-- Number Input -->
+                                                @if (field.type === 'number') {
+                                                    <p-inputNumber
+                                                        [id]="field.id"
+                                                        [formControlName]="field.name"
+                                                        [placeholder]="field.placeholder || ''"
+                                                        [readonly]="field.readonly || false"
+                                                        class="w-full configurable-form-input configurable-form-number-input"
+                                                        [class.p-invalid]="isFieldInvalid(element.id, field.name)"
+                                                    />
+                                                }
+
+                                                <!-- Date Input -->
+                                                @if (field.type === 'date') {
+                                                    <p-datepicker
+                                                        [timeOnly]="field.timeOnly || false"
+                                                        [showTime]="field.showTime || false"
+                                                        [id]="field.id"
+                                                        [formControlName]="field.name"
+                                                        class="w-full configurable-form-input configurable-form-date-input"
+                                                        [class.p-invalid]="isFieldInvalid(element.id, field.name)"
+                                                    />
+                                                }
+
+                                                <!-- Color Input -->
+                                                @if (field.type === 'color') {
+                                                    <p-colorpicker [id]="field.id" [formControlName]="field.name" class="configurable-form-input configurable-form-color-input" [class.p-invalid]="isFieldInvalid(element.id, field.name)" />
+                                                }
+
+                                                <!-- Textarea -->
+                                                @if (field.type === 'textarea') {
+                                                    <textarea
+                                                        pTextarea
+                                                        [id]="field.id"
+                                                        [formControlName]="field.name"
+                                                        [placeholder]="field.placeholder || ''"
+                                                        [readonly]="field.readonly || false"
+                                                        rows="4"
+                                                        class="w-full configurable-form-input configurable-form-textarea"
+                                                        [class.p-invalid]="isFieldInvalid(element.id, field.name)"
+                                                    ></textarea>
+                                                }
+
+                                                <!-- Select -->
+                                                @if (field.type === 'select') {
+                                                    <p-select
+                                                        [id]="field.id"
+                                                        [formControlName]="field.name"
+                                                        [options]="getSelectOptions(field)"
+                                                        [optionLabel]="field.displayKey || 'label'"
+                                                        [optionValue]="field.compareKey || 'value'"
+                                                        [placeholder]="field.placeholder || 'Sélectionnez une option'"
+                                                        class="w-full configurable-form-input configurable-form-select"
+                                                        [class.p-invalid]="isFieldInvalid(element.id, field.name)"
+                                                    >
+                                                        <ng-template pTemplate="item" let-option>
+                                                            {{ getOptionLabel(option, field) }}
+                                                        </ng-template>
+                                                        <ng-template pTemplate="selectedItem" let-option>
+                                                            {{ getOptionLabel(option, field) }}
+                                                        </ng-template>
+                                                    </p-select>
+                                                }
+
+                                                <!-- MultiSelect -->
+                                                @if (field.type === 'multiselect') {
+                                                    <p-multiselect
+                                                        [id]="field.id"
+                                                        [formControlName]="field.name"
+                                                        [options]="getSelectOptions(field)"
+                                                        [optionLabel]="field.displayKey || 'label'"
+                                                        [optionValue]="field.compareKey || 'value'"
+                                                        [placeholder]="field.placeholder || 'Sélectionnez vos options'"
+                                                        [selectAll]="true"
+                                                        [showToggleAll]="true"
+                                                        selectAllLabel="Sélectionner tout"
+                                                        class="w-full configurable-form-input configurable-form-select"
+                                                        [class.p-invalid]="isFieldInvalid(element.id, field.name)"
+                                                    >
+                                                        <ng-template pTemplate="item" let-option>
+                                                            {{ getOptionLabel(option, field) }}
+                                                        </ng-template>
+                                                        <ng-template pTemplate="selectedItems" let-value>
+                                                            @for (option of value; track option) {
+                                                                <div class="inline-flex items-center py-0.5 pl-2 pr-1 rounded-full text-sm bg-primary text-primary-contrast mr-2">
+                                                                    <span>{{ getOptionLabel(option, field) }}</span>
+                                                                </div>
+                                                            }
+                                                        </ng-template>
+                                                    </p-multiselect>
+                                                }
+
+                                                <!-- Checkbox -->
+                                                @if (field.type === 'checkbox') {
+                                                    <div class="flex items-start gap-3 configurable-form-checkbox-container">
+                                                        <p-checkbox [inputId]="field.id" [formControlName]="field.name" [binary]="true" class="configurable-form-input configurable-form-checkbox" />
+                                                        <label [for]="field.id" class="text-sm leading-relaxed cursor-pointer configurable-form-checkbox-label">
+                                                            {{ field.placeholder || field.label }}
+                                                        </label>
+                                                    </div>
+                                                }
+
+                                                <!-- Radio -->
+                                                @if (field.type === 'radio') {
+                                                    <div class="space-y-3 configurable-form-radio-container">
+                                                        @for (option of getSelectOptions(field); track option) {
+                                                            <div class="flex items-center gap-3 configurable-form-radio-option">
+                                                                <p-radiobutton
+                                                                    [inputId]="field.id + '_' + getOptionValue(option, field)"
+                                                                    [formControlName]="field.name"
+                                                                    [value]="getOptionValue(option, field)"
+                                                                    class="configurable-form-input configurable-form-radio"
+                                                                />
+                                                                <label [for]="field.id + '_' + getOptionValue(option, field)" class="text-sm cursor-pointer configurable-form-radio-label">
+                                                                    {{ getOptionLabel(option, field) }}
+                                                                </label>
+                                                            </div>
+                                                        }
+                                                    </div>
+                                                }
+
+                                                <!-- File Upload -->
+                                                @if (field.type === 'file') {
+                                                    <app-custom-upload-file
+                                                        [id]="field.id"
+                                                        [name]="field.name"
+                                                        [formControlName]="field.name"
+                                                        [accept]="field.accept || '*'"
+                                                        [multiple]="field.multiple || false"
+                                                        [maxFileSize]="field.maxFileSize || 1000000"
+                                                        [chooseLabel]="field.chooseLabel || 'Choisir'"
+                                                        [uploadLabel]="field.uploadLabel || 'Téléverser'"
+                                                        [cancelLabel]="field.cancelLabel || 'Annuler'"
+                                                        [emptyMessage]="field.emptyMessage || 'Sélectionnez et glissez vos fichiers ici'"
+                                                        [mode]="field.mode || 'advanced'"
+                                                        [url]="field.url || ''"
+                                                        [showUploadButton]="field.showUploadButton !== false"
+                                                        [showCancelButton]="field.showCancelButton !== false"
+                                                        [auto]="field.auto || false"
+                                                        [invalid]="isFieldInvalid(element.id, field.name)"
+                                                        class="configurable-form-input configurable-form-file-input"
+                                                    />
+                                                }
+
+                                                <!-- Field Status Icon -->
+                                                <!-- @if (isGroupTouched(element.id)) {
+                                                    <div class="absolute right-3 top-3 configurable-form-field-status">
+                                                        @if (!isFieldInvalid(element.id, field.name) && field.type !== 'checkbox' && field.type !== 'radio' && field.type !== 'file') {
+                                                            <i class="pi pi-check-circle text-green-500 text-sm configurable-form-field-status-valid"></i>
+                                                        }
+                                                        @if (isFieldInvalid(element.id, field.name)) {
+                                                            <i class="pi pi-exclamation-circle text-red-500 text-sm configurable-form-field-status-invalid"></i>
+                                                        }
+                                                    </div>
+                                                } -->
+                                            </div>
+
+                                            <!-- Individual Field Error Message -->
+                                            @if (getFieldError(element.id, field.name); as errorMessage) {
+                                                <div class="flex items-start gap-2 mt-2 configurable-form-field-error">
+                                                    <i class="pi pi-exclamation-circle text-red-500 text-sm mt-0.5 flex-shrink-0 configurable-form-field-error-icon"></i>
+                                                    <p class="text-sm text-red-600 leading-relaxed configurable-form-field-error-message">{{ errorMessage }}</p>
+                                                </div>
+                                            }
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+
+                <!-- Form Actions -->
+                @if (!structureData.hideSubmitButton || !structureData.hideCancelButton) {
+                    <div class="sticky bottom-0 px-6 py-4 mt-8 -mx-6 -mb-6 rounded-b-xl configurable-form-actions">
+                        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 configurable-form-actions-content">
+                            <!-- Form Status Summary -->
+                            <div class="flex items-center gap-2 configurable-form-status">
+                                <!-- @if (isFormValid()) {
+                                    <div class="flex items-center gap-2 text-green-600 configurable-form-status-valid">
+                                        <i class="pi pi-check-circle text-lg"></i>
+                                        <span class="text-sm font-medium">Formulaire valide</span>
+                                    </div>
+                                } @else {
+                                    @if (isFormTouched()) {
+                                        <div class="flex items-center gap-2 text-red-600 configurable-form-status-invalid">
+                                            <i class="pi pi-exclamation-triangle text-lg"></i>
+                                            <span class="text-sm font-medium">Veuillez corriger les erreurs</span>
+                                        </div>
+                                    }
+                                } -->
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto configurable-form-buttons">
+                                @if (!structureData.hideCancelButton) {
+                                    <p-button type="button" label="Annuler" severity="secondary" class="w-full sm:w-auto configurable-form-button configurable-form-button-cancel" (onClick)="onCancelClick()" />
+                                }
+                                @if (!structureData.hideSubmitButton) {
+                                    <p-button type="submit" label="Soumettre" [disabled]="!isFormValid()" class="w-full sm:w-auto configurable-form-button configurable-form-button-submit" />
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+            </form>
+        </div>
+    </div>
+} @else {
+    <div class="flex items-center justify-center p-12 bg-gray-50 rounded-lg configurable-form-empty">
+        <div class="text-center configurable-form-empty-content">
+            <i class="pi pi-inbox text-4xl mb-4 configurable-form-empty-icon"></i>
+            <p class="text-lg configurable-form-empty-message">Aucune structure de formulaire fournie</p>
+        </div>
+    </div>
+}

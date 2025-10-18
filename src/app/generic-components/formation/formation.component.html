@@ -1,0 +1,41 @@
+<app-smart-element [title]="'Formation'" [editMode]="editMode()" [editButtonIcon]="'pi pi-pencil'" [deleteButtonIcon]="'pi pi-trash'" (onEditClick)="openEditModal()" (onDeleteClick)="deleteFormation()">
+    <ng-template #main>
+        <div class="flex gap-2 p-2 pl-0">
+            <span class="w-2"></span>
+            <div class="flex flex-col gap-1">
+                <p class="font-semibold !mb-0">{{ formation().title }}</p>
+                <p class="text-xs !mb-0 text-gray-600 dark:text-gray-400">
+                    {{ formation().institution }} - {{ formation().dateFrom | date }}
+                    @if (formation().dateTo) {
+                        à {{ formation().dateTo | date }}
+                    } @else {
+                        (En cours)
+                    }
+                </p>
+                <p class="text-xs !mb-0 text-gray-700 dark:text-gray-400">{{ formation().description }}</p>
+            </div>
+        </div>
+    </ng-template>
+</app-smart-element>
+
+@if (showEditModal()) {
+    <app-modal-formation [(showEditModal)]="showEditModal" (onClose)="cancel()" [formationInput]="formation()"></app-modal-formation>
+}
+
+@if (showDeleteConfirm()) {
+    <app-confirm-modal
+        [(visible)]="showDeleteConfirm"
+        [title]="'Confirmer la suppression'"
+        [question]="'Êtes-vous sûr de vouloir supprimer cette formation ? Cette action est irréversible.'"
+        [confirmText]="'Supprimer'"
+        [cancelText]="'Annuler'"
+        [severity]="'danger'"
+        (onConfirm)="confirmDelete(true)"
+        (onCancel)="confirmDelete(false)"
+        (onClose)="showDeleteConfirm.set(false)"
+    >
+        <div slot="info" class="mt-4 text-sm text-gray-600">
+            <p>Cette action supprimera définitivement la formation sélectionnée de votre profil.</p>
+        </div>
+    </app-confirm-modal>
+}

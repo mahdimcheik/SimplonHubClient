@@ -1,0 +1,199 @@
+<div class="table-container">
+    <div class="flex flex-row items-center justify-between bg-gray-100 p-2 rounded-t-md dark:bg-gray-800">
+        <div class="flex items-center gap-2">
+            <h3 class="text-lg font-semibold">{{ title() || 'Données' }}</h3>
+            @if (leftContent()) {
+                <ng-container [ngTemplateOutlet]="rightContent()"></ng-container>
+            }
+        </div>
+        <div class="flex gap-2">
+            @if (rightContent()) {
+                <ng-container [ngTemplateOutlet]="rightContent()"></ng-container>
+            }
+            <input pInputText type="text" placeholder="Rechercher..." [value]="searchValue()" (input)="onSearchChange($event)" />
+        </div>
+    </div>
+    <div class="content">
+        <p-table
+            #dt
+            [value]="data()"
+            [totalRecords]="totalRecords()"
+            dataKey="id"
+            [rows]="tableState().rows"
+            [first]="tableState().first"
+            [rowsPerPageOptions]="[10, 25, 50, 100]"
+            [loading]="loading()"
+            [paginator]="true"
+            [lazy]="true"
+            [scrollable]="true"
+            [scrollHeight]="height()"
+            (onPage)="onPageChange($event)"
+            (onRowSelect)="onRowClick.emit($event.data)"
+            rowSelectionMode="single"
+            stripedRows
+            selectionMode="single"
+        >
+            <!-- Header -->
+            <ng-template pTemplate="header">
+                <tr>
+                    @for (column of columns(); track column.field) {
+                        <th [style.min-width]="column.width || 'auto'">
+                            <div class="flex items-center justify-between gap-2">
+                                <!-- Column header with sort -->
+                                <div class="flex items-center gap-2">
+                                    <span class="font-semibold">{{ column.header }}</span>
+                                    @if (column.sortable) {
+                                        <app-custom-sort [sortValue]="getSortOrderForField(column.sortField ?? column.field)" (sortChange)="sortChange($event, column)" />
+                                    }
+                                </div>
+
+                                <!-- Filter button -->
+                                @if (column.filterable) {
+                                    <div>
+                                        <button
+                                            type="button"
+                                            pButton
+                                            icon="pi pi-filter"
+                                            [class.p-button-outlined]="!getFilterValue(column.filterField ?? column.field)"
+                                            [class.p-button-info]="getFilterValue(column.filterField ?? column.field)"
+                                            class="p-button-sm p-button-text"
+                                            (click)="filterMenu.toggle($event)"
+                                            [attr.aria-label]="'Filter ' + column.header"
+                                        ></button>
+                                        <!-- Filter menu overlay -->
+                                        <p-popover #filterMenu>
+                                            <ng-template pTemplate="content">
+                                                <div class="flex flex-col gap-3 p-3" style="min-width: 250px">
+                                                    <!-- Text Filter -->
+                                                    @if (column.type === 'text') {
+                                                        <div class="flex flex-col gap-2">
+                                                            <label class="text-sm font-semibold">Filtre : {{ column.header }}</label>
+                                                            <input pInputText type="text" placeholder="Saisir..." [value]="getFilterValue(column.filterField ?? column.field) || ''" (input)="onTextFilterChange($any($event.target).value, column)" />
+                                                        </div>
+                                                    }
+
+                                                    <!-- Select Filter -->
+                                                    @if (column.type === 'select') {
+                                                        <div class="flex flex-col gap-2">
+                                                            <label class="text-sm font-semibold">Filtre : {{ column.header }}</label>
+                                                            <p-select
+                                                                [options]="column.options || []"
+                                                                [optionLabel]="column.optionLabel || 'label'"
+                                                                [optionValue]="column.optionValue || 'value'"
+                                                                [ngModel]="getFilterValue(column.filterField ?? column.field)"
+                                                                (ngModelChange)="onSelectFilterChange($event, column)"
+                                                                placeholder="Sélectionner"
+                                                                [showClear]="true"
+                                                                styleClass="w-full"
+                                                            />
+                                                        </div>
+                                                    }
+
+                                                    <!-- Array/Multi-select Filter -->
+                                                    @if (column.type === 'array') {
+                                                        <div class="flex flex-col gap-2">
+                                                            <label class="text-sm font-semibold">Filtre : {{ column.header }}</label>
+                                                            <p-multiselect
+                                                                [options]="column.options || []"
+                                                                [optionLabel]="column.optionLabel || 'label'"
+                                                                [optionValue]="column.optionValue || 'value'"
+                                                                [ngModel]="getFilterValue(column.filterField ?? column.field)"
+                                                                (ngModelChange)="onArrayFilterChange($event, column)"
+                                                                placeholder="Sélectionner..."
+                                                                [showClear]="true"
+                                                                display="chip"
+                                                                styleClass="w-full"
+                                                            />
+                                                        </div>
+                                                    }
+
+                                                    <!-- Date Filter -->
+                                                    @if (column.type === 'date') {
+                                                        <div class="flex flex-col gap-2">
+                                                            <label class="text-sm font-semibold">Filtre : {{ column.header }}</label>
+                                                            <p-select
+                                                                [options]="dateFilterMatchModes"
+                                                                optionLabel="label"
+                                                                optionValue="value"
+                                                                [ngModel]="getDateFilterMatchMode(column.filterField ?? column.field)"
+                                                                (ngModelChange)="onDateFilterMatchModeChange($event, column)"
+                                                                placeholder="Sélectionner le mode"
+                                                                styleClass="w-full"
+                                                            />
+                                                            <p-datepicker
+                                                                [ngModel]="getFilterValue(column.filterField ?? column.field)"
+                                                                (ngModelChange)="onDateFilterChange($event, column)"
+                                                                [showTime]="true"
+                                                                [showButtonBar]="true"
+                                                                dateFormat="dd/mm/yy"
+                                                                styleClass="w-full"
+                                                            />
+                                                        </div>
+                                                    }
+
+                                                    <!-- Filter Actions -->
+                                                    <div class="flex justify-between gap-2 pt-2 border-t">
+                                                        <button pButton label="Vider" icon="pi pi-filter-slash" class="p-button-sm p-button-outlined" (click)="clearFilter(column); filterMenu.hide()"></button>
+                                                        <button pButton label="Appliquer" icon="pi pi-check" class="p-button-sm" (click)="filterMenu.hide()"></button>
+                                                    </div>
+                                                </div>
+                                            </ng-template>
+                                        </p-popover>
+                                    </div>
+                                }
+                            </div>
+                        </th>
+                    }
+                </tr>
+            </ng-template>
+
+            <!-- Body -->
+            <ng-template pTemplate="body" let-item>
+                <tr [pSelectableRow]="item">
+                    @for (column of columns(); track column.field) {
+                        <td>
+                            @if (column.cellRenderer) {
+                                <!-- Custom cell renderer -->
+                                <ng-container *ngComponentOutlet="getComponent(column.cellRenderer); inputs: { data: item, params: column.cellRendererParams ?? {} }" />
+                            } @else {
+                                <!-- Default rendering based on type -->
+                                @switch (column.type) {
+                                    @case ('date') {
+                                        {{ column.valueFormatter ? column.valueFormatter(item[column.field]) : (item[column.field] | date: 'dd/MM/yyyy HH:mm') }}
+                                    }
+                                    @case ('boolean') {
+                                        <i
+                                            class="pi"
+                                            [ngClass]="{
+                                                'pi-check-circle text-green-500': item[column.field],
+                                                'pi-times-circle text-red-500': !item[column.field]
+                                            }"
+                                        ></i>
+                                    }
+                                    @case ('number') {
+                                        {{ column.valueFormatter ? column.valueFormatter(item[column.field]) : (item[column.field] | number: '1.0-2') }}
+                                    }
+                                    @default {
+                                        {{ column.valueFormatter ? column.valueFormatter(item[column.field]) : item[column.field] }}
+                                    }
+                                }
+                            }
+                        </td>
+                    }
+                </tr>
+            </ng-template>
+
+            <!-- Empty message -->
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td [attr.colspan]="columns().length" class="text-center p-4">
+                        <div class="flex flex-col items-center gap-2">
+                            <i class="pi pi-inbox text-4xl text-gray-400"></i>
+                            <p class="text-gray-500">No data found.</p>
+                        </div>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>

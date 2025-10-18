@@ -1,0 +1,36 @@
+<app-smart-element [title]="'Adresse'" [editMode]="editMode()" [editButtonIcon]="'pi pi-pencil'" [deleteButtonIcon]="'pi pi-trash'" (onEditClick)="openEditModal()" (onDeleteClick)="deleteAddress()">
+    <ng-template #main>
+        <div class="flex gap-2 p-2 pl-0">
+            <span class="w-2"></span>
+            <div class="flex flex-col gap-1">
+                <p class="font-semibold !mb-0">{{ address().street }}</p>
+                <p class="text-xs !mb-0 text-gray-600 dark:text-gray-300">{{ address().city }} - {{ address().state }} - {{ address().zipCode }} - {{ address().country }}</p>
+                @if (address().additionalInfo) {
+                    <p class="text-xs !mb-0 text-gray-500 dark:text-gray-400">{{ address().additionalInfo }}</p>
+                }
+            </div>
+        </div>
+    </ng-template>
+</app-smart-element>
+
+@if (showEditModal()) {
+    <app-modal-address [(showEditModal)]="showEditModal" (onClose)="cancel()" [addressInput]="address()"></app-modal-address>
+}
+
+@if (showDeleteConfirm()) {
+    <app-confirm-modal
+        [(visible)]="showDeleteConfirm"
+        [title]="'Confirmer la suppression'"
+        [question]="'Êtes-vous sûr de vouloir supprimer cette adresse ? Cette action est irréversible.'"
+        [confirmText]="'Supprimer'"
+        [cancelText]="'Annuler'"
+        [severity]="'danger'"
+        (onConfirm)="confirmDelete(true)"
+        (onCancel)="confirmDelete(false)"
+        (onClose)="showDeleteConfirm.set(false)"
+    >
+        <div slot="info" class="mt-4 text-sm text-gray-600">
+            <p>Cette action supprimera définitivement l'adresse sélectionnée de votre profil.</p>
+        </div>
+    </app-confirm-modal>
+}

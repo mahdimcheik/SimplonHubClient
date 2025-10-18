@@ -1,0 +1,30 @@
+<div class="flex flex-col mt-2">
+    <header class="flex items-center gap-2 p-3 bg-gray-50 dark:bg-gray-800 rounded-t-lg">
+        <h3 class="text-lg font-semibold flex-1">{{ title() || 'Smart Section' }}</h3>
+
+        <div class="flex items-center gap-2">
+            @if (rightContent()) {
+                <ng-container [ngTemplateOutlet]="rightContent()"></ng-container>
+            }
+            @if (editMode()) {
+                <button pButton class="p-button-sm" (click)="onAddClick.emit()">
+                    <i [class]="buttonIcon()" pButtonIcon></i>
+                </button>
+            }
+        </div>
+    </header>
+    <main class="min-h-[200px] flex flex-col gap-2 pt-2">
+        @if (mainContent()) {
+            <ng-container [ngTemplateOutlet]="mainContent()"></ng-container>
+        } @else if (emptyContent()) {
+            <div class="text-center py-8 text-gray-500">
+                <ng-container [ngTemplateOutlet]="emptyContent()"></ng-container>
+            </div>
+        } @else {
+            <div class="text-center py-8 text-gray-500">
+                <i class="pi pi-inbox text-4xl mb-4 block"></i>
+                <p>Pas de contenu disponible</p>
+            </div>
+        }
+    </main>
+</div>

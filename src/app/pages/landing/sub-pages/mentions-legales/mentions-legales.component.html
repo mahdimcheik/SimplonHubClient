@@ -1,0 +1,320 @@
+<div class="mentions-legales-container p-2 md:p-4 lg:p-8 max-w-[1000px] mx-auto">
+    <h1 class="title text-3xl font-bold mb-6 text-surface-900 dark:text-surface-0">Mentions Légales et Politique de Confidentialité</h1>
+    <p class="intro text-surface-600 dark:text-surface-300 mb-8">
+        Conformément aux dispositions des articles 6-III et 19 de la Loi n°2004-575 du 21 juin 2004 pour la Confiance dans l'économie numérique et au Règlement Général sur la Protection des Données (RGPD), nous vous informons des éléments suivants :
+    </p>
+
+    <!-- Navigation rapide -->
+    <div class="bg-surface-50 dark:bg-surface-800 p-4 rounded-lg mb-8 border border-surface-200 dark:border-surface-600">
+        <h3 class="font-semibold mb-3 text-surface-900 dark:text-surface-0">Navigation rapide :</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 text-sm">
+            <a [routerLink]="'/mentions-legales'" fragment="editeur" class="text-primary-500 hover:text-primary-600 underline">1. Éditeur du site</a>
+            <a [routerLink]="'/mentions-legales'" fragment="hebergement" class="text-primary-500 hover:text-primary-600 underline">2. Hébergement</a>
+            <a [routerLink]="'/mentions-legales'" fragment="donnees-personnelles" class="text-primary-500 hover:text-primary-600 underline">3. Données personnelles</a>
+            <a [routerLink]="'/mentions-legales'" fragment="cookies" class="text-primary-500 hover:text-primary-600 underline">4. Politique des cookies</a>
+            <a [routerLink]="'/mentions-legales'" fragment="droits-utilisateurs" class="text-primary-500 hover:text-primary-600 underline">5. Vos droits</a>
+            <a [routerLink]="'/mentions-legales'" fragment="securite" class="text-primary-500 hover:text-primary-600 underline">6. Sécurité des données</a>
+        </div>
+    </div>
+
+    <section id="editeur" class="section mb-8">
+        <h2 class="section-title text-2xl font-semibold mb-4 text-surface-900 dark:text-surface-0">1. Éditeur du site</h2>
+        <div class="bg-white dark:bg-surface-800 p-4 rounded-lg border border-surface-200 dark:border-surface-600">
+            <p class="text-surface-700 dark:text-surface-200">
+                <strong>Nom de l'entreprise :</strong> Skill Hive<br />
+                <strong>Adresse :</strong> 2 Bois Charles, Clérac 17270<br />
+                <strong>Téléphone :</strong> 06 35 12 45 78<br />
+                <strong>Email :</strong> {{ owner().email }}<br />
+                <strong>Numéro SIRET :</strong> 123-5487-985 L<br />
+                <strong>Directeur de la publication :</strong> Mahdi Mcheik<br />
+                <strong>Responsable du traitement des données :</strong> Mahdi Mcheik
+            </p>
+        </div>
+    </section>
+
+    <section id="hebergement" class="section mb-8">
+        <h2 class="section-title text-2xl font-semibold mb-4 text-surface-900 dark:text-surface-0">2. Hébergement</h2>
+        <div class="bg-white dark:bg-surface-800 p-4 rounded-lg border border-surface-200 dark:border-surface-600">
+            <p class="text-surface-700 dark:text-surface-200">
+                <strong>Hébergeur :</strong> Chez moi<br />
+                <strong>Adresse :</strong> 2 Bois Charles, Clérac 17270<br />
+                <strong>Téléphone :</strong> 06 35 12 45 78
+            </p>
+        </div>
+    </section>
+
+    <section id="donnees-personnelles" class="section mb-8">
+        <h2 class="section-title text-2xl font-semibold mb-4 text-surface-900 dark:text-surface-0">
+            <i class="pi pi-shield text-primary-500 mr-2"></i>
+            3. Politique de Confidentialité et Protection des Données
+        </h2>
+
+        <div class="space-y-6">
+            <div class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg border-l-4 border-blue-400">
+                <h3 class="font-semibold mb-2 text-surface-900 dark:text-surface-0">3.1. Responsable du traitement</h3>
+                <p class="text-surface-700 dark:text-surface-200 text-sm">Skill Hive, représentée par Mahdi Mcheik, est responsable du traitement de vos données personnelles au sens du Règlement Général sur la Protection des Données (RGPD).</p>
+            </div>
+
+            <div class="bg-white dark:bg-surface-800 p-4 rounded-lg border border-surface-200 dark:border-surface-600">
+                <h3 class="font-semibold mb-3 text-surface-900 dark:text-surface-0">3.2. Données collectées</h3>
+                <p class="text-surface-700 dark:text-surface-200 mb-3">Nous collectons les types de données suivants :</p>
+                <ul class="list-disc pl-6 space-y-2 text-surface-700 dark:text-surface-200 text-sm">
+                    <li><strong>Données d'identification :</strong> nom, prénom, adresse email, numéro de téléphone</li>
+                    <li><strong>Données de profil :</strong> date de naissance, genre, titre, description, URL LinkedIn</li>
+                    <li><strong>Données de localisation :</strong> adresses postales</li>
+                    <li><strong>Données de formation :</strong> formations suivies, compétences, expériences</li>
+                    <!-- <li><strong>Données techniques :</strong> adresse IP, cookies, données de navigation</li> -->
+                    <li><strong>Données de communication :</strong> messages, historique des échanges</li>
+                    <li><strong>Données de transaction :</strong> commandes, réservations, paiements</li>
+                </ul>
+            </div>
+
+            <div class="bg-white dark:bg-surface-800 p-4 rounded-lg border border-surface-200 dark:border-surface-600">
+                <h3 class="font-semibold mb-3 text-surface-900 dark:text-surface-0">3.3. Finalités du traitement</h3>
+                <p class="text-surface-700 dark:text-surface-200 mb-3">Vos données sont traitées pour les finalités suivantes :</p>
+                <ul class="list-disc pl-6 space-y-2 text-surface-700 dark:text-surface-200 text-sm">
+                    <li><strong>Gestion des comptes :</strong> création, authentification, maintenance des comptes utilisateurs</li>
+                    <li><strong>Fourniture des services :</strong> réservations, formations, communications</li>
+                    <!-- <li><strong>Amélioration des services :</strong> analyses statistiques, développement de nouvelles fonctionnalités</li> -->
+                    <!-- <li><strong>Communication :</strong> support client, newsletters, notifications importantes</li> -->
+                    <!-- <li><strong>Marketing :</strong> envoi d'offres personnalisées (avec votre consentement)</li> -->
+                    <li><strong>Obligations légales :</strong> comptabilité, facturation, déclarations fiscales</li>
+                </ul>
+            </div>
+
+            <div class="bg-white dark:bg-surface-800 p-4 rounded-lg border border-surface-200 dark:border-surface-600">
+                <h3 class="font-semibold mb-3 text-surface-900 dark:text-surface-0">3.4. Base légale du traitement</h3>
+                <ul class="list-disc pl-6 space-y-2 text-surface-700 dark:text-surface-200 text-sm">
+                    <!-- <li><strong>Consentement :</strong> marketing, newsletters, cookies non-essentiels</li> -->
+                    <li><strong>Exécution du contrat :</strong> gestion des services, réservations, paiements</li>
+                    <!-- <li><strong>Intérêt légitime :</strong> amélioration des services, sécurité, analyses</li> -->
+                    <li><strong>Obligation légale :</strong> conservation des factures, déclarations fiscales</li>
+                </ul>
+            </div>
+
+            <div class="bg-white dark:bg-surface-800 p-4 rounded-lg border border-surface-200 dark:border-surface-600">
+                <h3 class="font-semibold mb-3 text-surface-900 dark:text-surface-0">3.5. Durée de conservation</h3>
+                <ul class="list-disc pl-6 space-y-2 text-surface-700 dark:text-surface-200 text-sm">
+                    <li><strong>Comptes actifs :</strong> pendant toute la durée d'utilisation du service</li>
+                    <li><strong>Comptes inactifs :</strong> 3 ans après la dernière connexion</li>
+                    <li><strong>Données de facturation :</strong> 10 ans (obligation légale)</li>
+                    <!-- <li><strong>Cookies :</strong> maximum 13 mois</li> -->
+                    <!-- <li><strong>Logs de connexion :</strong> 12 mois maximum</li> -->
+                </ul>
+            </div>
+
+            <div class="bg-white dark:bg-surface-800 p-4 rounded-lg border border-surface-200 dark:border-surface-600">
+                <h3 class="font-semibold mb-3 text-surface-900 dark:text-surface-0">3.6. Destinataires des données</h3>
+                <p class="text-surface-700 dark:text-surface-200 mb-3">Vos données peuvent être partagées avec :</p>
+                <ul class="list-disc pl-6 space-y-2 text-surface-700 dark:text-surface-200 text-sm">
+                    <li><strong>Prestataires techniques :</strong> hébergement, maintenance, support</li>
+                    <li><strong>Processeurs de paiement :</strong> pour les transactions financières</li>
+                    <li><strong>Services de communication :</strong> envoi d'emails, notifications</li>
+                    <li><strong>Autorités légales :</strong> en cas d'obligation légale ou judiciaire</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section id="cookies" class="section mb-8">
+        <h2 class="section-title text-2xl font-semibold mb-4 text-surface-900 dark:text-surface-0">
+            <i class="pi pi-cog text-primary-500 mr-2"></i>
+            4. Politique des Cookies
+        </h2>
+
+        <div class="space-y-6">
+            <div class="bg-orange-50 dark:bg-orange-900/20 p-4 rounded-lg border-l-4 border-orange-400">
+                <h3 class="font-semibold mb-2 text-surface-900 dark:text-surface-0">4.1. Qu'est-ce qu'un cookie ?</h3>
+                <p class="text-surface-700 dark:text-surface-200 text-sm">
+                    Un cookie est un petit fichier texte déposé sur votre appareil lors de votre visite sur notre site. Il permet de mémoriser vos préférences et d'améliorer votre expérience utilisateur.
+                </p>
+            </div>
+
+            <div class="bg-white dark:bg-surface-800 p-4 rounded-lg border border-surface-200 dark:border-surface-600">
+                <h3 class="font-semibold mb-3 text-surface-900 dark:text-surface-0">4.2. Types de cookies utilisés</h3>
+
+                <div class="space-y-4">
+                    <div class="p-3 bg-green-50 dark:bg-green-900/20 rounded border-l-4 border-green-400">
+                        <h4 class="font-medium text-green-800 dark:text-green-200 mb-1"><i class="pi pi-lock mr-2"></i>Cookies essentiels (obligatoires)</h4>
+                        <p class="text-sm text-green-700 dark:text-green-300">
+                            Nécessaires au fonctionnement du site : authentification, sécurité, panier.
+                            <strong>Durée :</strong> 7 jours maximum.
+                        </p>
+                    </div>
+
+                    <!-- <div class="p-3 bg-blue-50 dark:bg-blue-900/20 rounded border-l-4 border-blue-400">
+                        <h4 class="font-medium text-blue-800 dark:text-blue-200 mb-1"><i class="pi pi-cog mr-2"></i>Cookies fonctionnels (avec consentement)</h4>
+                        <p class="text-sm text-blue-700 dark:text-blue-300">
+                            Améliorent l'expérience utilisateur : préférences de thème, langue, configuration.
+                            <strong>Durée :</strong> 12 mois maximum.
+                        </p>
+                    </div> -->
+
+                    <!-- <div class="p-3 bg-orange-50 dark:bg-orange-900/20 rounded border-l-4 border-orange-400">
+                        <h4 class="font-medium text-orange-800 dark:text-orange-200 mb-1"><i class="pi pi-chart-line mr-2"></i>Cookies analytiques (avec consentement)</h4>
+                        <p class="text-sm text-orange-700 dark:text-orange-300">
+                            Mesurent l'audience et analysent l'utilisation du site de manière anonyme.
+                            <strong>Durée :</strong> 13 mois maximum.
+                        </p>
+                    </div> -->
+
+                    <!-- <div class="p-3 bg-purple-50 dark:bg-purple-900/20 rounded border-l-4 border-purple-400">
+                        <h4 class="font-medium text-purple-800 dark:text-purple-200 mb-1"><i class="pi pi-megaphone mr-2"></i>Cookies marketing (avec consentement)</h4>
+                        <p class="text-sm text-purple-700 dark:text-purple-300">
+                            Personnalisent les publicités et mesurent l'efficacité des campagnes.
+                            <strong>Durée :</strong> 13 mois maximum.
+                        </p>
+                    </div> -->
+                </div>
+            </div>
+
+            <div class="bg-white dark:bg-surface-800 p-4 rounded-lg border border-surface-200 dark:border-surface-600">
+                <h3 class="font-semibold mb-3 text-surface-900 dark:text-surface-0">4.3. Gestion de vos préférences</h3>
+                <p class="text-surface-700 dark:text-surface-200 text-sm mb-3">Vous pouvez modifier vos préférences de cookies à tout moment :</p>
+                <ul class="list-disc pl-6 space-y-1 text-surface-700 dark:text-surface-200 text-sm">
+                    <li>Via la bannière de consentement lors de votre première visite</li>
+                    <li>Dans les paramètres de votre navigateur</li>
+                    <li>En contactant notre support client</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section id="droits-utilisateurs" class="section mb-8">
+        <h2 class="section-title text-2xl font-semibold mb-4 text-surface-900 dark:text-surface-0">
+            <i class="pi pi-user text-primary-500 mr-2"></i>
+            5. Vos Droits selon le RGPD
+        </h2>
+
+        <div class="bg-gradient-to-r from-primary-50 to-blue-50 dark:from-primary-900/20 dark:to-blue-900/20 p-6 rounded-lg border border-primary-200 dark:border-primary-600 mb-6">
+            <p class="text-surface-800 dark:text-surface-100 font-medium mb-2">En tant que personne concernée, vous disposez des droits suivants :</p>
+            <p class="text-surface-600 dark:text-surface-300 text-sm">Pour exercer ces droits, contactez-nous à {{ owner().email }} avec une pièce d'identité.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-white dark:bg-surface-800 p-4 rounded-lg border border-surface-200 dark:border-surface-600">
+                <h3 class="font-semibold mb-2 text-surface-900 dark:text-surface-0 flex items-center"><i class="pi pi-eye text-blue-500 mr-2"></i>Droit d'accès</h3>
+                <p class="text-surface-700 dark:text-surface-200 text-sm">Obtenez une copie de toutes vos données personnelles que nous traitons.</p>
+            </div>
+
+            <div class="bg-white dark:bg-surface-800 p-4 rounded-lg border border-surface-200 dark:border-surface-600">
+                <h3 class="font-semibold mb-2 text-surface-900 dark:text-surface-0 flex items-center"><i class="pi pi-pencil text-green-500 mr-2"></i>Droit de rectification</h3>
+                <p class="text-surface-700 dark:text-surface-200 text-sm">Corrigez ou complétez vos données personnelles inexactes ou incomplètes.</p>
+            </div>
+
+            <div class="bg-white dark:bg-surface-800 p-4 rounded-lg border border-surface-200 dark:border-surface-600">
+                <h3 class="font-semibold mb-2 text-surface-900 dark:text-surface-0 flex items-center"><i class="pi pi-trash text-red-500 mr-2"></i>Droit à l'effacement</h3>
+                <p class="text-surface-700 dark:text-surface-200 text-sm">Demandez la suppression de vos données dans certaines conditions.</p>
+            </div>
+
+            <div class="bg-white dark:bg-surface-800 p-4 rounded-lg border border-surface-200 dark:border-surface-600">
+                <h3 class="font-semibold mb-2 text-surface-900 dark:text-surface-0 flex items-center"><i class="pi pi-download text-purple-500 mr-2"></i>Droit à la portabilité</h3>
+                <p class="text-surface-700 dark:text-surface-200 text-sm">Récupérez vos données dans un format structuré et lisible.</p>
+            </div>
+
+            <div class="bg-white dark:bg-surface-800 p-4 rounded-lg border border-surface-200 dark:border-surface-600">
+                <h3 class="font-semibold mb-2 text-surface-900 dark:text-surface-0 flex items-center"><i class="pi pi-pause text-orange-500 mr-2"></i>Droit à la limitation</h3>
+                <p class="text-surface-700 dark:text-surface-200 text-sm">Limitez le traitement de vos données dans certaines circonstances.</p>
+            </div>
+
+            <div class="bg-white dark:bg-surface-800 p-4 rounded-lg border border-surface-200 dark:border-surface-600">
+                <h3 class="font-semibold mb-2 text-surface-900 dark:text-surface-0 flex items-center"><i class="pi pi-times text-red-500 mr-2"></i>Droit d'opposition</h3>
+                <p class="text-surface-700 dark:text-surface-200 text-sm">Opposez-vous au traitement de vos données pour des raisons légitimes.</p>
+            </div>
+        </div>
+
+        <div class="bg-yellow-50 dark:bg-yellow-900/20 p-4 rounded-lg border-l-4 border-yellow-400 mt-6">
+            <h3 class="font-semibold mb-2 text-surface-900 dark:text-surface-0">
+                <i class="pi pi-exclamation-triangle text-yellow-500 mr-2"></i>
+                Délai de réponse
+            </h3>
+            <p class="text-surface-700 dark:text-surface-200 text-sm">Nous nous engageons à répondre à vos demandes dans un délai d'un mois maximum. Si vous n'êtes pas satisfait de notre réponse, vous pouvez saisir la CNIL.</p>
+        </div>
+    </section>
+
+    <section id="securite" class="section mb-8">
+        <h2 class="section-title text-2xl font-semibold mb-4 text-surface-900 dark:text-surface-0">
+            <i class="pi pi-shield text-primary-500 mr-2"></i>
+            6. Sécurité des Données
+        </h2>
+
+        <div class="space-y-4">
+            <div class="bg-white dark:bg-surface-800 p-4 rounded-lg border border-surface-200 dark:border-surface-600">
+                <h3 class="font-semibold mb-3 text-surface-900 dark:text-surface-0">6.1. Mesures de sécurité techniques</h3>
+                <ul class="list-disc pl-6 space-y-2 text-surface-700 dark:text-surface-200 text-sm">
+                    <li>Chiffrement SSL/TLS pour toutes les communications</li>
+                    <li>Authentification forte et gestion sécurisée des sessions</li>
+                    <li>Stockage sécurisé des mots de passe (hashage bcrypt)</li>
+                    <li>Surveillance et détection des intrusions</li>
+                    <li>Sauvegardes régulières et chiffrées</li>
+                </ul>
+            </div>
+
+            <div class="bg-white dark:bg-surface-800 p-4 rounded-lg border border-surface-200 dark:border-surface-600">
+                <h3 class="font-semibold mb-3 text-surface-900 dark:text-surface-0">6.2. Mesures organisationnelles</h3>
+                <ul class="list-disc pl-6 space-y-2 text-surface-700 dark:text-surface-200 text-sm">
+                    <li>Accès aux données limité au personnel autorisé</li>
+                    <li>Formation du personnel sur la protection des données</li>
+
+                    <!-- <li>Audits de sécurité réguliers</li>
+
+                    <li>Procédures de gestion des incidents</li> -->
+                </ul>
+            </div>
+
+            <div class="bg-red-50 dark:bg-red-900/20 p-4 rounded-lg border-l-4 border-red-400">
+                <h3 class="font-semibold mb-2 text-surface-900 dark:text-surface-0">
+                    <i class="pi pi-exclamation-circle text-red-500 mr-2"></i>
+                    Notification des violations
+                </h3>
+                <p class="text-surface-700 dark:text-surface-200 text-sm">
+                    En cas de violation de données personnelles susceptible d'engendrer un risque élevé pour vos droits et libertés, nous vous en informerons dans les plus brefs délais conformément au RGPD.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section mb-8">
+        <h2 class="section-title text-2xl font-semibold mb-4 text-surface-900 dark:text-surface-0">
+            <i class="pi pi-phone text-primary-500 mr-2"></i>
+            7. Contact et Réclamations
+        </h2>
+
+        <div class="bg-white dark:bg-surface-800 p-6 rounded-lg border border-surface-200 dark:border-surface-600">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <h3 class="font-semibold mb-3 text-surface-900 dark:text-surface-0">Délégué à la Protection des Données</h3>
+                    <p class="text-surface-700 dark:text-surface-200 text-sm">
+                        <strong>Email :</strong> {{ owner().email }}<br />
+                        <strong>Adresse :</strong> 2 Bois Charles, Clérac 17270<br />
+                        <strong>Téléphone :</strong> 06 35 12 45 78
+                    </p>
+                </div>
+
+                <div>
+                    <h3 class="font-semibold mb-3 text-surface-900 dark:text-surface-0">Autorité de contrôle</h3>
+                    <p class="text-surface-700 dark:text-surface-200 text-sm">
+                        Commission Nationale de l'Informatique et des Libertés (CNIL)<br />
+                        <strong>Site web :</strong> <a href="https://www.cnil.fr" target="_blank" class="text-primary-500 underline">www.cnil.fr</a><br />
+                        <strong>Téléphone :</strong> 01 53 73 22 22
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section mb-8">
+        <h2 class="section-title text-2xl font-semibold mb-4 text-surface-900 dark:text-surface-0">
+            <i class="pi pi-calendar text-primary-500 mr-2"></i>
+            8. Mise à jour de cette politique
+        </h2>
+
+        <div class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg border-l-4 border-blue-400">
+            <p class="text-surface-700 dark:text-surface-200 text-sm">
+                Cette politique de confidentialité peut être mise à jour pour refléter les évolutions de nos pratiques ou de la réglementation. La date de dernière modification est indiquée ci-dessous. Les modifications importantes vous seront
+                notifiées par email ou via un avis sur notre site.
+            </p>
+            <p class="text-surface-500 dark:text-surface-400 text-xs mt-3"><strong>Dernière mise à jour :</strong> {{ getCurrentDate() }}</p>
+        </div>
+    </section>
+</div>
