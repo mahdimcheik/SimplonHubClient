@@ -8,7 +8,7 @@ import { CursusesMainService } from '../../shared/services/cursuses-main.service
 import { MessageService } from 'primeng/api';
 @Component({
     selector: 'app-cursus',
-    imports: [SmartElementComponent, DatePipe, ModalCursusComponent, ConfirmModalComponent],
+    imports: [SmartElementComponent, ModalCursusComponent, ConfirmModalComponent],
     templateUrl: './cursus.component.html',
     styleUrl: './cursus.component.scss'
 })

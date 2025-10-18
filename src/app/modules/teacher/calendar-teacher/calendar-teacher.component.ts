@@ -1,7 +1,6 @@
 import { Component, computed, inject, input, model, output, signal, viewChild } from '@angular/core';
 import { CalendarOptions, DateSelectArg, DateSpanApi, EventClickArg, EventDropArg, EventInput } from '@fullcalendar/core/index.js';
 import { FullCalendarComponent, FullCalendarModule } from '@fullcalendar/angular';
-import { TooltipModule } from 'primeng/tooltip';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import listPlugin from '@fullcalendar/list';
 import frLocale from '@fullcalendar/core/locales/fr';
@@ -10,13 +9,12 @@ import interactionPlugin, { EventResizeDoneArg } from '@fullcalendar/interaction
 import { FormBuilder } from '@angular/forms';
 import { DateTime } from 'luxon';
 import { ModalQuickInfosComponent } from '../../../generic-components/modal-quick-infos/modal-quick-infos.component';
-import { Button } from 'primeng/button';
 import { ModalCreateEditSlotComponent } from '../../../generic-components/modal-create-edit-slot/modal-create-edit-slot.component';
 import { EventImpl } from '@fullcalendar/core/internal';
 
 @Component({
     selector: 'app-calendar-teacher',
-    imports: [FullCalendarModule, ModalQuickInfosComponent, Button, ModalCreateEditSlotComponent],
+    imports: [FullCalendarModule, ModalQuickInfosComponent, ModalCreateEditSlotComponent],
     templateUrl: './calendar-teacher.component.html',
     styleUrl: './calendar-teacher.component.scss'
 })

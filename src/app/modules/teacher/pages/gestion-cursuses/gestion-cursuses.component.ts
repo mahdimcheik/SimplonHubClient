@@ -2,11 +2,9 @@ import { Component, effect, inject, signal, Type } from '@angular/core';
 import { ActionButtonRendererComponent, CustomTableState, DynamicColDef, ICellRendererAngularComp, INITIAL_STATE, SmartGridComponent } from '../../../../generic-components/smart-grid';
 import { CursusesMainService } from '../../../../shared/services/cursuses-main.service';
 import { LevelCursusResponseDTO } from '../../../../../api';
-import { TableState } from 'primeng/api';
 
 @Component({
     selector: 'app-gestion-cursuses',
-    imports: [SmartGridComponent],
     templateUrl: './gestion-cursuses.component.html',
     styleUrl: './gestion-cursuses.component.scss'
 })

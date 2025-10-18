@@ -2,22 +2,16 @@ import { Component, computed, DestroyRef, inject, model, OnInit, signal } from '
 import { SmartSectionComponent } from '../smart-section/smart-section.component';
 import { CursusComponent } from '../cursus/cursus.component';
 import { CursusesMainService } from '../../shared/services/cursuses-main.service';
-import { Structure } from '../configurable-form/related-models';
-import { Drawer } from 'primeng/drawer';
-import { Footer, MessageService } from 'primeng/api';
+import { MessageService } from 'primeng/api';
 import { DialogModule } from 'primeng/dialog';
-import { ConfigurableFormComponent } from '../configurable-form/configurable-form.component';
-import { FormGroup } from '@angular/forms';
 import { UserMainService } from '../../shared/services/userMain.service';
-import { Message } from 'primeng/message';
 import { ModalCursusComponent } from '../modal-cursus/modal-cursus.component';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { CursusResponseDTO } from '../../../api';
 
 @Component({
     selector: 'app-cursuses-list',
-    imports: [SmartSectionComponent, CursusComponent, Drawer, DialogModule, ConfigurableFormComponent, ModalCursusComponent],
+    imports: [SmartSectionComponent, CursusComponent, DialogModule, ModalCursusComponent],
     templateUrl: './cursuses-list.component.html',
     styleUrl: './cursuses-list.component.scss'
 })

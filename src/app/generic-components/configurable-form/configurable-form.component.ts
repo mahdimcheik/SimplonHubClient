@@ -36,8 +36,7 @@ import { ChipsListComponent } from '../chips-list/chips-list.component';
         ColorPickerModule,
         ButtonModule,
         InputGroupModule,
-        InputGroupAddonModule,
-        ChipsListComponent
+        InputGroupAddonModule
     ],
     templateUrl: './configurable-form.component.html',
     changeDetection: ChangeDetectionStrategy.Default
