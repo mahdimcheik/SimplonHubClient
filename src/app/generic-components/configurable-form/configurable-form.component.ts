@@ -36,7 +36,8 @@ import { ChipsListComponent } from '../chips-list/chips-list.component';
         ColorPickerModule,
         ButtonModule,
         InputGroupModule,
-        InputGroupAddonModule
+        InputGroupAddonModule,
+        ChipsListComponent
     ],
     templateUrl: './configurable-form.component.html',
     changeDetection: ChangeDetectionStrategy.Default
@@ -46,7 +47,7 @@ export class ConfigurableFormComponent implements OnInit {
 
     // Input signal for the structure
     structure = input<Structure | null>(null);
-
+    verboseError = input<boolean>(true);
     // Output signal for form submission
     onFormSubmit = output<FormGroup>();
     onCancel = output<void>();

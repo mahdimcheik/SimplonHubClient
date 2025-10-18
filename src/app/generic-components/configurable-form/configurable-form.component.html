@@ -17,7 +17,7 @@
         <div class="p-0 lg:p-6 configurable-form-body">
             <form [formGroup]="form()" (ngSubmit)="onSubmit()" class="space-y-8 configurable-form-content">
                 <!-- Global Validation Errors -->
-                @if (hasGlobalValidationErrors() && isFormTouched()) {
+                @if (verboseError() && hasGlobalValidationErrors() && isFormTouched()) {
                     <div class="p-4 bg-red-50 border-l-4 border-red-400 rounded-r-lg shadow-sm configurable-form-global-errors">
                         <div class="flex items-start gap-3">
                             <i class="pi pi-exclamation-triangle text-red-500 mt-0.5 flex-shrink-0"></i>
@@ -316,7 +316,7 @@
                                     }
 
                                     <!-- Field-level Errors Summary -->
-                                    @if (getGroupErrors(element.id).length > getGroupValidationErrors(element.id).length && isGroupTouched(element.id)) {
+                                    @if (verboseError() && getGroupErrors(element.id).length > getGroupValidationErrors(element.id).length && isGroupTouched(element.id)) {
                                         <div class="mt-4 p-4 bg-orange-50 border-l-4 border-orange-400 rounded-r-lg shadow-sm configurable-form-section-field-errors configurable-form-group-errors-summary">
                                             <div class="flex items-start gap-3 configurable-form-section-field-errors-header">
                                                 <i class="pi pi-info-circle text-orange-500 mt-0.5 flex-shrink-0"></i>

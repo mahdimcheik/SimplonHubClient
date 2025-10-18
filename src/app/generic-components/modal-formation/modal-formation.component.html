@@ -1,6 +1,6 @@
 <p-drawer header="Editer les informations personnelles" position="right" [visible]="showEditModal()" [style]="{ width: '50vw' }" [modal]="true" [closable]="true" (closeOnEscape)="(true)" (onHide)="cancel()">
     <div class="p-fluid formgrid grid">
-        <app-configurable-form [structure]="formationForm()" (onFormSubmit)="submit($event)" (onCancel)="cancel()"></app-configurable-form>
+        <app-configurable-form [structure]="formationForm()" (onFormSubmit)="submit($event)" (onCancel)="cancel()" [verboseError]="false"></app-configurable-form>
     </div>
     <p-footer>
         <button pButton type="button" label="Annuler" icon="pi pi-times" class="p-button-text" (click)="cancel()"></button>
