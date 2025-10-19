@@ -1,11 +1,14 @@
-import { Component, computed, inject, linkedSignal, model, OnInit } from '@angular/core';
+import { Component, computed, inject, linkedSignal, model, OnInit, signal } from '@angular/core';
 import { DialogModule } from 'primeng/dialog';
 import { ConfigurableFormComponent } from '../configurable-form/configurable-form.component';
 import { DrawerModule } from 'primeng/drawer';
 import { EventInput } from '@fullcalendar/core/index.js';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Structure } from '../configurable-form/related-models';
-import { SlotResponseDTO } from '../../../api';
+import { SlotResponseDTO, TypeSlotResponseDTO, UserResponseDTO } from '../../../api';
+import { SlotMainService } from '../../shared/services/slot-main.service';
+import { UserMainService } from '../../shared/services/userMain.service';
+import { MessageService } from 'primeng/api';
 
 @Component({
     selector: 'app-modal-create-edit-slot',
@@ -15,10 +18,14 @@ import { SlotResponseDTO } from '../../../api';
 })
 export class ModalCreateEditSlotComponent implements OnInit {
     fb = inject(FormBuilder);
+    slotMainService = inject(SlotMainService);
+    userMainService = inject(UserMainService);
+    messageService = inject(MessageService);
 
+    user = this.userMainService.userConnected;
     event = model<EventInput | null>(null);
     visible = model(false);
-    title = computed(() => (this.event() ? "Modification d'un créneau" : "Création d'un créneau"));
+    title = computed(() => (this.event()?.extendedProps?.['slot'] ? "Modification d'un créneau" : "Création d'un créneau"));
     slot = linkedSignal<SlotResponseDTO | null>(() => {
         const slot = this.event()?.extendedProps?.['slot'];
         if (slot) {
@@ -50,34 +57,40 @@ export class ModalCreateEditSlotComponent implements OnInit {
                     name: 'Informations',
                     label: 'Informations',
                     fields: [
-                        { id: 'start', label: 'Date de début', name: 'start', type: 'date', value: this.start(), showTime: true, fullWidth: true, timeOnly: true },
-                        { id: 'end', label: 'Date de fin', name: 'end', type: 'date', value: this.end(), showTime: true, required: true, fullWidth: true, timeOnly: true },
-                        { id: 'typeId', label: 'Type', name: 'typeId', type: 'select', options: this.getTypes(), required: true, compareKey: 'id', displayKey: 'name', value: this.slot()?.typeId, fullWidth: true }
+                        { id: 'dateFrom', label: 'Date de début', name: 'dateFrom', type: 'date', value: this.start(), showTime: true, fullWidth: true, timeOnly: true },
+                        { id: 'dateTo', label: 'Date de fin', name: 'dateTo', type: 'date', value: this.end(), showTime: true, required: true, fullWidth: true, timeOnly: true },
+                        { id: 'typeId', label: 'Type', name: 'typeId', type: 'select', options: this.typesSlot(), required: true, compareKey: 'id', displayKey: 'name', value: this.slot()?.typeId, fullWidth: true }
                     ]
                 }
             ]
         };
     });
 
+    typesSlot = signal<TypeSlotResponseDTO[]>([]);
+
     ngOnInit(): void {
-        console.log('Event:', this.event());
-        console.log('Start Date:', this.start());
-        console.log('End Date:', this.end());
-        console.log('Start type:', typeof this.start());
-        console.log('End type:', typeof this.end());
-        console.log('Form structure:', this.form());
+        this.loadData();
     }
 
-    getTypes() {
-        return [
-            { id: '1', name: 'Type 1' },
-            { id: '2', name: 'Type 2' },
-            { id: '3', name: 'Type 3' }
-        ];
+    async loadData() {
+        const types = await this.slotMainService.getTypeSlot();
+        this.typesSlot.set(types);
     }
 
-    submit(event: FormGroup) {
-        console.log(event.value);
+    async submit(event: FormGroup) {
+        try {
+            const slot = await this.slotMainService.createSlot({
+                ...event.value.informations,
+                teacherId: this.user()?.id ?? ''
+            });
+            this.visible.set(false);
+            this.slotMainService.slots.update((current) => [...current, slot!]);
+            this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Créneau créé avec succès' });
+        } catch (error) {
+            this.messageService.add({ severity: 'error', summary: 'Erreur', detail: 'Une erreur est survenue lors de la création du créneau.' });
+        } finally {
+            this.cancel();
+        }
     }
 
     cancel() {

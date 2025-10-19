@@ -10,7 +10,7 @@
 import { HttpClient, HttpContext, HttpContextToken, HttpEvent, HttpResponse } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { ObjectResponseDTO, RequestOptions, SlotCreateDTO, SlotResponseDTOListResponseDTO, SlotResponseDTOResponseDTO, SlotUpdateDTO } from "../models";
+import { ObjectResponseDTO, RequestOptions, SlotCreateDTO, SlotDynamicFilters, SlotResponseDTOListResponseDTO, SlotResponseDTOResponseDTO, SlotUpdateDTO } from "../models";
 import { BASE_PATH_DEFAULT, CLIENT_CONTEXT_TOKEN_DEFAULT } from "../tokens";
 
 @Injectable({ providedIn: "root" })
@@ -24,10 +24,10 @@ export class SlotsService {
         return context.set(this.clientContextToken, 'default');
     }
 
-    slotsAllGet(observe?: 'body', options?: RequestOptions<'json'>): Observable<SlotResponseDTOListResponseDTO>;
-    slotsAllGet(observe?: 'response', options?: RequestOptions<'json'>): Observable<HttpResponse<SlotResponseDTOListResponseDTO>>;
-    slotsAllGet(observe?: 'events', options?: RequestOptions<'json'>): Observable<HttpEvent<SlotResponseDTOListResponseDTO>>;
-    slotsAllGet(observe?: 'body' | 'events' | 'response', options?: RequestOptions<'arraybuffer' | 'blob' | 'json' | 'text'>): Observable<any> {
+    slotsAllPost(slotDynamicFilters?: SlotDynamicFilters, observe?: 'body', options?: RequestOptions<'json'>): Observable<SlotResponseDTOListResponseDTO>;
+    slotsAllPost(slotDynamicFilters?: SlotDynamicFilters, observe?: 'response', options?: RequestOptions<'json'>): Observable<HttpResponse<SlotResponseDTOListResponseDTO>>;
+    slotsAllPost(slotDynamicFilters?: SlotDynamicFilters, observe?: 'events', options?: RequestOptions<'json'>): Observable<HttpEvent<SlotResponseDTOListResponseDTO>>;
+    slotsAllPost(slotDynamicFilters?: SlotDynamicFilters, observe?: 'body' | 'events' | 'response', options?: RequestOptions<'arraybuffer' | 'blob' | 'json' | 'text'>): Observable<any> {
         const url = `${this.basePath}/slots/all`;
 
         const requestOptions: any = {
@@ -37,7 +37,7 @@ export class SlotsService {
             context: this.createContextWithClientId(options?.context)
         };
 
-        return this.httpClient.get(url, requestOptions);
+        return this.httpClient.post(url, slotDynamicFilters, requestOptions);
     }
 
     slotsIdGet(id: string, observe?: 'body', options?: RequestOptions<'json'>): Observable<SlotResponseDTOResponseDTO>;

@@ -126,6 +126,12 @@ export interface Booking {
     student?: UserApp;
 }
 
+export interface BookingDetailsDTO {
+    readonly title?: string | null;
+    readonly description?: string | null;
+    student?: UserResponseDTO;
+}
+
 export interface BooleanResponseDTO {
     message: string;
     status: number;
@@ -860,6 +866,7 @@ export interface Slot {
     teacher?: UserApp;
     typeId?: string;
     type?: TypeSlot;
+    booking?: Booking;
 }
 
 /** DTO pour la création d'un nouveau créneau */
@@ -872,6 +879,15 @@ export interface SlotCreateDTO {
     teacherId: string;
     /** Identifiant du type de créneau */
     typeId: string;
+}
+
+export interface SlotDynamicFilters {
+    first?: number;
+    rows?: number;
+    search?: string | null;
+    globalSearch?: string | null;
+    sorts?: Sort[];
+    filters?: Record<string, FilterItem>;
 }
 
 /** DTO pour l'affichage des informations d'un créneau */
@@ -892,8 +908,7 @@ export interface SlotResponseDTO {
     createdAt: Date;
     /** Date de dernière mise à jour */
     updatedAt?: Date | null;
-    /** Indique si le créneau est disponible (non réservé) */
-    isAvailable?: boolean;
+    booking?: BookingDetailsDTO;
 }
 
 export interface SlotResponseDTOListResponseDTO {

@@ -1,5 +1,5 @@
-import { Component, computed, inject, input, model, output, signal, viewChild } from '@angular/core';
-import { CalendarOptions, DateSelectArg, DateSpanApi, EventClickArg, EventDropArg, EventInput } from '@fullcalendar/core/index.js';
+import { Component, computed, inject, input, model, OnInit, output, signal, viewChild } from '@angular/core';
+import { CalendarApi, CalendarOptions, DateSelectArg, DateSpanApi, EventClickArg, EventDropArg, EventInput, DatesSetArg } from '@fullcalendar/core/index.js';
 import { FullCalendarComponent, FullCalendarModule } from '@fullcalendar/angular';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import listPlugin from '@fullcalendar/list';
@@ -11,6 +11,10 @@ import { DateTime } from 'luxon';
 import { ModalQuickInfosComponent } from '../../../generic-components/modal-quick-infos/modal-quick-infos.component';
 import { ModalCreateEditSlotComponent } from '../../../generic-components/modal-create-edit-slot/modal-create-edit-slot.component';
 import { EventImpl } from '@fullcalendar/core/internal';
+import { SlotMainService } from '../../../shared/services/slot-main.service';
+import { TypeSlotResponseDTO } from '../../../../api/models';
+import { CustomTableState } from '../../../generic-components/smart-grid';
+import { UserMainService } from '../../../shared/services/userMain.service';
 
 @Component({
     selector: 'app-calendar-teacher',
@@ -18,26 +22,50 @@ import { EventImpl } from '@fullcalendar/core/internal';
     templateUrl: './calendar-teacher.component.html',
     styleUrl: './calendar-teacher.component.scss'
 })
-export class CalendarTeacherComponent {
+export class CalendarTeacherComponent implements OnInit {
     private fb = inject(FormBuilder);
-    calendarRef = viewChild(FullCalendarComponent);
+    slotMainService = inject(SlotMainService);
     selectedEvent = signal<EventInput>({});
+    userMainService = inject(UserMainService);
+    user = this.userMainService.userConnected;
 
     quickInfosVisible = signal(false);
     createEventVisible = signal(false);
 
-    sourceEvents = signal<EventInput[]>([
-        {
-            title: 'Event 1',
-            start: DateTime.local(2025, 10, 12, 10, 30).toISO() ?? '',
-            end: DateTime.local(2025, 10, 12, 11, 30).toISO() ?? ''
-        },
-        {
-            title: 'Event 2',
-            start: DateTime.local(2025, 10, 12, 8, 30).toISO() ?? '',
-            end: DateTime.local(2025, 10, 12, 9, 30).toISO() ?? ''
-        }
-    ]);
+    // calendar ref
+    calendarRef = viewChild(FullCalendarComponent);
+    calendarApi = computed(() => this.calendarRef()?.getApi() as CalendarApi);
+    startDate = signal<Date | null>(null);
+    endDate = signal<Date | null>(null);
+
+    // filters
+    filters = computed<CustomTableState>(() => {
+        const startDate = this.startDate()?.toISOString() ?? '';
+        const endDate = this.endDate()?.toISOString() ?? '';
+
+        return {
+            first: 0,
+            rows: 1000,
+            sorts: [],
+            filters: {
+                dateFrom: {
+                    value: startDate,
+                    matchMode: 'after'
+                },
+                dateTo: {
+                    value: endDate,
+                    matchMode: 'before'
+                },
+                teacherId: {
+                    value: this.user()?.id ?? '',
+                    matchMode: 'equals'
+                }
+            },
+            search: ''
+        };
+    });
+
+    sourceEvents = signal<EventInput[]>([]);
 
     initialView = computed(() => (window.innerWidth < 768 ? 'timeGridDay' : 'timeGridWeek'));
 
@@ -65,24 +93,33 @@ export class CalendarTeacherComponent {
         console.log(dropInfo);
     };
 
+    onDatesSet = (dateInfo: DatesSetArg) => {
+        this.startDate.set(dateInfo.start);
+        this.endDate.set(dateInfo.end);
+        this.loadData();
+    };
+
     // Method to get calendar API when needed
     getCalendarApi() {
         return this.calendarRef()?.getApi();
     }
 
-    calendarOptions = computed<CalendarOptions>(() => {
-        return {
+    calendarOptions = signal<CalendarOptions>(
+        // computed<CalendarOptions>
+        // (() => {
+        //     return
+        {
             initialView: this.initialView(),
-            initialDate: '2025-10-11',
+            initialDate: new Date().toISOString(),
             plugins: [dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin],
             locale: frLocale,
             headerToolbar: {
-                // left: 'prev,next today',
-                // center: 'title',
-                // right: 'dayGridMonth,timeGridWeek,timeGridDay'
-                right: '',
-                left: '',
-                center: ''
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                // right: '',
+                // left: '',
+                // center: ''
             },
             views: {
                 dayGridMonth: {
@@ -122,9 +159,28 @@ export class CalendarTeacherComponent {
             selectAllow: this.onStartDrag,
             eventAllow: this.canDrop,
             eventDrop: this.onDrop,
+            datesSet: this.onDatesSet,
             events: this.sourceEvents(),
-            eventColor: '#378006',
+            eventColor: '#d68181',
             eventDisplay: 'block'
-        };
-    });
+        }
+    );
+    // });
+
+    ngOnInit(): void {}
+
+    async loadData() {
+        console.log(this.filters());
+        console.log(this.startDate());
+        console.log(this.endDate());
+
+        const slots = await this.slotMainService.getAllSlots(this.filters());
+        this.sourceEvents.set(
+            slots.map((slot) => ({
+                title: slot?.type?.name ?? '',
+                start: slot.dateFrom,
+                end: slot.dateTo
+            }))
+        );
+    }
 }
