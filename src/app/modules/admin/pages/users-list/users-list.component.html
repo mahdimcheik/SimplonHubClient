@@ -1,3 +1,25 @@
+<app-smart-grid-modernized
+    [(data)]="users"
+    [columns]="columns()"
+    [(customComponents)]="customComponents"
+    [(tableState)]="filterParams"
+    [(totalRecords)]="totalRecords"
+    [(loading)]="loading"
+    [storageName]="'users-list-state'"
+    (onRowClick)="onRowClick($event)"
+>
+    <!-- <ng-template #left>
+        <div>
+            <h3 class="text-lg font-semibold">left content</h3>
+        </div>
+    </ng-template>
+    <ng-template #right>
+        <div>
+            <h3 class="text-lg font-semibold">right content</h3>
+        </div>
+    </ng-template> -->
+</app-smart-grid-modernized>
+
 <app-smart-grid
     [(data)]="users"
     [columns]="columns()"

@@ -46,6 +46,14 @@ export class ModalCreateEditSlotComponent implements OnInit {
         return event.end instanceof Date ? event.end : new Date(event?.end as string);
     });
 
+    typeId = computed(() => {
+        return this.slot()?.typeId ?? '';
+    });
+
+    // typeName = computed(() => {
+    //     return this.typesSlot().find((type) => type.id === this.typeId())?.name ?? '';
+    // });
+
     form = computed<Structure>(() => {
         return {
             id: 'slot',
@@ -59,7 +67,7 @@ export class ModalCreateEditSlotComponent implements OnInit {
                     fields: [
                         { id: 'dateFrom', label: 'Date de début', name: 'dateFrom', type: 'date', value: this.start(), showTime: true, fullWidth: true, timeOnly: true },
                         { id: 'dateTo', label: 'Date de fin', name: 'dateTo', type: 'date', value: this.end(), showTime: true, required: true, fullWidth: true, timeOnly: true },
-                        { id: 'typeId', label: 'Type', name: 'typeId', type: 'select', options: this.typesSlot(), required: true, compareKey: 'id', displayKey: 'name', value: this.slot()?.typeId, fullWidth: true }
+                        { id: 'typeId', label: 'Type', name: 'typeId', type: 'select', options: this.typesSlot(), required: true, compareKey: 'id', displayKey: 'name', value: this.typeId(), fullWidth: true }
                     ]
                 }
             ]
@@ -79,13 +87,22 @@ export class ModalCreateEditSlotComponent implements OnInit {
 
     async submit(event: FormGroup) {
         try {
-            const slot = await this.slotMainService.createSlot({
-                ...event.value.informations,
-                teacherId: this.user()?.id ?? ''
-            });
-            this.visible.set(false);
-            this.slotMainService.slots.update((current) => [...current, slot!]);
-            this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Créneau créé avec succès' });
+            if (!this.slot()) {
+                const slot = await this.slotMainService.createSlot({
+                    ...event.value.informations,
+                    teacherId: this.user()?.id ?? ''
+                });
+                this.visible.set(false);
+                this.slotMainService.slots.update((current) => [...current, slot!]);
+                this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Créneau créé avec succès' });
+            } else {
+                const slot = await this.slotMainService.updateSlot(this.slot()?.id ?? '', {
+                    ...event.value.informations,
+                    teacherId: this.user()?.id ?? ''
+                });
+                this.visible.set(false);
+                this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Créneau mis à jour avec succès' });
+            }
         } catch (error) {
             this.messageService.add({ severity: 'error', summary: 'Erreur', detail: 'Une erreur est survenue lors de la création du créneau.' });
         } finally {

@@ -9,13 +9,14 @@ import { ODataQueryBuilder, parseODataResponse } from '../../../../generic-compo
 import { UserMainService } from '../../../../shared/services/userMain.service';
 import { AdminMainService } from '../../../../shared/services/admin-main.service';
 import { firstValueFrom } from 'rxjs';
+import { SmartGridModernizedComponent } from '../../../../generic-components/smart-grid-modernized/smart-grid-modernized.component';
 
 /**
  * Example component showing how to use SmartGrid with OData backend
  */
 @Component({
     selector: 'app-users-list',
-    imports: [SmartGridComponent],
+    imports: [SmartGridComponent, SmartGridModernizedComponent],
     templateUrl: './users-list.component.html',
     styleUrl: './users-list.component.scss'
 })

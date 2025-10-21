@@ -57,3 +57,8 @@ export const INITIAL_STATE: CustomTableState = {
     sorts: [],
     filters: {}
 };
+export const DATE_FILTER_MATCH_MODES = [
+    { label: 'égal à', value: 'equals' },
+    { label: 'avant', value: 'before' },
+    { label: 'après', value: 'after' }
+];

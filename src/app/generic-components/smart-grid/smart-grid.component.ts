@@ -8,7 +8,7 @@ import { TagModule } from 'primeng/tag';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { TableModule } from 'primeng/table';
-import { CustomTableState, DynamicColDef, ICellRendererAngularComp, INITIAL_STATE, SortCriterion, SortOrder } from '../../shared/models/TableColumn ';
+import { CustomTableState, DATE_FILTER_MATCH_MODES, DynamicColDef, ICellRendererAngularComp, INITIAL_STATE, SortCriterion, SortOrder } from '../../shared/models/TableColumn ';
 import { ActionButtonRendererComponent } from './default-component';
 import { CustomSortComponent } from './custom-sort/custom-sort.component';
 import { DatePickerModule } from 'primeng/datepicker';
@@ -122,11 +122,7 @@ export class SmartGridComponent<T extends Record<string, any>> implements OnInit
     });
 
     // Date filter configuration
-    dateFilterMatchModes = [
-        { label: 'égal à', value: 'equals' },
-        { label: 'avant', value: 'before' },
-        { label: 'après', value: 'after' }
-    ];
+    dateFilterMatchModes = DATE_FILTER_MATCH_MODES;
 
     constructor() {
         // Debug effect to monitor state changes

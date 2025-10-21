@@ -12,7 +12,7 @@ import { ModalQuickInfosComponent } from '../../../generic-components/modal-quic
 import { ModalCreateEditSlotComponent } from '../../../generic-components/modal-create-edit-slot/modal-create-edit-slot.component';
 import { EventImpl } from '@fullcalendar/core/internal';
 import { SlotMainService } from '../../../shared/services/slot-main.service';
-import { TypeSlotResponseDTO } from '../../../../api/models';
+import { SlotResponseDTO, TypeSlotResponseDTO } from '../../../../api/models';
 import { CustomTableState } from '../../../generic-components/smart-grid';
 import { UserMainService } from '../../../shared/services/userMain.service';
 
@@ -82,15 +82,18 @@ export class CalendarTeacherComponent implements OnInit {
     };
 
     onStartDrag = (dragInfo: any) => {
+        this.selectedEvent.set(dragInfo);
         console.log(dragInfo);
-        return true;
+        return !dragInfo.extendedProps?.['slot']?.studentId && dragInfo.start > DateTime.now().toJSDate();
     };
+
     canDrop = (dropInfo: DateSpanApi, draggedEvent: EventImpl | null) => {
-        return false;
+        return (dropInfo.start > DateTime.now().toJSDate() && draggedEvent?.start && draggedEvent.start > DateTime.now().toJSDate() && !draggedEvent?.extendedProps?.['slot']?.studentId) ?? false;
     };
 
     onDrop = (dropInfo: EventDropArg) => {
-        console.log(dropInfo);
+        this.selectedEvent.set({ extendedProps: { slot: dropInfo.oldEvent.extendedProps?.['slot'] as SlotResponseDTO }, start: dropInfo.event?.start as Date, end: dropInfo.event?.end as Date });
+        this.createEventVisible.set(true);
     };
 
     onDatesSet = (dateInfo: DatesSetArg) => {
@@ -99,87 +102,77 @@ export class CalendarTeacherComponent implements OnInit {
         this.loadData();
     };
 
-    // Method to get calendar API when needed
     getCalendarApi() {
         return this.calendarRef()?.getApi();
     }
 
-    calendarOptions = signal<CalendarOptions>(
-        // computed<CalendarOptions>
-        // (() => {
-        //     return
-        {
-            initialView: this.initialView(),
-            initialDate: new Date().toISOString(),
-            plugins: [dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin],
-            locale: frLocale,
-            headerToolbar: {
-                left: 'prev,next today',
-                center: 'title',
-                right: 'dayGridMonth,timeGridWeek,timeGridDay'
-                // right: '',
-                // left: '',
-                // center: ''
+    calendarOptions = computed<CalendarOptions>(() => ({
+        initialView: this.initialView(),
+        initialDate: new Date().toISOString(),
+        plugins: [dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin],
+        locale: frLocale,
+        headerToolbar: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek,timeGridDay'
+        },
+        views: {
+            dayGridMonth: {
+                titleFormat: { year: 'numeric', month: '2-digit', day: '2-digit' }
             },
-            views: {
-                dayGridMonth: {
-                    titleFormat: { year: 'numeric', month: '2-digit', day: '2-digit' }
-                },
-                timeGridFiveDays: {
-                    type: 'timeGrid',
-                    duration: { days: 4 }
-                }
-            },
-            weekends: true,
-            slotDuration: '00:15:00',
-            slotMinTime: '06:00',
-            slotMaxTime: '22:00',
-            allDaySlot: true,
-            navLinks: true,
-            eventStartEditable: true,
-            eventOverlap: false,
-            weekNumbers: true,
-            selectMirror: true,
-            unselectAuto: true,
-            selectOverlap: false,
-            editable: true,
-            selectable: true,
-            eventDurationEditable: true,
-            defaultTimedEventDuration: '01:00:00',
-            nowIndicator: true,
-            allDayText: 'Heures',
-            droppable: false,
-            eventResizableFromStart: true,
-            height: 1000,
+            timeGridFiveDays: {
+                type: 'timeGrid',
+                duration: { days: 4 }
+            }
+        },
+        weekends: true,
+        slotDuration: '00:15:00',
+        slotMinTime: '06:00',
+        slotMaxTime: '22:00',
+        allDaySlot: true,
+        navLinks: true,
+        eventStartEditable: true,
+        eventOverlap: false,
+        weekNumbers: true,
+        selectMirror: true,
+        unselectAuto: true,
+        selectOverlap: false,
+        editable: true,
+        selectable: true,
+        eventDurationEditable: true,
+        defaultTimedEventDuration: '01:00:00',
+        nowIndicator: true,
+        allDayText: 'Heures',
+        droppable: false,
+        eventResizableFromStart: true,
+        height: 1000,
 
-            eventResizeStop() {},
-            eventResize: this.onResize,
-            select: this.onDateSelect,
-            eventClick: this.onEventClick,
-            selectAllow: this.onStartDrag,
-            eventAllow: this.canDrop,
-            eventDrop: this.onDrop,
-            datesSet: this.onDatesSet,
-            events: this.sourceEvents(),
-            eventColor: '#d68181',
-            eventDisplay: 'block'
-        }
-    );
+        eventResizeStop() {},
+        eventResize: this.onResize,
+        select: this.onDateSelect,
+        eventClick: this.onEventClick,
+        selectAllow: this.onStartDrag,
+        eventAllow: this.canDrop,
+        eventDrop: this.onDrop,
+        datesSet: this.onDatesSet,
+        events: this.sourceEvents(),
+        eventColor: '#d68181',
+        eventDisplay: 'block'
+    }));
     // });
 
     ngOnInit(): void {}
 
     async loadData() {
-        console.log(this.filters());
-        console.log(this.startDate());
-        console.log(this.endDate());
-
         const slots = await this.slotMainService.getAllSlots(this.filters());
         this.sourceEvents.set(
             slots.map((slot) => ({
                 title: slot?.type?.name ?? '',
                 start: slot.dateFrom,
-                end: slot.dateTo
+                end: slot.dateTo,
+                extendedProps: {
+                    slot: slot
+                }
             }))
         );
     }
