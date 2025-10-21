@@ -6,18 +6,10 @@
     [(totalRecords)]="totalRecords"
     [(loading)]="loading"
     [storageName]="'users-list-state'"
+    [itemRendererComponent]="cardUserComponent"
     (onRowClick)="onRowClick($event)"
+    [lineItemComponent]="cardUserComponent"
 >
-    <!-- <ng-template #left>
-        <div>
-            <h3 class="text-lg font-semibold">left content</h3>
-        </div>
-    </ng-template>
-    <ng-template #right>
-        <div>
-            <h3 class="text-lg font-semibold">right content</h3>
-        </div>
-    </ng-template> -->
 </app-smart-grid-modernized>
 
 <app-smart-grid

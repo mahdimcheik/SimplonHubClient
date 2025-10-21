@@ -1,17 +1,20 @@
 import { Component, effect, input, model, OnInit, output, signal, Type } from '@angular/core';
-import { CustomTableState, DATE_FILTER_MATCH_MODES, DynamicColDef, ICellRendererAngularComp, INITIAL_STATE } from '../../shared/models/TableColumn ';
+import { CustomTableState, DATE_FILTER_MATCH_MODES, DynamicColDef, ICellRendererAngularComp, INITIAL_STATE, SortCriterion, SortOrder } from '../../shared/models/TableColumn ';
 import { ActionButtonRendererComponent } from '../smart-grid/default-component';
 import { InputTextModule } from 'primeng/inputtext';
 import { DatePickerModule } from 'primeng/datepicker';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { SelectModule } from 'primeng/select';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgComponentOutlet } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
+import { TableModule } from 'primeng/table';
+import { CustomSortComponent } from '../smart-grid/custom-sort/custom-sort.component';
+import { PopoverModule } from 'primeng/popover';
 
 @Component({
     selector: 'app-smart-grid-modernized',
-    imports: [InputTextModule, SelectModule, MultiSelectModule, ButtonModule, DatePickerModule, CommonModule, FormsModule],
+    imports: [TableModule, InputTextModule, CustomSortComponent, PopoverModule, SelectModule, MultiSelectModule, ButtonModule, DatePickerModule, CommonModule, FormsModule, NgComponentOutlet],
     templateUrl: './smart-grid-modernized.component.html',
     styleUrl: './smart-grid-modernized.component.scss'
 })
@@ -25,7 +28,10 @@ export class SmartGridModernizedComponent<T extends Record<string, any>> impleme
     storageName = input<string>('');
     searchValue = signal<string>('');
     customComponents = model<{ [key: string]: Type<ICellRendererAngularComp> }>({});
+    itemRendererComponent = input<Type<any>>(); // Component to render each data item
+    itemPropertyName = input<string>(); // Optional: property name to pass data to the component (e.g., 'user', 'product')
     dateFilterMatchModes = DATE_FILTER_MATCH_MODES;
+    lineItemComponent = input<Type<ICellRendererAngularComp>>();
 
     // output
     onRowClick = output<T | T[] | undefined>();
@@ -48,6 +54,37 @@ export class SmartGridModernizedComponent<T extends Record<string, any>> impleme
             ...customComps,
             default: ActionButtonRendererComponent
         });
+    } // ========== Component Rendering ==========
+    getComponent(templateName: string | Type<ICellRendererAngularComp>): Type<ICellRendererAngularComp> {
+        if (typeof templateName === 'string') {
+            return this.componentMap()[templateName] || this.componentMap()['default'];
+        }
+        return templateName;
+    }
+
+    getSortOrderForField(field: string): SortOrder {
+        const sortCriterion = this.tableState().sorts.find((s) => s.field === field);
+        return sortCriterion?.order ?? 0;
+    }
+
+    sortChange(order: SortOrder, column: DynamicColDef): void {
+        const sortField = column.sortField ?? column.field;
+        const currentSorts = [...this.tableState().sorts];
+        const sortMap = new Map<string, SortCriterion>(currentSorts.map((s) => [s.field, s]));
+
+        if (order === 0) {
+            // Remove sort
+            sortMap.delete(sortField);
+        } else {
+            // Add or update sort
+            sortMap.set(sortField, { field: sortField, order });
+        }
+
+        this.tableState.update((state) => ({
+            ...state,
+            sorts: Array.from(sortMap.values()),
+            first: 0 // Reset to first page when sorting changes
+        }));
     }
 
     // ========== Filtering Methods ==========
@@ -152,5 +189,31 @@ export class SmartGridModernizedComponent<T extends Record<string, any>> impleme
                 this.tableState.set(JSON.parse(state));
             }
         }
+    }
+
+    // Helper method to create inputs for the dynamic component
+    getComponentInputs(item: T): Record<string, any> {
+        // If itemPropertyName is explicitly provided, use it
+        if (this.itemPropertyName()) {
+            return { [this.itemPropertyName()!]: item };
+        }
+
+        // Otherwise, try to infer the property name from the component name
+        // For CardUserComponent, it expects a 'user' input
+        const componentName = this.itemRendererComponent()?.name.toLowerCase() || '';
+
+        // Try to infer the property name from the component name
+        // e.g., CardUserComponent -> user, CardProductComponent -> product
+        let propertyName = 'data'; // default fallback
+
+        if (componentName.includes('user')) {
+            propertyName = 'user';
+        } else if (componentName.includes('product')) {
+            propertyName = 'product';
+        } else if (componentName.includes('item')) {
+            propertyName = 'item';
+        }
+
+        return { [propertyName]: item };
     }
 }

@@ -10,6 +10,7 @@ import { UserMainService } from '../../../../shared/services/userMain.service';
 import { AdminMainService } from '../../../../shared/services/admin-main.service';
 import { firstValueFrom } from 'rxjs';
 import { SmartGridModernizedComponent } from '../../../../generic-components/smart-grid-modernized/smart-grid-modernized.component';
+import { CardUserComponent } from './card-user/card-user.component';
 
 /**
  * Example component showing how to use SmartGrid with OData backend
@@ -40,6 +41,10 @@ export class UsersListComponent {
     // Options for filters
     statuses = signal<StatusAccountDTO[]>([]);
     roles = signal<RoleAppResponseDTO[]>([]);
+
+    // Item renderer component
+    cardUserComponent = CardUserComponent;
+
     // Column definitions
     columns = computed<DynamicColDef[]>(() => {
         const statuses = this.statuses();
