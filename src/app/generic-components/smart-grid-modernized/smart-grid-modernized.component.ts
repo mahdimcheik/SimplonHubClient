@@ -11,10 +11,11 @@ import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
 import { CustomSortComponent } from '../smart-grid/custom-sort/custom-sort.component';
 import { PopoverModule } from 'primeng/popover';
+import { PaginatorModule } from 'primeng/paginator';
 
 @Component({
     selector: 'app-smart-grid-modernized',
-    imports: [TableModule, InputTextModule, CustomSortComponent, PopoverModule, SelectModule, MultiSelectModule, ButtonModule, DatePickerModule, CommonModule, FormsModule, NgComponentOutlet],
+    imports: [TableModule, InputTextModule, CustomSortComponent, PaginatorModule, PopoverModule, SelectModule, MultiSelectModule, ButtonModule, DatePickerModule, CommonModule, FormsModule, NgComponentOutlet],
     templateUrl: './smart-grid-modernized.component.html',
     styleUrl: './smart-grid-modernized.component.scss'
 })

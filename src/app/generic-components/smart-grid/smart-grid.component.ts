@@ -106,7 +106,7 @@ export class SmartGridComponent<T extends Record<string, any>> implements OnInit
     loading = model(false);
     columns = model.required<DynamicColDef[]>();
     searchValue = signal<string>('');
-    height = input<string>('flex');
+    height = input<string>('800px');
     editMode = model<boolean>(false);
     storageName = input<string>('');
     // Content children
