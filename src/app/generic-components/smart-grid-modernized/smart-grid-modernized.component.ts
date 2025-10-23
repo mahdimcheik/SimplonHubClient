@@ -44,11 +44,6 @@ export class SmartGridModernizedComponent<T extends Record<string, any>> impleme
     });
 
     constructor() {
-        effect(() => {
-            const state = this.tableState();
-        });
-    }
-    ngOnInit(): void {
         this.getStateFromLocalStorage();
         // Initialize component map with custom components
         const customComps = this.customComponents();
@@ -56,7 +51,14 @@ export class SmartGridModernizedComponent<T extends Record<string, any>> impleme
             ...customComps,
             default: ActionButtonRendererComponent
         });
-    } // ========== Component Rendering ==========
+        effect(() => {
+            const state = this.tableState();
+        });
+    }
+
+    ngOnInit(): void {}
+
+    // ========== Component Rendering ==========
     getComponent(templateName: string | Type<ICellRendererAngularComp>): Type<ICellRendererAngularComp> {
         if (typeof templateName === 'string') {
             return this.componentMap()[templateName] || this.componentMap()['default'];

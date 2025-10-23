@@ -39,4 +39,20 @@ export class UsersService {
 
         return this.httpClient.post(url, userAppDynamicFilters, requestOptions);
     }
+
+    usersListTeachersPost(userAppDynamicFilters?: UserAppDynamicFilters, observe?: 'body', options?: RequestOptions<'json'>): Observable<UserResponseDTOListResponseDTO>;
+    usersListTeachersPost(userAppDynamicFilters?: UserAppDynamicFilters, observe?: 'response', options?: RequestOptions<'json'>): Observable<HttpResponse<UserResponseDTOListResponseDTO>>;
+    usersListTeachersPost(userAppDynamicFilters?: UserAppDynamicFilters, observe?: 'events', options?: RequestOptions<'json'>): Observable<HttpEvent<UserResponseDTOListResponseDTO>>;
+    usersListTeachersPost(userAppDynamicFilters?: UserAppDynamicFilters, observe?: 'body' | 'events' | 'response', options?: RequestOptions<'arraybuffer' | 'blob' | 'json' | 'text'>): Observable<any> {
+        const url = `${this.basePath}/users/list-teachers`;
+
+        const requestOptions: any = {
+            observe: observe as any,
+            reportProgress: options?.reportProgress,
+            withCredentials: options?.withCredentials,
+            context: this.createContextWithClientId(options?.context)
+        };
+
+        return this.httpClient.post(url, userAppDynamicFilters, requestOptions);
+    }
 }

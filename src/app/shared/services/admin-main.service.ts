@@ -45,14 +45,37 @@ import { CustomTableState } from '../models/TableColumn ';
 export class AdminMainService {
     baseUrl = environment.API_URL;
     private userService = inject(UsersService);
-    private roleAppService = inject(RoleAppService);
-    private localStorageService = inject(LocalstorageService);
-    private roleappService = inject(RoleAppService);
 
     getUsers(CustomTableState: CustomTableState) {
         try {
             return firstValueFrom(
                 this.userService.usersListPost(CustomTableState).pipe(
+                    map((response: UserResponseDTOListResponseDTO) => {
+                        const legacyResponse: ResponseDTO<UserResponseDTO[]> = {
+                            message: response.message || '',
+                            status: response.status || 200,
+                            data: response.data as UserResponseDTO[],
+                            count: response.count || 0
+                        };
+                        return legacyResponse;
+                    })
+                )
+            );
+        } catch (error) {
+            console.error('Error loading users:', error);
+            return {
+                message: 'Erreur lors du chargement des utilisateurs',
+                status: 500,
+                data: [],
+                count: 0
+            };
+        }
+    }
+
+    getTeachers(CustomTableState: CustomTableState) {
+        try {
+            return firstValueFrom(
+                this.userService.usersListTeachersPost(CustomTableState).pipe(
                     map((response: UserResponseDTOListResponseDTO) => {
                         const legacyResponse: ResponseDTO<UserResponseDTO[]> = {
                             message: response.message || '',
