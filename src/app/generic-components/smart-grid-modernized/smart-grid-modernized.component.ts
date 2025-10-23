@@ -25,6 +25,7 @@ export class SmartGridModernizedComponent<T extends Record<string, any>> impleme
     tableState = model<CustomTableState>(INITIAL_STATE);
     totalRecords = model<number>(0);
     loading = model(false);
+    heightToSubtractPx = input<string>('300px');
     title = input<string>('');
     storageName = input<string>('');
     searchValue = signal<string>('');

@@ -1,4 +1,15 @@
-<p-dialog [(visible)]="visible" [modal]="true" [dismissableMask]="true" [closeOnEscape]="true" [closable]="false" [draggable]="false" [resizable]="false" styleClass="confirm-modal" [style]="{ width: '90vw', maxWidth: '500px' }" (onHide)="onHide()">
+<p-dialog
+    [(visible)]="visible"
+    [modal]="true"
+    [dismissableMask]="true"
+    [closeOnEscape]="true"
+    [closable]="false"
+    [draggable]="false"
+    [resizable]="false"
+    styleClass="confirm-modal"
+    [style]="{ width: '90vw', maxWidth: '500px', border: `3px solid ${event()?.extendedProps?.['slot']?.type?.color ?? 'red'}` }"
+    (onHide)="onHide()"
+>
     <!-- Header -->
     <ng-template pTemplate="header">
         <div class="flex flex-1 justify-between items-center gap-3">
@@ -11,7 +22,7 @@
                     <p-button label="Editer" (onClick)="edit()" class="flex-shrink-0" severity="secondary">
                         <i class="pi pi-pencil"></i>
                     </p-button>
-                    <p-divider layout="vertical" />
+                    <p-divider layout="vertical" [style]="{ margin: '0 8px' }" />
                 }
                 <p-button (onClick)="close()" class="flex-shrink-0" severity="secondary">
                     <i class="pi pi-times"></i>

@@ -218,7 +218,7 @@
             </p-popover>
         </div>
     </div>
-    <div class="flex flex-col gap-1 bg-white p-4 rounded-md dark:bg-gray-800 overflow-y-auto" style="height: calc(100vh - 300px)">
+    <div class="flex flex-col gap-1 bg-white p-4 rounded-md dark:bg-gray-800 overflow-y-auto" [style]="`height: calc(100vh - ${heightToSubtractPx()})`">
         @for (item of data(); track item[columns()[0].field] || $index) {
             <div class="flex flex-col gap-1 bg-white rounded-md dark:bg-gray-800">
                 <ng-container *ngComponentOutlet="lineItemComponent() ?? null; inputs: { data: item }" />

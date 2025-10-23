@@ -1,4 +1,4 @@
-import { Component, computed, inject, linkedSignal, model, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, linkedSignal, model, OnInit, output, signal } from '@angular/core';
 import { DialogModule } from 'primeng/dialog';
 import { ConfigurableFormComponent } from '../configurable-form/configurable-form.component';
 import { DrawerModule } from 'primeng/drawer';
@@ -50,10 +50,6 @@ export class ModalCreateEditSlotComponent implements OnInit {
         return this.slot()?.typeId ?? '';
     });
 
-    // typeName = computed(() => {
-    //     return this.typesSlot().find((type) => type.id === this.typeId())?.name ?? '';
-    // });
-
     form = computed<Structure>(() => {
         return {
             id: 'slot',
@@ -75,6 +71,9 @@ export class ModalCreateEditSlotComponent implements OnInit {
     });
 
     typesSlot = signal<TypeSlotResponseDTO[]>([]);
+
+    // output
+    onExit = output<void>();
 
     ngOnInit(): void {
         this.loadData();
@@ -112,5 +111,6 @@ export class ModalCreateEditSlotComponent implements OnInit {
 
     cancel() {
         this.visible.set(false);
+        this.onExit.emit();
     }
 }

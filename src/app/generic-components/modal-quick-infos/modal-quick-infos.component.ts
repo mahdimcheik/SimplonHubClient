@@ -1,4 +1,4 @@
-import { Component, computed, inject, input, model } from '@angular/core';
+import { Component, computed, inject, input, model, output } from '@angular/core';
 import { EventInput } from '@fullcalendar/core/index.js';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
@@ -20,6 +20,11 @@ export class ModalQuickInfosComponent {
     showSubmitButton = model(true);
     showCancelButton = model(true);
     showEditButton = model(false);
+    // datePipe = inject(DatePipe);
+
+    // output
+    onEdit = output<void>();
+    onClose = output<void>();
 
     slot = computed<Slot | null>(() => {
         if (this.event()?.extendedProps && this.event()?.extendedProps?.['slot']) {
@@ -27,18 +32,21 @@ export class ModalQuickInfosComponent {
         }
         return null;
     });
-    title = computed(() => (this.slot() ? `Détails du créneau - ${this.slot()?.dateTo}` : "Détails de l'événement"));
+    title = computed(() => (this.slot() ? `Détails du créneau - ${new Date(this.slot()?.dateTo as Date).toLocaleDateString('fr-FR')}` : "Détails de l'événement"));
 
     close = () => {
         this.visible.set(false);
+        this.onClose.emit();
     };
 
     onHide = () => {
         this.visible.set(false);
+        this.onClose.emit();
     };
 
     edit() {
         this.isEditing.set(true);
         this.close();
+        this.onEdit.emit();
     }
 }
