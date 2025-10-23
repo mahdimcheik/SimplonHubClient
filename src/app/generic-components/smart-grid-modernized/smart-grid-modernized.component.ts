@@ -89,6 +89,7 @@ export class SmartGridModernizedComponent<T extends Record<string, any>> impleme
             sorts: Array.from(sortMap.values()),
             first: 0 // Reset to first page when sorting changes
         }));
+        this.saveStateToLocalStorage();
     }
 
     // ========== Filtering Methods ==========

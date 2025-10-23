@@ -4,7 +4,7 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { SmartGridModernizedComponent } from '../../../../generic-components/smart-grid-modernized/smart-grid-modernized.component';
 import { CardUserComponent } from '../../../admin/pages/users-list/card-user/card-user.component';
 import { ActionButtonRendererComponent, CustomTableState, DynamicColDef, ICellRendererAngularComp, INITIAL_STATE } from '../../../../generic-components/smart-grid';
-import { RoleAppResponseDTO, StatusAccountDTO, UserResponseDTO } from '../../../../../api';
+import { LanguageResponseDTO, RoleAppResponseDTO, StatusAccountDTO, UserResponseDTO } from '../../../../../api';
 import { OptionsRendererComponent } from '../../../../generic-components/smart-grid/options-component';
 import { UserMainService } from '../../../../shared/services/userMain.service';
 import { AdminMainService } from '../../../../shared/services/admin-main.service';
@@ -37,6 +37,7 @@ export class TeacherListComponent {
     // Options for filters
     statuses = signal<StatusAccountDTO[]>([]);
     roles = signal<RoleAppResponseDTO[]>([]);
+    languages = signal<LanguageResponseDTO[]>([]);
 
     // Item renderer component
     cardUserComponent = CardUserComponent;
@@ -45,6 +46,7 @@ export class TeacherListComponent {
     columns = computed<DynamicColDef[]>(() => {
         const statuses = this.statuses();
         const roles = this.roles();
+        const languages = this.languages();
         return [
             {
                 field: 'lastName',
@@ -62,6 +64,30 @@ export class TeacherListComponent {
                 sortable: true,
                 sortField: 'email',
                 filterable: true
+            },
+            {
+                field: 'userLanguages',
+                header: 'Langues',
+                type: 'array',
+                options: this.languages(),
+                optionLabel: 'name',
+                optionValue: 'id',
+                filterable: true,
+                filterField: 'languages/Id',
+                cellRenderer: 'options',
+                cellRendererParams: {
+                    field: 'userLanguages',
+                    options: this.languages(),
+                    optionLabel: 'name',
+                    optionValue: 'id'
+                }
+            },
+            {
+                field: 'TeacherCursuses/name',
+                header: 'Cursuses',
+                type: 'text',
+                filterable: true,
+                width: '200px'
             }
         ];
     });
@@ -83,7 +109,7 @@ export class TeacherListComponent {
     }
     constructor() {
         this.getStatuses();
-
+        this.getLanguages();
         effect(
             () => {
                 const state = this.filterParams();
@@ -104,6 +130,19 @@ export class TeacherListComponent {
             } as CustomTableState)
         );
         this.statuses.set(response.data ?? []);
+        return response.data ?? [];
+    }
+    async getLanguages() {
+        this.languages.set([]);
+        const response = await firstValueFrom(
+            this.userService.getLanguages({
+                first: 0,
+                rows: 10,
+                sorts: [],
+                filters: {}
+            } as CustomTableState)
+        );
+        this.languages.set(response.data ?? []);
         return response.data ?? [];
     }
 
