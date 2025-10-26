@@ -9,13 +9,18 @@ import { ODataQueryBuilder, parseODataResponse } from '../../../../generic-compo
 import { UserMainService } from '../../../../shared/services/userMain.service';
 import { AdminMainService } from '../../../../shared/services/admin-main.service';
 import { firstValueFrom } from 'rxjs';
+import { SmartGridModernizedComponent } from '../../../../generic-components/smart-grid-modernized/smart-grid-modernized.component';
+import { CardUserComponent } from './card-user/card-user.component';
+import { ButtonModule } from 'primeng/button';
+import { RadioButtonModule } from 'primeng/radiobutton';
+import { FormsModule } from '@angular/forms';
 
 /**
  * Example component showing how to use SmartGrid with OData backend
  */
 @Component({
     selector: 'app-users-list',
-    imports: [SmartGridComponent],
+    imports: [SmartGridComponent, SmartGridModernizedComponent, ButtonModule, RadioButtonModule, FormsModule],
     templateUrl: './users-list.component.html',
     styleUrl: './users-list.component.scss'
 })
@@ -26,6 +31,7 @@ export class UsersListComponent {
     filterParams = signal<CustomTableState>(INITIAL_STATE);
     loading = signal(false);
     totalRecords = signal(0);
+    viewMode = signal<'grid' | 'list'>('grid');
 
     // Custom components
     customComponents = signal<{ [key: string]: Type<ICellRendererAngularComp> }>({
@@ -39,6 +45,10 @@ export class UsersListComponent {
     // Options for filters
     statuses = signal<StatusAccountDTO[]>([]);
     roles = signal<RoleAppResponseDTO[]>([]);
+
+    // Item renderer component
+    cardUserComponent = CardUserComponent;
+
     // Column definitions
     columns = computed<DynamicColDef[]>(() => {
         const statuses = this.statuses();

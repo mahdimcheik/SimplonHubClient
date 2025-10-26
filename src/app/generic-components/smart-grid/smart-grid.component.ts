@@ -8,91 +8,16 @@ import { TagModule } from 'primeng/tag';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { TableModule } from 'primeng/table';
-import { CustomTableState, DynamicColDef, ICellRendererAngularComp, INITIAL_STATE, SortCriterion, SortOrder } from '../../shared/models/TableColumn ';
+import { CustomTableState, DATE_FILTER_MATCH_MODES, DynamicColDef, ICellRendererAngularComp, INITIAL_STATE, SortCriterion, SortOrder } from '../../shared/models/TableColumn ';
 import { ActionButtonRendererComponent } from './default-component';
 import { CustomSortComponent } from './custom-sort/custom-sort.component';
 import { DatePickerModule } from 'primeng/datepicker';
 import { ButtonModule } from 'primeng/button';
 import { PopoverModule } from 'primeng/popover';
-
-/**
- * SmartGridComponent - A powerful, ag-grid-like data table component with OData support
- *
- * This component provides a customizable data grid with:
- * - Programmatic column definitions
- * - Custom state management for filters and sorting
- * - OData-ready (server-side filtering and sorting)
- * - Multiple filter types: text, select, array, date
- * - Custom cell renderers
- * - Pagination with total count support
- *
- * @example
- * ```typescript
- * // In your component:
- * import { ODataQueryBuilder } from '@generic-components/smart-grid/odata-query-builder';
- *
- * columns = signal<DynamicColDef[]>([
- *   {
- *     field: 'name',
- *     header: 'Name',
- *     type: 'text',
- *     sortable: true,
- *     filterable: true
- *   },
- *   {
- *     field: 'status',
- *     header: 'Status',
- *     type: 'select',
- *     options: statuses,
- *     optionLabel: 'name',
- *     optionValue: 'id',
- *     filterable: true
- *   },
- *   {
- *     field: 'createdAt',
- *     header: 'Created',
- *     type: 'date',
- *     filterable: true
- *   }
- * ]);
- *
- * // Subscribe to state changes and load data
- * effect(() => {
- *   const state = this.tableState();
- *   const odataQuery = ODataQueryBuilder.buildQuery(state);
- *   const queryString = ODataQueryBuilder.toQueryString(odataQuery);
- *   this.loadData(queryString);
- * });
- *
- * async loadData(queryString: string) {
- *   this.loading.set(true);
- *   const response = await this.api.getUsers(queryString);
- *   const { data, totalCount } = parseODataResponse(response);
- *   this.users.set(data);
- *   this.totalRecords.set(totalCount);
- *   this.loading.set(false);
- * }
- *
- * // In your template:
- * <app-smart-grid
- *   [(data)]="users"
- *   [(columns)]="columns"
- *   [(tableState)]="tableState"
- *   [(totalRecords)]="totalRecords"
- *   [(loading)]="loading"
- * />
- * ```
- *
- * @property {T[]} data - The data array from server
- * @property {DynamicColDef[]} columns - Column definitions
- * @property {CustomTableState} tableState - Current state (filters, sorts, pagination)
- * @property {number} totalRecords - Total count from OData @odata.count
- * @property {boolean} loading - Loading indicator
- * @property {Object} customComponents - Custom cell renderer components
- */
+import { PaginatorModule } from 'primeng/paginator';
 @Component({
     selector: 'app-smart-grid',
-    imports: [TableModule, TagModule, IconFieldModule, InputTextModule, InputIconModule, MultiSelectModule, SelectModule, CommonModule, CustomSortComponent, DatePickerModule, FormsModule, ButtonModule, PopoverModule],
+    imports: [TableModule, TagModule, PaginatorModule, IconFieldModule, InputTextModule, InputIconModule, MultiSelectModule, SelectModule, CommonModule, CustomSortComponent, DatePickerModule, FormsModule, ButtonModule, PopoverModule],
     templateUrl: './smart-grid.component.html',
     styleUrl: './smart-grid.component.scss'
 })
@@ -106,9 +31,10 @@ export class SmartGridComponent<T extends Record<string, any>> implements OnInit
     loading = model(false);
     columns = model.required<DynamicColDef[]>();
     searchValue = signal<string>('');
-    height = input<string>('flex');
+    height = input<string>('1000px');
     editMode = model<boolean>(false);
     storageName = input<string>('');
+    heightToSubtractPx = input<string>('185px');
     // Content children
     rightContent = contentChild<TemplateRef<any>>('right');
     leftContent = contentChild<TemplateRef<any>>('left');
@@ -122,11 +48,7 @@ export class SmartGridComponent<T extends Record<string, any>> implements OnInit
     });
 
     // Date filter configuration
-    dateFilterMatchModes = [
-        { label: 'égal à', value: 'equals' },
-        { label: 'avant', value: 'before' },
-        { label: 'après', value: 'after' }
-    ];
+    dateFilterMatchModes = DATE_FILTER_MATCH_MODES;
 
     constructor() {
         // Debug effect to monitor state changes

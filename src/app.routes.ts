@@ -18,11 +18,13 @@ import { PasswordResetSuccessfullyComponent } from './app/modules/auth/pages/pas
 // Landing components
 import { MainComponent } from './app/pages/landing/sub-pages/main/main.component';
 import { MentionsLegalesComponent } from './app/pages/landing/sub-pages/mentions-legales/mentions-legales.component';
-import { ProfileTeacherComponent } from './app/modules/teacher/profile-teacher/profile-teacher.component';
+import { ProfileTeacherComponent } from './app/modules/teacher/pages/profile-teacher/profile-teacher.component';
 import { UsersListComponent } from './app/modules/admin/pages/users-list/users-list.component';
-import { CalendarTeacherComponent } from './app/modules/teacher/calendar-teacher/calendar-teacher.component';
+import { CalendarTeacherComponent } from './app/modules/teacher/pages/calendar-teacher/calendar-teacher.component';
 import { GestionCursusesComponent } from './app/modules/teacher/pages/gestion-cursuses/gestion-cursuses.component';
 import { AdminitrationComponent } from './app/modules/admin/pages/adminitration/adminitration.component';
+import { CalendarStudentComponent } from './app/modules/student/pages/calendar-student/calendar-student.component';
+import { TeacherListComponent } from './app/modules/student/pages/teacher-list/teacher-list.component';
 
 // Define path constants
 const TEACHER_PATH = 'teacher';
@@ -111,6 +113,15 @@ export const appRoutes: Routes = [
             { path: SETTINGS_PATH, component: SettingsComponent },
             { path: 'users-list', component: UsersListComponent },
             { path: 'adminitration', component: AdminitrationComponent }
+        ]
+    },
+    {
+        path: STUDENT_PATH,
+        component: AppLayout,
+        canActivate: [isConnectedGuard],
+        children: [
+            { path: '', component: CalendarStudentComponent },
+            { path: 'teacher-list', component: TeacherListComponent }
         ]
     },
 

@@ -1,6 +1,7 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { SlotCreateDTO, SlotResponseDTO, SlotsService, SlotUpdateDTO, TypeSlotResponseDTO, TypeSlotService } from '../../../api';
 import { firstValueFrom } from 'rxjs';
+import { CustomTableState } from '../../generic-components/smart-grid';
 
 @Injectable({
     providedIn: 'root'
@@ -16,6 +17,12 @@ export class SlotMainService {
     // Get slots by user
     async getAllSlotsByUser(userId: string) {
         const slots = await firstValueFrom(this.slotsService.slotsTeacherTeacherIdGet(userId));
+        this.slots.set(slots.data || []);
+        return slots.data || [];
+    }
+
+    async getAllSlots(filters: CustomTableState) {
+        const slots = await firstValueFrom(this.slotsService.slotsAllPost(filters));
         this.slots.set(slots.data || []);
         return slots.data || [];
     }
@@ -38,6 +45,13 @@ export class SlotMainService {
     }
 
     async getAllTypeSlot() {
+        const typeSlot = await firstValueFrom(this.typeSlotService.typeslotAllGet());
+        this.TypeSlot.set(typeSlot.data || []);
+        return typeSlot.data || [];
+    }
+
+    // get all type slot
+    async getTypeSlot() {
         const typeSlot = await firstValueFrom(this.typeSlotService.typeslotAllGet());
         this.TypeSlot.set(typeSlot.data || []);
         return typeSlot.data || [];

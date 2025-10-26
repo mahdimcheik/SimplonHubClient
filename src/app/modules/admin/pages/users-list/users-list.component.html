@@ -1,22 +1,55 @@
-<app-smart-grid
-    [(data)]="users"
-    [columns]="columns()"
-    [(customComponents)]="customComponents"
-    [(tableState)]="filterParams"
-    [(totalRecords)]="totalRecords"
-    [(loading)]="loading"
-    [height]="'1000px'"
-    [storageName]="'users-list-state'"
-    (onRowClick)="onRowClick($event)"
->
-    <!-- <ng-template #left>
-        <div>
-            <h3 class="text-lg font-semibold">left content</h3>
+<header class="flex flex-row justify-between items-center gap-2">
+    <h1 class="text-2xl font-bold">Liste des utilisateurs</h1>
+    <div class="flex flex-row justify-end items-center gap-2">
+        <div class="flex items-center">
+            <p-radiobutton name="pizza" value="grid" [(ngModel)]="viewMode" inputId="grille" />
+            <label for="grille" class="ml-2">Grille</label>
         </div>
-    </ng-template>
-    <ng-template #right>
-        <div>
-            <h3 class="text-lg font-semibold">right content</h3>
+
+        <div class="flex items-center">
+            <p-radiobutton name="pizza" value="list" [(ngModel)]="viewMode" inputId="liste" />
+            <label for="liste" class="ml-2">Liste</label>
         </div>
-    </ng-template> -->
-</app-smart-grid>
+    </div>
+</header>
+<div class="gap-2 flex flex-col" style="height: 900px">
+    @if (viewMode() === 'grid') {
+        <app-smart-grid-modernized
+            [(data)]="users"
+            [columns]="columns()"
+            [(customComponents)]="customComponents"
+            [(tableState)]="filterParams"
+            [(totalRecords)]="totalRecords"
+            [(loading)]="loading"
+            [storageName]="'users-list-state'"
+            [itemRendererComponent]="cardUserComponent"
+            (onRowClick)="onRowClick($event)"
+            [lineItemComponent]="cardUserComponent"
+        >
+        </app-smart-grid-modernized>
+    } @else {
+        <app-smart-grid
+            [(data)]="users"
+            [columns]="columns()"
+            [(customComponents)]="customComponents"
+            [(tableState)]="filterParams"
+            [(totalRecords)]="totalRecords"
+            [(loading)]="loading"
+            height="'1000px'"
+            [storageName]="'users-list-state'"
+            [title]="'Liste des utilisateurs'"
+            (onRowClick)="onRowClick($event)"
+        >
+            <!-- <ng-template #left>
+            <div>
+                <h3 class="text-lg font-semibold">left content</h3>
+            </div>
+        </ng-template>
+        <ng-template #right>
+            <div>
+                <h3 class="text-lg font-semibold">right content</h3>
+            </div>
+        </ng-template> -->
+        </app-smart-grid>
+    }
+</div>
