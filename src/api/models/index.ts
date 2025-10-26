@@ -828,6 +828,7 @@ export interface RoleAppResponseDTO {
     /** Nom normalisé du rôle (en majuscules) */
     normalizedName?: string | null;
     color?: string | null;
+    displayName?: string | null;
     /** Date de création de l'enregistrement */
     createdAt: Date;
     /** Date de dernière mise à jour */
