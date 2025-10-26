@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal, viewChild } from '@angular/core';
+import { Component, computed, DestroyRef, inject, OnInit, signal, viewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { CalendarApi, CalendarOptions, DateSelectArg, DateSpanApi, DatesSetArg, EventClickArg, EventDropArg, EventInput } from '@fullcalendar/core/index.js';
 import { SlotMainService } from '../../../../shared/services/slot-main.service';
@@ -15,6 +15,8 @@ import listPlugin from '@fullcalendar/list';
 import frLocale from '@fullcalendar/core/locales/fr';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
+import { ActivatedRoute } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
     selector: 'app-calendar-student',
@@ -22,9 +24,11 @@ import interactionPlugin from '@fullcalendar/interaction';
     templateUrl: './calendar-student.component.html',
     styleUrl: './calendar-student.component.scss'
 })
-export class CalendarStudentComponent {
+export class CalendarStudentComponent implements OnInit {
     private fb = inject(FormBuilder);
     slotMainService = inject(SlotMainService);
+    activatedRoute = inject(ActivatedRoute);
+    destroyRef = inject(DestroyRef);
     selectedEvent = signal<EventInput>({});
     userMainService = inject(UserMainService);
     calendarSetupService = inject(CalendarSetupService);
@@ -38,33 +42,7 @@ export class CalendarStudentComponent {
     calendarApi = computed(() => this.calendarRef()?.getApi() as CalendarApi);
     startDate = signal<Date | null>(null);
     endDate = signal<Date | null>(null);
-
-    // filters
-    filters = computed<CustomTableState>(() => {
-        const startDate = this.startDate()?.toISOString() ?? '';
-        const endDate = this.endDate()?.toISOString() ?? '';
-
-        return {
-            first: 0,
-            rows: 1000,
-            sorts: [],
-            filters: {
-                dateFrom: {
-                    value: startDate,
-                    matchMode: 'after'
-                },
-                dateTo: {
-                    value: endDate,
-                    matchMode: 'before'
-                },
-                teacherId: {
-                    value: this.user()?.id ?? '',
-                    matchMode: 'equals'
-                }
-            },
-            search: ''
-        };
-    });
+    teacherId = signal<string | null>(null);
 
     sourceEvents = signal<EventInput[]>([]);
 
@@ -75,7 +53,9 @@ export class CalendarStudentComponent {
         this.selectedEvent.set({ extendedProps: { slot: event.oldEvent.extendedProps?.['slot'] as SlotResponseDTO }, start: event.event?.start as Date, end: event.event?.end as Date });
         this.createEventVisible.set(true);
     };
+
     onDateSelect = (selectInfo: DateSelectArg) => {};
+
     onEventClick = (clickInfo: EventClickArg) => {
         this.selectedEvent.set(clickInfo.event as EventInput);
         this.quickInfosVisible.set(true);
@@ -150,12 +130,20 @@ export class CalendarStudentComponent {
         eventColor: 'transparent',
         eventDisplay: 'block'
     }));
-    // });
 
-    ngOnInit(): void {}
+    ngOnInit(): void {
+        this.activatedRoute.params.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
+            const teacherId = params['teacherId'];
+            if (teacherId) {
+                this.teacherId.set(teacherId);
+            } else {
+                this.teacherId.set(null);
+            }
+        });
+    }
 
     async loadData() {
-        const slots = await this.slotMainService.getAllSlots(this.filters());
+        const slots = await this.slotMainService.getAllSlotsByStudent(this.startDate() ?? new Date(), this.endDate() ?? new Date(), this.teacherId() ?? undefined);
         this.sourceEvents.set(
             slots.map((slot) => ({
                 title: slot?.type?.name ?? '',
@@ -166,7 +154,9 @@ export class CalendarStudentComponent {
                 }
             }))
         );
+        console.log('sourceEvents', this.sourceEvents());
     }
+
     editEvent() {
         this.selectedEvent.set(this.selectedEvent() as EventInput);
         this.createEventVisible.set(true);

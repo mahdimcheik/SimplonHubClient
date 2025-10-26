@@ -27,6 +27,12 @@ export class SlotMainService {
         return slots.data || [];
     }
 
+    async getAllSlotsByStudent(dateFrom: Date, dateTo: Date, teacherId?: string) {
+        const slots = await firstValueFrom(this.slotsService.slotsStudentGet(dateFrom, dateTo, teacherId));
+        this.slots.set(slots.data || []);
+        return slots.data || [];
+    }
+
     async createSlot(slot: SlotCreateDTO) {
         const newSlot = await firstValueFrom(this.slotsService.slotsCreatePost(slot));
         this.slots.update((current) => [...current, newSlot.data!]);
