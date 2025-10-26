@@ -6,7 +6,7 @@
                     <p-image src="https://primefaces.org/cdn/primeng/images/galleria/galleria10.jpg" alt="Image" [preview]="true" class="w-20 h-20 rounded-full" />
                     <div>
                         <h4 class="text-xl font-bold !mb-0">{{ user().firstName }} {{ user().lastName }}</h4>
-                        <p class="text-gray-600 !mb-0">{{ user().roles?.join(', ') }}</p>
+                        <p class="text-gray-600 !mb-0">{{ roles() | titlecase }}</p>
                         <p class="text-sm text-gray-500 !mb-0">{{ user().email }}</p>
                     </div>
                 </div>

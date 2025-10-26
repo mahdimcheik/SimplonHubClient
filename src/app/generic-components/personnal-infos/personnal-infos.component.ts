@@ -15,10 +15,11 @@ import { MessageService } from 'primeng/api';
 import { CursusesMainService } from '../../shared/services/cursuses-main.service';
 import { ActivatedRoute } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { TitleCasePipe } from '@angular/common';
 
 @Component({
     selector: 'app-personnal-infos',
-    imports: [SmartSectionComponent, Image, DrawerModule, DialogModule, ConfigurableFormComponent, ChipsListComponent],
+    imports: [SmartSectionComponent, Image, DrawerModule, DialogModule, ConfigurableFormComponent, ChipsListComponent, TitleCasePipe],
     templateUrl: './personnal-infos.component.html',
     styleUrl: './personnal-infos.component.scss'
 })
@@ -35,6 +36,11 @@ export class PersonnalInfosComponent implements OnInit {
     languages = this.languagesService.languages;
     editMode = model(false);
     userId = signal<string>(this.userservice.userConnected().id);
+    roles = computed(() =>
+        this.user()
+            .roles?.map((role) => role.name)
+            .join(', ')
+    );
 
     // options pour les multiselects
     languagesOptions = this.languagesService.allLanguages;
