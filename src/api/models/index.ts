@@ -1220,6 +1220,9 @@ export interface UserResponseDTO {
     status?: StatusAccountDTO;
     gender?: GenderDTO;
     roles: RoleAppResponseDTO[];
+    languages?: LanguageResponseDTO[];
+    programmingLanguages?: ProgrammingLanguageResponseDTO[];
+    formations?: FormationResponseDTO[];
 }
 
 export interface UserResponseDTOListResponseDTO {

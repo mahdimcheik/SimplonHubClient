@@ -38,7 +38,7 @@ export class PersonnalInfosComponent implements OnInit {
     userId = signal<string>(this.userservice.userConnected().id);
     roles = computed(() =>
         this.user()
-            .roles?.map((role) => role.name)
+            .roles?.map((role) => role.displayName)
             .join(', ')
     );
 
