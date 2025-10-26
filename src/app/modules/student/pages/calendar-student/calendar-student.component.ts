@@ -98,8 +98,8 @@ export class CalendarStudentComponent implements OnInit {
         },
         weekends: true,
         slotDuration: this.calendarSetupService.slotDuration(),
-        slotMinTime: '06:00',
-        slotMaxTime: this.calendarSetupService.slotMaxTime(),
+        slotMinTime: '00:00',
+        slotMaxTime: '24:00',
         allDaySlot: this.calendarSetupService.allDaySlot(),
         navLinks: this.calendarSetupService.navLinks(),
         eventStartEditable: this.calendarSetupService.eventStartEditable(),
@@ -126,35 +126,38 @@ export class CalendarStudentComponent implements OnInit {
         eventAllow: this.canDrop,
         eventDrop: this.onDrop,
         datesSet: this.onDatesSet,
-        events: this.sourceEvents(),
-        eventColor: 'transparent',
+        eventColor: '#3788d8',
         eventDisplay: 'block'
     }));
 
     ngOnInit(): void {
-        this.activatedRoute.params.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
+        this.activatedRoute.queryParams.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
             const teacherId = params['teacherId'];
+            console.log('params', params);
+
             if (teacherId) {
                 this.teacherId.set(teacherId);
             } else {
                 this.teacherId.set(null);
             }
+            console.log('teacherId', this.teacherId());
         });
     }
 
     async loadData() {
         const slots = await this.slotMainService.getAllSlotsByStudent(this.startDate() ?? new Date(), this.endDate() ?? new Date(), this.teacherId() ?? undefined);
-        this.sourceEvents.set(
-            slots.map((slot) => ({
+
+        const events = slots.map((slot) => {
+            return {
                 title: slot?.type?.name ?? '',
                 start: slot.dateFrom,
                 end: slot.dateTo,
                 extendedProps: {
                     slot: slot
                 }
-            }))
-        );
-        console.log('sourceEvents', this.sourceEvents());
+            };
+        });
+        this.sourceEvents.set(events);
     }
 
     editEvent() {

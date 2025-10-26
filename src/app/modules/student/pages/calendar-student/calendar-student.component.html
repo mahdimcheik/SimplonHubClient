@@ -1,4 +1,4 @@
-<full-calendar [options]="calendarOptions()" #calendar [events]="sourceEvents()" class="h-full">
+<full-calendar [options]="calendarOptions()" #calendar class="h-full" [events]="sourceEvents()">
     <ng-template #eventContent let-arg>
         <div class="custom-event w-full h-full flex justify-center" [style.backgroundColor]="arg.event.extendedProps.slot?.type?.color ?? 'red'">
             <strong class="text-white w-full text-center h-[20px] border-b border-white rounded-t-md px-2">{{ arg.event.title }}</strong
