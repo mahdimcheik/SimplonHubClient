@@ -17,10 +17,11 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { ActivatedRoute } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ModalBookUnbookComponent } from '../../../../generic-components/modal-book-unbook/modal-book-unbook';
 
 @Component({
     selector: 'app-calendar-student',
-    imports: [FullCalendarModule],
+    imports: [FullCalendarModule, ModalBookUnbookComponent],
     templateUrl: './calendar-student.component.html',
     styleUrl: './calendar-student.component.scss'
 })
@@ -34,8 +35,7 @@ export class CalendarStudentComponent implements OnInit {
     calendarSetupService = inject(CalendarSetupService);
     user = this.userMainService.userConnected;
 
-    quickInfosVisible = signal(false);
-    createEventVisible = signal(false);
+    bookUnbookVisible = signal(false);
 
     // calendar ref
     calendarRef = viewChild(FullCalendarComponent);
@@ -51,14 +51,13 @@ export class CalendarStudentComponent implements OnInit {
     onResize = (event: EventResizeDoneArg) => {
         console.log(event);
         this.selectedEvent.set({ extendedProps: { slot: event.oldEvent.extendedProps?.['slot'] as SlotResponseDTO }, start: event.event?.start as Date, end: event.event?.end as Date });
-        this.createEventVisible.set(true);
     };
 
     onDateSelect = (selectInfo: DateSelectArg) => {};
 
     onEventClick = (clickInfo: EventClickArg) => {
         this.selectedEvent.set(clickInfo.event as EventInput);
-        this.quickInfosVisible.set(true);
+        this.bookUnbookVisible.set(true);
     };
 
     onStartDrag = (dragInfo: any) => {
@@ -162,6 +161,5 @@ export class CalendarStudentComponent implements OnInit {
 
     editEvent() {
         this.selectedEvent.set(this.selectedEvent() as EventInput);
-        this.createEventVisible.set(true);
     }
 }

@@ -1,5 +1,5 @@
 import { inject, Injectable, signal } from '@angular/core';
-import { SlotCreateDTO, SlotResponseDTO, SlotsService, SlotUpdateDTO, TypeSlotResponseDTO, TypeSlotService } from '../../../api';
+import { BookingCreateDTO, SlotCreateDTO, SlotResponseDTO, SlotsService, SlotUpdateDTO, TypeSlotResponseDTO, TypeSlotService } from '../../../api';
 import { firstValueFrom } from 'rxjs';
 import { CustomTableState } from '../../generic-components/smart-grid';
 
@@ -62,4 +62,17 @@ export class SlotMainService {
         this.TypeSlot.set(typeSlot.data || []);
         return typeSlot.data || [];
     }
+
+    // book slot
+    async bookSlot(booking: BookingCreateDTO) {
+        const bookedSlot = await firstValueFrom(this.slotsService.slotsBookPost(booking));
+        return bookedSlot.data;
+    }
+
+    // // unbook slot
+    // async unbookSlot(slotId: string) {
+    //     const unbookedSlot = await firstValueFrom(this.slotsService.slotsUnbookIdPut(slotId));
+    //     this.slots.update((current) => current.map((s) => (s.id === slotId ? unbookedSlot.data! : s)));
+    //     return unbookedSlot.data;
+    // }
 }

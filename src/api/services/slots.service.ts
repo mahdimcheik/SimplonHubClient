@@ -10,7 +10,7 @@
 import { HttpClient, HttpContext, HttpContextToken, HttpEvent, HttpParams, HttpResponse } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { ObjectResponseDTO, RequestOptions, SlotCreateDTO, SlotDynamicFilters, SlotResponseDTOListResponseDTO, SlotResponseDTOResponseDTO, SlotUpdateDTO } from "../models";
+import { BookingCreateDTO, ObjectResponseDTO, RequestOptions, SlotCreateDTO, SlotDynamicFilters, SlotResponseDTOListResponseDTO, SlotResponseDTOResponseDTO, SlotUpdateDTO } from "../models";
 import { BASE_PATH_DEFAULT, CLIENT_CONTEXT_TOKEN_DEFAULT } from "../tokens";
 import { HttpParamsBuilder } from "../utils/http-params-builder";
 
@@ -163,5 +163,21 @@ export class SlotsService {
         };
 
         return this.httpClient.delete(url, requestOptions);
+    }
+
+    slotsBookPost(bookingCreateDTO?: BookingCreateDTO, observe?: 'body', options?: RequestOptions<'json'>): Observable<ObjectResponseDTO>;
+    slotsBookPost(bookingCreateDTO?: BookingCreateDTO, observe?: 'response', options?: RequestOptions<'json'>): Observable<HttpResponse<ObjectResponseDTO>>;
+    slotsBookPost(bookingCreateDTO?: BookingCreateDTO, observe?: 'events', options?: RequestOptions<'json'>): Observable<HttpEvent<ObjectResponseDTO>>;
+    slotsBookPost(bookingCreateDTO?: BookingCreateDTO, observe?: 'body' | 'events' | 'response', options?: RequestOptions<'arraybuffer' | 'blob' | 'json' | 'text'>): Observable<any> {
+        const url = `${this.basePath}/slots/book`;
+
+        const requestOptions: any = {
+            observe: observe as any,
+            reportProgress: options?.reportProgress,
+            withCredentials: options?.withCredentials,
+            context: this.createContextWithClientId(options?.context)
+        };
+
+        return this.httpClient.post(url, bookingCreateDTO, requestOptions);
     }
 }

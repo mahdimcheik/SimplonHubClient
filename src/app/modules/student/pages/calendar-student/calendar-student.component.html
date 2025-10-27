@@ -9,3 +9,7 @@
         </div>
     </ng-template>
 </full-calendar>
+
+@if (bookUnbookVisible()) {
+    <app-modal-book-unbook [(visible)]="bookUnbookVisible" (close)="bookUnbookVisible.set(false)" [event]="selectedEvent()" (onExit)="loadData()"></app-modal-book-unbook>
+}

@@ -1,17 +1,21 @@
 @if (structure(); as structureData) {
     <div class="w-full max-w-6xl mx-auto overflow-hidden scrollbar-off configurable-form-container" [class]="structureData.styleClass || ''">
         <!-- Form Header -->
-        <div class="px-6 py-8 pb-2 configurable-form-header">
-            <div class="flex flex-col items-center configurable-form-header-content">
-                @if (structureData.imgUrl) {
-                    <img [src]="structureData.imgUrl" alt="Form Icon" class="w-[350px] h-auto rounded-full" />
-                }
-                <h2 class="text-2xl sm:text-3xl font-bold configurable-form-title self-center">{{ structureData.label || structureData.name }}</h2>
-                @if (structureData.description) {
-                    <p class="text-3xl leading-relaxed configurable-form-description">{{ structureData.description }}</p>
-                }
+        @if (structureData.imgUrl && structureData.imgUrl && (structureData.label || structureData.name)) {
+            <div class="px-6 py-8 pb-2 configurable-form-header">
+                <div class="flex flex-col items-center configurable-form-header-content">
+                    @if (structureData.imgUrl) {
+                        <img [src]="structureData.imgUrl" alt="Form Icon" class="w-[350px] h-auto rounded-full" />
+                    }
+                    @if (structureData.label || structureData.name) {
+                        <h2 class="text-2xl sm:text-3xl font-bold configurable-form-title self-center">{{ structureData.label || structureData.name }}</h2>
+                    }
+                    @if (structureData.description) {
+                        <p class="text-3xl leading-relaxed configurable-form-description">{{ structureData.description }}</p>
+                    }
+                </div>
             </div>
-        </div>
+        }
 
         <!-- Form Content -->
         <div class="p-0 lg:p-6 configurable-form-body">

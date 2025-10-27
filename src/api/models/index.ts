@@ -120,13 +120,20 @@ export interface Booking {
     description?: string | null;
     slotId?: string;
     slot?: Slot;
-    orderId?: string;
-    order?: Order;
     studentId?: string;
     student?: UserApp;
 }
 
+export interface BookingCreateDTO {
+    title?: string | null;
+    description?: string | null;
+    student?: UserResponseDTO;
+    slotId?: string;
+    studentId?: string;
+}
+
 export interface BookingDetailsDTO {
+    readonly id?: string;
     readonly title?: string | null;
     readonly description?: string | null;
     student?: UserResponseDTO;
@@ -712,7 +719,6 @@ export interface Order {
     reductionAmount?: number;
     studentId?: string;
     student?: UserApp;
-    bookings?: Booking[];
 }
 
 export interface PasswordRecoveryInput {
