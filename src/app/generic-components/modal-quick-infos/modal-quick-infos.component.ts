@@ -4,12 +4,13 @@ import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { Slot } from '../../../api';
 import { DatePipe } from '@angular/common';
-import { Divider } from 'primeng/divider';
+import { Divider, DividerModule } from 'primeng/divider';
 import { FormBuilder } from '@angular/forms';
+import { BaseModalComponent } from '../base-modal/base-modal.component';
 
 @Component({
     selector: 'app-modal-quick-infos',
-    imports: [DialogModule, ButtonModule, DatePipe, Divider],
+    imports: [BaseModalComponent, ButtonModule, DatePipe, DividerModule],
     templateUrl: './modal-quick-infos.component.html',
     styleUrl: './modal-quick-infos.component.scss'
 })

@@ -1,18 +1,17 @@
 import { Component, computed, inject, linkedSignal, model, OnInit, output, signal } from '@angular/core';
-import { DialogModule } from 'primeng/dialog';
-import { ConfigurableFormComponent } from '../configurable-form/configurable-form.component';
-import { DrawerModule } from 'primeng/drawer';
 import { EventInput } from '@fullcalendar/core/index.js';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Structure } from '../configurable-form/related-models';
-import { SlotResponseDTO, TypeSlotResponseDTO, UserResponseDTO } from '../../../api';
+import { SlotResponseDTO, TypeSlotResponseDTO } from '../../../api';
 import { SlotMainService } from '../../shared/services/slot-main.service';
 import { UserMainService } from '../../shared/services/userMain.service';
 import { MessageService } from 'primeng/api';
+import { BaseSideModalComponent } from '../base-side-modal/base-side-modal.component';
+import { ConfigurableFormComponent } from '../configurable-form/configurable-form.component';
 
 @Component({
     selector: 'app-modal-create-edit-slot',
-    imports: [DialogModule, ConfigurableFormComponent, DrawerModule],
+    imports: [BaseSideModalComponent, ConfigurableFormComponent],
     templateUrl: './modal-create-edit-slot.component.html',
     styleUrl: './modal-create-edit-slot.component.scss'
 })

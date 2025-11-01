@@ -1,60 +1,36 @@
-<p-dialog
-    [(visible)]="visible"
-    [modal]="true"
-    [dismissableMask]="true"
-    [closeOnEscape]="true"
-    [closable]="false"
-    [draggable]="false"
-    [resizable]="false"
-    styleClass="confirm-modal"
-    [style]="{ width: '90vw', maxWidth: '500px', border: `3px solid ${event()?.extendedProps?.['slot']?.type?.color ?? 'red'}` }"
-    (onHide)="onHide()"
->
-    <!-- Header -->
-    <ng-template pTemplate="header">
-        <div class="flex flex-1 justify-between items-center gap-3">
-            <div class="start flex items-center gap-2">
-                <i class="pi pi-info-circle text-2xl"></i>
-                <h3 class="text-xl font-semibold text-gray-800 m-0">{{ title() }}</h3>
-            </div>
-            <div class="controls flex">
-                @if (showEditButton() && !isPassed()) {
-                    <p-button label="Editer" (onClick)="edit()" class="flex-shrink-0" severity="secondary">
-                        <i class="pi pi-pencil"></i>
-                    </p-button>
-                    <p-divider layout="vertical" [style]="{ margin: '0 8px' }" />
-                }
-                <p-button (onClick)="close()" class="flex-shrink-0" severity="secondary">
-                    <i class="pi pi-times"></i>
-                </p-button>
-            </div>
+<app-base-modal [(visible)]="visible" [title]="title()" (onHide)="onHide()">
+    <!-- Header End: Edit button if needed -->
+    @if (showEditButton() && !isPassed()) {
+        <div header-end>
+            <p-button label="Editer" (onClick)="edit()" class="flex-shrink-0" severity="secondary">
+                <i class="pi pi-pencil"></i>
+            </p-button>
         </div>
-    </ng-template>
+    }
 
     <!-- Content -->
-
-    <div class="flex items-start gap-4">
-        <i class="pi pi-info-circle text-3xl flex-shrink-0 mt-1"></i>
-        <div class="flex-1">
-            <div class="text-gray-700 text-base leading-relaxed m-0 flex gap-2">
-                <span class="font-bold">De : {{ event()?.start?.toString() | date }}</span>
-                <span class="font-bold">À : {{ event()?.end?.toString() | date }}</span>
+    <div content class="flex flex-col gap-4 p-4">
+        <div class="flex items-start gap-4">
+            <i class="pi pi-info-circle text-3xl flex-shrink-0 mt-1"></i>
+            <div class="flex-1">
+                <div class="text-gray-700 text-base leading-relaxed m-0 flex gap-2">
+                    <span class="font-bold">De : {{ event()?.start?.toString() | date }}</span>
+                    <span class="font-bold">À : {{ event()?.end?.toString() | date }}</span>
+                </div>
+                <ng-content select="[slot=info-slot]"></ng-content>
             </div>
-            <ng-content select="[slot=info-slot]"></ng-content>
         </div>
+        <ng-content select="[slot=info-booking]"></ng-content>
     </div>
-    <ng-content select="[slot=info-booking]"></ng-content>
 
     <!-- Footer -->
-    <ng-template pTemplate="footer">
-        <div class="flex justify-end gap-3 pt-4">
-            <ng-content select="[slot=controls]"></ng-content>
-            @if (showCancelButton()) {
-                <p-button label="Fermer" (onClick)="close()" class="flex-shrink-0" severity="danger" />
-            }
-            @if (showSubmitButton()) {
-                <p-button label="Soumission" (onClick)="close()" class="flex-shrink-0" severity="primary" />
-            }
-        </div>
-    </ng-template>
-</p-dialog>
+    <div footer-end class="flex justify-end gap-3">
+        <ng-content select="[slot=controls]"></ng-content>
+        @if (showCancelButton()) {
+            <p-button label="Fermer" (onClick)="close()" class="flex-shrink-0" severity="danger" />
+        }
+        @if (showSubmitButton()) {
+            <p-button label="Soumission" (onClick)="close()" class="flex-shrink-0" severity="primary" />
+        }
+    </div>
+</app-base-modal>
