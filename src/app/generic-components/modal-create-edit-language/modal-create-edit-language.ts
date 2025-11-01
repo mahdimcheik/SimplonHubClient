@@ -1,17 +1,15 @@
-import { Component, computed, inject, linkedSignal, model, OnInit, output } from '@angular/core';
-import { DialogModule } from 'primeng/dialog';
+import { Component, computed, inject, model, OnInit, output } from '@angular/core';
 import { ConfigurableFormComponent } from '../configurable-form/configurable-form.component';
-import { DrawerModule } from 'primeng/drawer';
-import { EventInput } from '@fullcalendar/core/index.js';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Structure } from '../configurable-form/related-models';
-import { LanguageCreateDTO, LanguageResponseDTO, LanguageUpdateDTO, SlotResponseDTO } from '../../../api';
+import { LanguageCreateDTO, LanguageResponseDTO, LanguageUpdateDTO } from '../../../api';
 import { LanguagesMainService } from '../../shared/services/languages.store.service';
 import { MessageService } from 'primeng/api';
+import { BaseSideModalComponent } from '../base-side-modal/base-side-modal.component';
 
 @Component({
     selector: 'app-modal-create-language',
-    imports: [DialogModule, ConfigurableFormComponent, DrawerModule],
+    imports: [BaseSideModalComponent, ConfigurableFormComponent],
     templateUrl: './modal-create-edit-language.html',
     styleUrl: './modal-create-edit-language.scss'
 })

@@ -26,22 +26,18 @@
 </app-smart-section>
 <!-- modal edit infos -->
 @if (editPersonnalInfosDialogVisible()) {
-    <p-drawer
-        header="Editer les informations personnelles"
-        position="right"
-        [visible]="editPersonnalInfosDialogVisible()"
-        [style]="{ width: '50vw' }"
-        [modal]="true"
-        [closable]="true"
-        (closeOnEscape)="(true)"
-        (onHide)="editPersonnalInfosDialogVisible.set(false)"
-    >
-        <div class="p-fluid formgrid grid">
-            <app-configurable-form [structure]="personnalInfosFormConfig()" (onFormSubmit)="submit($event)" (onCancel)="cancel()"></app-configurable-form>
+    <app-base-side-modal 
+        [(visible)]="editPersonnalInfosDialogVisible" 
+        [title]="'Editer les informations personnelles'" 
+        [position]="'right'"
+        (onHide)="cancel()">
+        
+        <div content class="p-4">
+            <app-configurable-form 
+                [structure]="personnalInfosFormConfig()" 
+                (onFormSubmit)="submit($event)" 
+                (onCancel)="cancel()">
+            </app-configurable-form>
         </div>
-        <p-footer>
-            <button pButton type="button" label="Annuler" icon="pi pi-times" class="p-button-text" (click)="editPersonnalInfosDialogVisible.set(false)"></button>
-            <button pButton type="button" label="Enregistrer" icon="pi pi-check" (click)="editPersonnalInfosDialogVisible.set(false)"></button>
-        </p-footer>
-    </p-drawer>
+    </app-base-side-modal>
 }

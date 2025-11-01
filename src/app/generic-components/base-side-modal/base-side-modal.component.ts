@@ -20,6 +20,7 @@ export class BaseSideModalComponent {
     iconClass = input<string>('pi pi-info-circle');
     position = input<'left' | 'right' | 'top' | 'bottom'>('right');
     width = signal<string>(window.innerWidth < 768 ? '100vw' : '50vw');
+
     constructor() {
         this.breakPointservice
             .observe([Breakpoints.Small, Breakpoints.Medium, Breakpoints.Large, Breakpoints.XLarge])
@@ -28,6 +29,7 @@ export class BaseSideModalComponent {
                 this.width.set(result.breakpoints[Breakpoints.Medium] ? '100vw' : '50vw');
             });
     }
+
     onHide = () => {
         this.visible.set(false);
     };
