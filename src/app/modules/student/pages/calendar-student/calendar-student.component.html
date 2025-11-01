@@ -1,3 +1,4 @@
+<button (click)="openModal()">Open Modal</button>
 <full-calendar [options]="calendarOptions()" #calendar class="h-full" [events]="sourceEvents()">
     <ng-template #eventContent let-arg>
         @let slot = arg.event.extendedProps?.slot;
@@ -27,4 +28,16 @@
 
 @if (bookUnbookVisible()) {
     <app-modal-book-unbook [(visible)]="bookUnbookVisible" (close)="bookUnbookVisible.set(false)" [event]="selectedEvent()" (onExit)="loadData()"></app-modal-book-unbook>
+}
+
+@if (testModalVisible()) {
+    <app-base-modal [(visible)]="testModalVisible" title="Test Modal" (onHide)="testModalVisible.set(false)">
+        <ng-template header-start>
+            <h1>start</h1>
+        </ng-template>
+
+        <ng-template header-end>
+            <button (click)="testModalVisible.set(false)">end</button>
+        </ng-template>
+    </app-base-modal>
 }

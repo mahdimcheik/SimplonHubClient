@@ -18,10 +18,11 @@ import interactionPlugin from '@fullcalendar/interaction';
 import { ActivatedRoute } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ModalBookUnbookComponent } from '../../../../generic-components/modal-book-unbook/modal-book-unbook';
+import { BaseModalComponent } from '../../../../generic-components/base-modal/base-modal.component';
 
 @Component({
     selector: 'app-calendar-student',
-    imports: [FullCalendarModule, ModalBookUnbookComponent],
+    imports: [FullCalendarModule, ModalBookUnbookComponent, BaseModalComponent],
     templateUrl: './calendar-student.component.html',
     styleUrl: './calendar-student.component.scss'
 })
@@ -44,6 +45,11 @@ export class CalendarStudentComponent implements OnInit {
     endDate = signal<Date | null>(null);
     teacherId = signal<string | null>(null);
 
+    testModalVisible = signal(false);
+    openModal() {
+        this.testModalVisible.set(true);
+    }
+
     sourceEvents = signal<EventInput[]>([]);
 
     initialView = computed(() => (window.innerWidth < 768 ? 'timeGridDay' : 'timeGridWeek'));
@@ -55,9 +61,17 @@ export class CalendarStudentComponent implements OnInit {
 
     onDateSelect = (selectInfo: DateSelectArg) => {};
 
-    onEventClick = (clickInfo: EventClickArg) => {
+    // si l'événement est un slot, on affiche le modal de réservation/désinscription
+    onEventClick = async (clickInfo: EventClickArg) => {
         this.selectedEvent.set(clickInfo.event as EventInput);
-        this.bookUnbookVisible.set(true);
+
+        const slot = await this.slotMainService.getSlotById(this.selectedEvent()?.extendedProps?.['slot']?.id!);
+
+        if (slot && slot?.booking && slot?.booking?.student?.id !== this.user()?.id) {
+            return;
+        } else {
+            this.bookUnbookVisible.set(true);
+        }
     };
 
     onStartDrag = (dragInfo: any) => {

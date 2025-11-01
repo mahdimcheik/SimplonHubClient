@@ -34,11 +34,20 @@ export class ModalBookUnbookComponent implements OnInit {
         }
         return null;
     });
+
+    isBooked = linkedSignal<boolean>(() => {
+        return !!this.slot()?.booking?.student?.id;
+    });
+    ispassed = computed(() => {
+        return new Date(this.slot()?.dateFrom!) < new Date();
+    });
+
     start = computed(() => {
         const event = this.event();
         if (!event?.start) return null;
         return event.start instanceof Date ? event.start : new Date(event?.start as string);
     });
+
     end = computed(() => {
         const event = this.event();
         if (!event?.end) return null;

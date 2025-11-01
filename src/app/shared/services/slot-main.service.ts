@@ -27,6 +27,11 @@ export class SlotMainService {
         return slots.data || [];
     }
 
+    async getSlotById(slotId: string) {
+        const slot = await firstValueFrom(this.slotsService.slotsIdGet(slotId));
+        return slot.data;
+    }
+
     async getAllSlotsByStudent(dateFrom: Date, dateTo: Date, teacherId?: string) {
         const slots = await firstValueFrom(this.slotsService.slotsStudentGet(dateFrom, dateTo, teacherId));
         this.slots.set(slots.data || []);

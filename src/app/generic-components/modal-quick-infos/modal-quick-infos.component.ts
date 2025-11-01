@@ -20,6 +20,9 @@ export class ModalQuickInfosComponent {
     showSubmitButton = model(true);
     showCancelButton = model(true);
     showEditButton = model(false);
+    isPassed = computed(() => {
+        return new Date(this.slot()?.dateTo as Date) < new Date();
+    });
     // datePipe = inject(DatePipe);
 
     // output

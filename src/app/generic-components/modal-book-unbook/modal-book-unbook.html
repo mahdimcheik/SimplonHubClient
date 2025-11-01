@@ -6,5 +6,7 @@
             <p>Professeur : {{ slot()?.teacher?.firstName }} {{ slot()?.teacher?.lastName }} - {{ slot()?.type?.name }}</p>
         </div>
     </div>
+    @if (!isBooked() && !ispassed()) {
     <app-configurable-form [structure]="form()" (onFormSubmit)="submit($event)" (onCancel)="cancel()" [verboseError]="false"> </app-configurable-form>
+    }
 </p-drawer>
