@@ -21,9 +21,9 @@
                     <p>{{ slot.booking?.description }}</p>
                 </div>
             }
-            @if (slot?.booking?.status) {
+            @if (slot?.booking?.status?.name == 'waiting') {
                 <div class="w-full h-full absolute bottom-0 left-0 flex items-center justify-center" [style.background-color]="'rgba(0, 0, 0, 0.25)'">
-                    <small [style.color]="slot.booking?.status?.color ?? 'white'">{{ slot.booking?.status?.name }}</small>
+                    <small [style.color]="slot.booking?.status?.color ?? 'white'">{{ slot.booking?.status?.displayName }}</small>
                 </div>
             }
         </div>
@@ -46,5 +46,15 @@
         (onClose)="quickInfosVisible.set(false)"
         (onEdit)="openEditModal()"
     >
+        @let slot = selectedEvent().extendedProps?.['slot'];
+        <div slot="info-booking">
+            <div>
+                <p>avec : {{ slot?.teacher?.firstName }} {{ slot?.teacher?.lastName }}</p>
+            </div>
+            @if (slot?.booking) {
+                <p>Titre : {{ slot?.booking?.title }}</p>
+                <p>Description : {{ slot?.booking?.description }}</p>
+            }
+        </div>
     </app-modal-quick-infos>
 }

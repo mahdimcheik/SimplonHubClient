@@ -10,7 +10,7 @@
 import { HttpClient, HttpContext, HttpContextToken, HttpEvent, HttpParams, HttpResponse } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { BookingCreateDTO, ObjectResponseDTO, RequestOptions, SlotCreateDTO, SlotDynamicFilters, SlotResponseDTOListResponseDTO, SlotResponseDTOResponseDTO, SlotUpdateDTO } from "../models";
+import { BookingCreateDTO, BookingUpdateDTO, ObjectResponseDTO, RequestOptions, SlotCreateDTO, SlotDynamicFilters, SlotResponseDTOListResponseDTO, SlotResponseDTOResponseDTO, SlotUpdateDTO } from "../models";
 import { BASE_PATH_DEFAULT, CLIENT_CONTEXT_TOKEN_DEFAULT } from "../tokens";
 import { HttpParamsBuilder } from "../utils/http-params-builder";
 
@@ -149,6 +149,38 @@ export class SlotsService {
         return this.httpClient.put(url, slotUpdateDTO, requestOptions);
     }
 
+    slotsUpdateBookingPut(bookingUpdateDTO?: BookingUpdateDTO, observe?: 'body', options?: RequestOptions<'json'>): Observable<SlotResponseDTOResponseDTO>;
+    slotsUpdateBookingPut(bookingUpdateDTO?: BookingUpdateDTO, observe?: 'response', options?: RequestOptions<'json'>): Observable<HttpResponse<SlotResponseDTOResponseDTO>>;
+    slotsUpdateBookingPut(bookingUpdateDTO?: BookingUpdateDTO, observe?: 'events', options?: RequestOptions<'json'>): Observable<HttpEvent<SlotResponseDTOResponseDTO>>;
+    slotsUpdateBookingPut(bookingUpdateDTO?: BookingUpdateDTO, observe?: 'body' | 'events' | 'response', options?: RequestOptions<'arraybuffer' | 'blob' | 'json' | 'text'>): Observable<any> {
+        const url = `${this.basePath}/slots/update-booking`;
+
+        const requestOptions: any = {
+            observe: observe as any,
+            reportProgress: options?.reportProgress,
+            withCredentials: options?.withCredentials,
+            context: this.createContextWithClientId(options?.context)
+        };
+
+        return this.httpClient.put(url, bookingUpdateDTO, requestOptions);
+    }
+
+    slotsConfirmBookingIdPut(id: string, observe?: 'body', options?: RequestOptions<'json'>): Observable<SlotResponseDTOResponseDTO>;
+    slotsConfirmBookingIdPut(id: string, observe?: 'response', options?: RequestOptions<'json'>): Observable<HttpResponse<SlotResponseDTOResponseDTO>>;
+    slotsConfirmBookingIdPut(id: string, observe?: 'events', options?: RequestOptions<'json'>): Observable<HttpEvent<SlotResponseDTOResponseDTO>>;
+    slotsConfirmBookingIdPut(id: string, observe?: 'body' | 'events' | 'response', options?: RequestOptions<'arraybuffer' | 'blob' | 'json' | 'text'>): Observable<any> {
+        const url = `${this.basePath}/slots/confirm-booking/${id}`;
+
+        const requestOptions: any = {
+            observe: observe as any,
+            reportProgress: options?.reportProgress,
+            withCredentials: options?.withCredentials,
+            context: this.createContextWithClientId(options?.context)
+        };
+
+        return this.httpClient.put(url, null, requestOptions);
+    }
+
     slotsDeleteIdDelete(id: string, observe?: 'body', options?: RequestOptions<'json'>): Observable<ObjectResponseDTO>;
     slotsDeleteIdDelete(id: string, observe?: 'response', options?: RequestOptions<'json'>): Observable<HttpResponse<ObjectResponseDTO>>;
     slotsDeleteIdDelete(id: string, observe?: 'events', options?: RequestOptions<'json'>): Observable<HttpEvent<ObjectResponseDTO>>;
@@ -179,5 +211,21 @@ export class SlotsService {
         };
 
         return this.httpClient.post(url, bookingCreateDTO, requestOptions);
+    }
+
+    slotsUnbookIdPost(id: string, observe?: 'body', options?: RequestOptions<'json'>): Observable<ObjectResponseDTO>;
+    slotsUnbookIdPost(id: string, observe?: 'response', options?: RequestOptions<'json'>): Observable<HttpResponse<ObjectResponseDTO>>;
+    slotsUnbookIdPost(id: string, observe?: 'events', options?: RequestOptions<'json'>): Observable<HttpEvent<ObjectResponseDTO>>;
+    slotsUnbookIdPost(id: string, observe?: 'body' | 'events' | 'response', options?: RequestOptions<'arraybuffer' | 'blob' | 'json' | 'text'>): Observable<any> {
+        const url = `${this.basePath}/slots/unbook/${id}`;
+
+        const requestOptions: any = {
+            observe: observe as any,
+            reportProgress: options?.reportProgress,
+            withCredentials: options?.withCredentials,
+            context: this.createContextWithClientId(options?.context)
+        };
+
+        return this.httpClient.post(url, null, requestOptions);
     }
 }

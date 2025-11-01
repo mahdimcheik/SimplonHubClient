@@ -3,7 +3,7 @@ import { ConfigurableFormComponent } from '../configurable-form/configurable-for
 import { EventInput } from '@fullcalendar/core/index.js';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Structure } from '../configurable-form/related-models';
-import { SlotResponseDTO, TypeSlotResponseDTO } from '../../../api';
+import { BookingUpdateDTO, SlotResponseDTO, TypeSlotResponseDTO } from '../../../api';
 import { SlotMainService } from '../../shared/services/slot-main.service';
 import { UserMainService } from '../../shared/services/userMain.service';
 import { MessageService } from 'primeng/api';
@@ -38,6 +38,10 @@ export class ModalBookUnbookComponent implements OnInit {
     isBooked = linkedSignal<boolean>(() => {
         return !!this.slot()?.booking?.student?.id;
     });
+
+    submitButtonTitle = computed(() => {
+        return this.isBooked() ? 'Modifier' : 'Réserver';
+    });
     ispassed = computed(() => {
         return new Date(this.slot()?.dateFrom!) < new Date();
     });
@@ -64,6 +68,7 @@ export class ModalBookUnbookComponent implements OnInit {
             id: 'slot',
             name: '',
             label: '',
+            submitButtonLabel: this.submitButtonTitle(),
             formFieldGroups: [
                 {
                     id: 'informations',
@@ -103,11 +108,40 @@ export class ModalBookUnbookComponent implements OnInit {
                 this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Créneau reservé avec succès' });
                 this.visible.set(false);
             } else {
+                await this.updateBooking({
+                    id: this.slot()?.booking?.id ?? '',
+                    ...event.value.informations
+                });
                 this.visible.set(false);
-                this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Créneau désinscrit avec succès' });
+                this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Créneau mis à jour avec succès' });
             }
         } catch (error) {
             this.messageService.add({ severity: 'error', summary: 'Erreur', detail: 'Une erreur est survenue lors de la réservation du créneau.' });
+        } finally {
+            this.cancel();
+        }
+    }
+
+    async updateBooking(newBooking: BookingUpdateDTO) {
+        try {
+            await this.slotMainService.updateBooking(newBooking);
+            // await this.slotMainService.unbookSlot(this.slot()?.id ?? '');
+            this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Créneau désinscrit avec succès' });
+            this.visible.set(false);
+        } catch (error) {
+            this.messageService.add({ severity: 'error', summary: 'Erreur', detail: 'Une erreur est survenue lors de la désinscription du créneau.' });
+        } finally {
+            this.cancel();
+        }
+    }
+
+    async unbook() {
+        try {
+            await this.slotMainService.unbookSlot(this.slot()?.booking?.id ?? '');
+            this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Créneau désinscrit avec succès' });
+            this.visible.set(false);
+        } catch (error) {
+            this.messageService.add({ severity: 'error', summary: 'Erreur', detail: 'Une erreur est survenue lors de la désinscription du créneau.' });
         } finally {
             this.cancel();
         }

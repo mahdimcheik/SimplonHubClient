@@ -142,6 +142,12 @@ export interface BookingDetailsDTO {
     student?: UserResponseDTO;
 }
 
+export interface BookingUpdateDTO {
+    id: string;
+    title: string;
+    description?: string | null;
+}
+
 export interface BooleanResponseDTO {
     message: string;
     status: number;

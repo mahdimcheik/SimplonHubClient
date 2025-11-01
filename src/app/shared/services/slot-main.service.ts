@@ -1,5 +1,5 @@
 import { inject, Injectable, signal } from '@angular/core';
-import { BookingCreateDTO, SlotCreateDTO, SlotResponseDTO, SlotsService, SlotUpdateDTO, TypeSlotResponseDTO, TypeSlotService } from '../../../api';
+import { BookingCreateDTO, BookingUpdateDTO, SlotCreateDTO, SlotResponseDTO, SlotsService, SlotUpdateDTO, TypeSlotResponseDTO, TypeSlotService } from '../../../api';
 import { firstValueFrom } from 'rxjs';
 import { CustomTableState } from '../../generic-components/smart-grid';
 
@@ -50,6 +50,16 @@ export class SlotMainService {
         return updatedSlot.data;
     }
 
+    async updateBooking(booking: BookingUpdateDTO) {
+        const updatedBooking = await firstValueFrom(this.slotsService.slotsUpdateBookingPut(booking));
+        return updatedBooking.data;
+    }
+
+    async confirmBooking(bookingId: string) {
+        const confirmedBooking = await firstValueFrom(this.slotsService.slotsConfirmBookingIdPut(bookingId));
+        return confirmedBooking.data;
+    }
+
     async deleteSlot(slotId: string) {
         await firstValueFrom(this.slotsService.slotsDeleteIdDelete(slotId));
         this.slots.update((current) => current.filter((s) => s.id !== slotId));
@@ -74,10 +84,10 @@ export class SlotMainService {
         return bookedSlot.data;
     }
 
-    // // unbook slot
-    // async unbookSlot(slotId: string) {
-    //     const unbookedSlot = await firstValueFrom(this.slotsService.slotsUnbookIdPut(slotId));
-    //     this.slots.update((current) => current.map((s) => (s.id === slotId ? unbookedSlot.data! : s)));
-    //     return unbookedSlot.data;
-    // }
+    // unbook slot
+    async unbookSlot(slotId: string) {
+        const unbookedSlot = await firstValueFrom(this.slotsService.slotsUnbookIdPost(slotId));
+        this.slots.update((current) => current.map((s) => (s.id === slotId ? unbookedSlot.data! : s)));
+        return unbookedSlot.data;
+    }
 }
