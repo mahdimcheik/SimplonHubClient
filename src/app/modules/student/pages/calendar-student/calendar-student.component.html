@@ -1,4 +1,3 @@
-<button (click)="openModal()">Open Modal</button>
 <full-calendar [options]="calendarOptions()" #calendar class="h-full" [events]="sourceEvents()">
     <ng-template #eventContent let-arg>
         @let slot = arg.event.extendedProps?.slot;
@@ -11,10 +10,10 @@
             <strong class="w-full text-center h-[20px] border-b border-white rounded-t-md px-2 !text-teal-800 py-1">{{ arg.event.title }}</strong
             ><br />
             @if (slot?.booking) {
-                <!-- étudiant -->
-                @if (slot.booking?.student) {
+                <!-- professeur -->
+                @if (slot?.teacher) {
                     <div class="w-full h-[20px] px-2 flex flex-col !text-emerald-600">
-                        <small>Pour :{{ slot.booking?.student?.firstName }} {{ slot.booking?.student?.lastName }}</small>
+                        <small>chez :{{ slot.teacher?.firstName }} {{ slot.teacher?.lastName }}</small>
                     </div>
                 }
                 <div class="w-full h-[20px] px-2 flex flex-col !text-emerald-600">
@@ -30,17 +29,17 @@
     <app-modal-book-unbook [(visible)]="bookUnbookVisible" (close)="bookUnbookVisible.set(false)" [event]="selectedEvent()" (onExit)="loadData()"></app-modal-book-unbook>
 }
 
-@if (testModalVisible()) {
-    <app-base-modal [(visible)]="testModalVisible" title="Test Modal" (onHide)="testModalVisible.set(false)">
-        <div header-start>
-            <h1>start</h1>
-        </div>
-
-        <div header-end>
-            <div class="flex items-center gap-1">
-                <button (click)="testModalVisible.set(false)">end</button>
-                <p-divider layout="vertical" [style]="{ margin: '0 8px' }" />
-            </div>
-        </div>
-    </app-base-modal>
+@if (quickInfosVisible()) {
+    <app-modal-quick-infos
+        [showEditButton]="true"
+        [(visible)]="quickInfosVisible"
+        (close)="quickInfosVisible.set(false)"
+        [event]="selectedEvent()"
+        [showSubmitButton]="false"
+        [showEditButton]="true"
+        (onEdit)="editEvent()"
+        (onClose)="quickInfosVisible.set(false)"
+        (onEdit)="openEditModal()"
+    >
+    </app-modal-quick-infos>
 }

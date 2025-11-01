@@ -20,10 +20,12 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ModalBookUnbookComponent } from '../../../../generic-components/modal-book-unbook/modal-book-unbook';
 import { BaseModalComponent } from '../../../../generic-components/base-modal/base-modal.component';
 import { DividerModule } from 'primeng/divider';
+import { ModalQuickInfosComponent } from '../../../../generic-components/modal-quick-infos/modal-quick-infos.component';
+import { DatePipe } from '@angular/common';
 
 @Component({
     selector: 'app-calendar-student',
-    imports: [FullCalendarModule, ModalBookUnbookComponent, BaseModalComponent, DividerModule],
+    imports: [FullCalendarModule, ModalBookUnbookComponent, ModalQuickInfosComponent, DividerModule, DatePipe],
     templateUrl: './calendar-student.component.html',
     styleUrl: './calendar-student.component.scss'
 })
@@ -38,6 +40,7 @@ export class CalendarStudentComponent implements OnInit {
     user = this.userMainService.userConnected;
 
     bookUnbookVisible = signal(false);
+    quickInfosVisible = signal(false);
 
     // calendar ref
     calendarRef = viewChild(FullCalendarComponent);
@@ -45,11 +48,6 @@ export class CalendarStudentComponent implements OnInit {
     startDate = signal<Date | null>(null);
     endDate = signal<Date | null>(null);
     teacherId = signal<string | null>(null);
-
-    testModalVisible = signal(false);
-    openModal() {
-        this.testModalVisible.set(true);
-    }
 
     sourceEvents = signal<EventInput[]>([]);
 
@@ -68,8 +66,8 @@ export class CalendarStudentComponent implements OnInit {
 
         const slot = await this.slotMainService.getSlotById(this.selectedEvent()?.extendedProps?.['slot']?.id!);
 
-        if (slot && slot?.booking && slot?.booking?.student?.id !== this.user()?.id) {
-            return;
+        if (slot && slot?.booking && slot?.booking?.student?.id === this.user()?.id) {
+            this.quickInfosVisible.set(true);
         } else {
             this.bookUnbookVisible.set(true);
         }
@@ -112,8 +110,8 @@ export class CalendarStudentComponent implements OnInit {
         },
         weekends: true,
         slotDuration: this.calendarSetupService.slotDuration(),
-        slotMinTime: '00:00',
-        slotMaxTime: '24:00',
+        slotMinTime: this.calendarSetupService.slotMinTime(),
+        slotMaxTime: this.calendarSetupService.slotMaxTime(),
         allDaySlot: this.calendarSetupService.allDaySlot(),
         navLinks: this.calendarSetupService.navLinks(),
         eventStartEditable: this.calendarSetupService.eventStartEditable(),
@@ -184,5 +182,9 @@ export class CalendarStudentComponent implements OnInit {
 
     editEvent() {
         this.selectedEvent.set(this.selectedEvent() as EventInput);
+    }
+    openEditModal() {
+        this.quickInfosVisible.set(false);
+        this.bookUnbookVisible.set(true);
     }
 }

@@ -127,7 +127,7 @@ export class CalendarTeacherComponent implements OnInit {
         },
         weekends: true,
         slotDuration: this.calendarSetupService.slotDuration(),
-        slotMinTime: '06:00',
+        slotMinTime: this.calendarSetupService.slotMinTime(),
         slotMaxTime: this.calendarSetupService.slotMaxTime(),
         allDaySlot: this.calendarSetupService.allDaySlot(),
         navLinks: this.calendarSetupService.navLinks(),
