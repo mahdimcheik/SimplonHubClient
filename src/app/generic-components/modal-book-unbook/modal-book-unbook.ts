@@ -69,8 +69,8 @@ export class ModalBookUnbookComponent implements OnInit {
                     name: 'Informations',
                     label: 'Informations',
                     fields: [
-                        { id: 'title', label: 'Titre', name: 'title', type: 'text', required: true, value: this.user()?.title, fullWidth: true },
-                        { id: 'description', label: 'Description', name: 'description', type: 'textarea', required: true, value: this.user()?.description, fullWidth: true }
+                        { id: 'title', label: 'Titre', name: 'title', type: 'text', required: true, value: this.slot()?.booking?.title, fullWidth: true },
+                        { id: 'description', label: 'Description', name: 'description', type: 'textarea', required: true, value: this.slot()?.booking?.description, fullWidth: true }
                     ]
                 }
             ]

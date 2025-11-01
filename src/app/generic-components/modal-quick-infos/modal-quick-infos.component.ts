@@ -24,7 +24,11 @@ export class ModalQuickInfosComponent {
     isPassed = computed(() => {
         return new Date(this.slot()?.dateTo as Date) < new Date();
     });
-    // datePipe = inject(DatePipe);
+
+    // controls
+    submitButtonTitle = input<string>('Soumission');
+    cancelButtonTitle = input<string>('Fermer');
+    editButtonTitle = input<string>('Editer');
 
     // output
     onEdit = output<void>();

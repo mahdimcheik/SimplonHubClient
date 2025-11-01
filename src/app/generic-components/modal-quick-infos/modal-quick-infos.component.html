@@ -2,7 +2,7 @@
     <!-- Header End: Edit button if needed -->
     @if (showEditButton() && !isPassed()) {
         <div header-end>
-            <p-button label="Editer" (onClick)="edit()" class="flex-shrink-0" severity="secondary">
+            <p-button [label]="editButtonTitle()" (onClick)="edit()" class="flex-shrink-0" severity="secondary">
                 <i class="pi pi-pencil"></i>
             </p-button>
         </div>
@@ -14,8 +14,8 @@
             <i class="pi pi-info-circle text-3xl flex-shrink-0 mt-1"></i>
             <div class="flex-1">
                 <div class="text-gray-700 text-base leading-relaxed m-0 flex gap-2">
-                    <span class="font-bold">De : {{ event()?.start?.toString() | date }}</span>
-                    <span class="font-bold">À : {{ event()?.end?.toString() | date }}</span>
+                    <span class="font-bold">De : {{ event()?.start?.toString() | date: 'dd/MM/yyyy à HH:mm' }}</span>
+                    <span class="font-bold">À : {{ event()?.end?.toString() | date: 'HH:mm' }}</span>
                 </div>
                 <ng-content select="[slot=info-slot]"></ng-content>
             </div>
@@ -24,13 +24,13 @@
     </div>
 
     <!-- Footer -->
-    <div footer-end class="flex justify-end gap-3">
+    <div footer-end class="flex justify-end gap-2 w-full">
         <ng-content select="[slot=controls]"></ng-content>
         @if (showCancelButton()) {
-            <p-button label="Fermer" (onClick)="close()" class="flex-shrink-0" severity="danger" />
+            <p-button [label]="cancelButtonTitle()" (onClick)="close()" class="flex-shrink-0" severity="danger" />
         }
         @if (showSubmitButton()) {
-            <p-button label="Soumission" (onClick)="close()" class="flex-shrink-0" severity="primary" />
+            <p-button [label]="submitButtonTitle()" (onClick)="close()" class="flex-shrink-0" severity="primary" />
         }
     </div>
 </app-base-modal>

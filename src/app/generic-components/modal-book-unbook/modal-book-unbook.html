@@ -8,7 +8,7 @@
             </div>
         </div>
 
-        @if (!isBooked() && !ispassed()) {
+        @if (!ispassed() &&(!isBooked() || (isBooked() && slot()?.booking?.student?.id === user()?.id))) {
         <app-configurable-form [structure]="form()" (onFormSubmit)="submit($event)" (onCancel)="cancel()" [verboseError]="false"> </app-configurable-form>
         }
     </div>

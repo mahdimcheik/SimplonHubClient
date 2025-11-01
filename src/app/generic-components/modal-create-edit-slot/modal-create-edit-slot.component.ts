@@ -8,10 +8,11 @@ import { UserMainService } from '../../shared/services/userMain.service';
 import { MessageService } from 'primeng/api';
 import { BaseSideModalComponent } from '../base-side-modal/base-side-modal.component';
 import { ConfigurableFormComponent } from '../configurable-form/configurable-form.component';
+import { DatePipe } from '@angular/common';
 
 @Component({
     selector: 'app-modal-create-edit-slot',
-    imports: [BaseSideModalComponent, ConfigurableFormComponent],
+    imports: [BaseSideModalComponent, ConfigurableFormComponent, DatePipe],
     templateUrl: './modal-create-edit-slot.component.html',
     styleUrl: './modal-create-edit-slot.component.scss'
 })
