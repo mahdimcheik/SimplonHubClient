@@ -4,6 +4,7 @@ import { ButtonModule } from 'primeng/button';
 import { DividerModule } from 'primeng/divider';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { LayoutService } from '../../layout/service/layout.service';
 
 @Component({
     selector: 'app-base-side-modal',
@@ -14,6 +15,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 export class BaseSideModalComponent {
     breakPointservice = inject(BreakpointObserver);
     destroyRef = inject(DestroyRef);
+    layoutService = inject(LayoutService);
 
     visible = model(false);
     title = input<string>('Titre');

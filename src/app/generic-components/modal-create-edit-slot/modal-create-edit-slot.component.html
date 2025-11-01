@@ -1,12 +1,12 @@
 <app-base-side-modal [(visible)]="visible" [title]="title()" [position]="'right'" (onHide)="cancel()">
     <div content class="p-4">
         @if (slot()) {
-            <div class="flex flex-col gap-2 p-4 bg-gray-50 rounded-lg">
+            <div class="flex flex-col gap-2 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
                 <p class="m-0"><strong>De :</strong> {{ slot()?.dateFrom | date: 'dd/MM/yyyy à HH:mm' }}</p>
                 <p class="m-0"><strong>À :</strong> {{ slot()?.dateTo | date: 'HH:mm' }}</p>
                 <p class="m-0"><strong>Professeur :</strong> {{ slot()?.teacher?.firstName }} {{ slot()?.teacher?.lastName }} - {{ slot()?.type?.name }}</p>
             </div>
-            <div class="flex flex-col gap-2 p-4 bg-gray-50 rounded-lg mt-2">
+            <div class="flex flex-col gap-2 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg mt-2">
                 <!-- student -->
                 @if (slot()?.booking?.student) {
                     <p class="m-0"><strong>Étudiant :</strong> {{ slot()?.booking?.student?.firstName }} {{ slot()?.booking?.student?.lastName }}</p>

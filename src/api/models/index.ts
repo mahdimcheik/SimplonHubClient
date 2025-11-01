@@ -120,6 +120,8 @@ export interface Booking {
     description?: string | null;
     slotId?: string;
     slot?: Slot;
+    status?: StatusBooking;
+    statusId?: string;
     studentId?: string;
     student?: UserApp;
 }
@@ -136,6 +138,7 @@ export interface BookingDetailsDTO {
     readonly id?: string;
     readonly title?: string | null;
     readonly description?: string | null;
+    status?: StatusBookingDTO;
     student?: UserResponseDTO;
 }
 
@@ -1028,6 +1031,27 @@ export interface StatusAccountUpdateDTO {
     color: string;
     /** Icône associée au statut */
     icon?: string | null;
+}
+
+export interface StatusBooking {
+    id: string;
+    createdAt: Date;
+    updatedAt?: Date | null;
+    archivedAt?: Date | null;
+    name?: string | null;
+    color?: string | null;
+    icon?: string | null;
+}
+
+export interface StatusBookingDTO {
+    /** Identifiant unique du statut */
+    readonly id: string;
+    /** Nom du statut */
+    readonly name: string;
+    /** Couleur associée au statut (code hexadécimal) */
+    readonly color: string;
+    /** Icône associée au statut */
+    readonly icon?: string | null;
 }
 
 export interface StringResponseDTO {
