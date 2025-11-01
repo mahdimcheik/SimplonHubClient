@@ -19,10 +19,11 @@ import { ActivatedRoute } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ModalBookUnbookComponent } from '../../../../generic-components/modal-book-unbook/modal-book-unbook';
 import { BaseModalComponent } from '../../../../generic-components/base-modal/base-modal.component';
+import { DividerModule } from 'primeng/divider';
 
 @Component({
     selector: 'app-calendar-student',
-    imports: [FullCalendarModule, ModalBookUnbookComponent, BaseModalComponent],
+    imports: [FullCalendarModule, ModalBookUnbookComponent, BaseModalComponent, DividerModule],
     templateUrl: './calendar-student.component.html',
     styleUrl: './calendar-student.component.scss'
 })

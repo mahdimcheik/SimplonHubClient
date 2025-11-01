@@ -32,12 +32,15 @@
 
 @if (testModalVisible()) {
     <app-base-modal [(visible)]="testModalVisible" title="Test Modal" (onHide)="testModalVisible.set(false)">
-        <ng-template header-start>
+        <div header-start>
             <h1>start</h1>
-        </ng-template>
+        </div>
 
-        <ng-template header-end>
-            <button (click)="testModalVisible.set(false)">end</button>
-        </ng-template>
+        <div header-end>
+            <div class="flex items-center gap-1">
+                <button (click)="testModalVisible.set(false)">end</button>
+                <p-divider layout="vertical" [style]="{ margin: '0 8px' }" />
+            </div>
+        </div>
     </app-base-modal>
 }
