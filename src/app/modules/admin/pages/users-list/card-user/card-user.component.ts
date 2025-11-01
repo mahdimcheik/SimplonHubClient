@@ -34,6 +34,6 @@ export class CardUserComponent implements ICellRendererAngularComp {
     bookAppointment($event: Event) {
         $event.preventDefault();
         $event.stopPropagation();
-        this.router.navigate(['/student'], { queryParams: { teacherId: this.data().id } });
+        this.router.navigate(['/student/calendar-student'], { queryParams: { teacherId: this.data().id } });
     }
 }

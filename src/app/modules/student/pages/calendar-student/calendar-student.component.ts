@@ -125,26 +125,31 @@ export class CalendarStudentComponent implements OnInit {
         eventAllow: this.canDrop,
         eventDrop: this.onDrop,
         datesSet: this.onDatesSet,
-        eventColor: '#3788d8',
+        eventColor: 'transparent',
         eventDisplay: 'block'
     }));
 
     ngOnInit(): void {
         this.activatedRoute.queryParams.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
             const teacherId = params['teacherId'];
-            console.log('params', params);
 
             if (teacherId) {
                 this.teacherId.set(teacherId);
             } else {
                 this.teacherId.set(null);
             }
-            console.log('teacherId', this.teacherId());
         });
     }
 
+    // si le teacherId est non null, on charge les slots pour le teacherId avec
     async loadData() {
-        const slots = await this.slotMainService.getAllSlotsByStudent(this.startDate() ?? new Date(), this.endDate() ?? new Date(), this.teacherId() ?? undefined);
+        const slots = await this.slotMainService.getAllSlotsByStudent(
+            this.startDate() ?? new Date(),
+            DateTime.fromJSDate(this.endDate() ?? new Date())
+                .plus({ days: 1, seconds: -1 })
+                .toJSDate(),
+            this.teacherId() ?? undefined
+        );
 
         const events = slots.map((slot) => {
             return {
@@ -152,10 +157,13 @@ export class CalendarStudentComponent implements OnInit {
                 start: slot.dateFrom,
                 end: slot.dateTo,
                 extendedProps: {
-                    slot: slot
+                    slot: slot,
+                    passed: new Date(slot.dateFrom) < new Date(),
+                    upcoming: new Date(slot.dateFrom) > new Date()
                 }
             };
         });
+
         this.sourceEvents.set(events);
     }
 

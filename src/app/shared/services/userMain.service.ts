@@ -139,8 +139,8 @@ export class UserMainService {
                 ]);
             } else if (this.isStudent()) {
                 this.sideNavItems.set([
-                    { label: 'Tableau de bord', icon: 'pi pi-fw pi-home', routerLink: ['/student'] },
-                    { label: 'Liste Prof', icon: 'pi pi-fw pi-list', routerLink: ['/student/teacher-list'] }
+                    { label: 'Calendrier', icon: 'pi pi-fw pi-home', routerLink: ['/student/calendar-student'] },
+                    { label: 'Liste Professeurs', icon: 'pi pi-fw pi-list', routerLink: ['/student/list-teachers'] }
                 ]);
             }
         });

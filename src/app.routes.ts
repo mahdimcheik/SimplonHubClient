@@ -120,8 +120,8 @@ export const appRoutes: Routes = [
         component: AppLayout,
         canActivate: [isConnectedGuard],
         children: [
-            { path: '', component: CalendarStudentComponent },
-            { path: 'teacher-list', component: TeacherListComponent }
+            { path: 'calendar-student', component: CalendarStudentComponent },
+            { path: 'list-teachers', component: TeacherListComponent }
         ]
     },
 

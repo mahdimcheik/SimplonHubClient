@@ -1,10 +1,25 @@
 <full-calendar [options]="calendarOptions()" #calendar class="h-full" [events]="sourceEvents()">
     <ng-template #eventContent let-arg>
-        <div class="custom-event w-full h-full flex justify-center" [style.backgroundColor]="arg.event.extendedProps.slot?.type?.color ?? 'red'">
-            <strong class="text-white w-full text-center h-[20px] border-b border-white rounded-t-md px-2">{{ arg.event.title }}</strong
+        @let slot = arg.event.extendedProps?.slot;
+        <div
+            class="custom-event w-full h-full flex flex-col border border-2"
+            [style.backgroundColor]="arg.event.extendedProps.slot?.type?.color ?? 'red'"
+            [class.border-blue-500]="arg.event.extendedProps.passed ?? false"
+            [class.border-green-500]="arg.event.extendedProps.upcoming ?? false"
+        >
+            <strong class="w-full text-center h-[20px] border-b border-white rounded-t-md px-2 !text-teal-800 py-1">{{ arg.event.title }}</strong
             ><br />
-            @if (arg.event.extendedProps.description) {
-                <small>{{ arg.event.extendedProps.description }}</small>
+            @if (slot?.booking) {
+                <!-- étudiant -->
+                @if (slot.booking?.student) {
+                    <div class="w-full h-[20px] px-2 flex flex-col !text-emerald-600">
+                        <small>Pour :{{ slot.booking?.student?.firstName }} {{ slot.booking?.student?.lastName }}</small>
+                    </div>
+                }
+                <div class="w-full h-[20px] px-2 flex flex-col !text-emerald-600">
+                    <small>{{ slot.booking?.title }}</small>
+                    <p>{{ slot.booking?.description }}</p>
+                </div>
             }
         </div>
     </ng-template>
