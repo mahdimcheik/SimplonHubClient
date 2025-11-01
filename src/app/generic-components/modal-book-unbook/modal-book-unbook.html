@@ -1,15 +1,17 @@
 <app-base-side-modal [(visible)]="visible" [title]="title()" [position]="'right'" (onHide)="cancel()">
     <div content class="flex flex-col gap-4 p-4">
-        <div class="flex gap-2 w-full">
-            <div class="flex flex-col gap-2 p-4 bg-gray-50 rounded-lg">
-                <p class="m-0"><strong>De :</strong> {{ slot()?.dateFrom | date }}</p>
-                <p class="m-0"><strong>À :</strong> {{ slot()?.dateTo | date }}</p>
-                <p class="m-0"><strong>Professeur :</strong> {{ slot()?.teacher?.firstName }} {{ slot()?.teacher?.lastName }} - {{ slot()?.type?.name }}</p>
-            </div>
+        <div class="flex flex-col gap-2 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+            <p class="m-0"><strong>De :</strong> {{ slot()?.dateFrom | date }}</p>
+            <p class="m-0"><strong>À :</strong> {{ slot()?.dateTo | date }}</p>
+            <p class="m-0"><strong>Professeur :</strong> {{ slot()?.teacher?.firstName }} {{ slot()?.teacher?.lastName }} - {{ slot()?.type?.name }}</p>
         </div>
 
         @if (!ispassed() &&(!isBooked() || (isBooked() && slot()?.booking?.student?.id === user()?.id))) {
-        <app-configurable-form [structure]="form()" (onFormSubmit)="submit($event)" (onCancel)="cancel()" [verboseError]="false"> </app-configurable-form>
+        <app-configurable-form [structure]="form()" (onFormSubmit)="submit($event)" (onCancel)="cancel()" [verboseError]="false">
+            <div slot="more-controls">
+                <p-button [label]="isBooked() ? 'Désinscrire' : 'Réserver'" class="flex-shrink-0" severity="primary" />
+            </div>
+        </app-configurable-form>
         }
     </div>
 </app-base-side-modal>

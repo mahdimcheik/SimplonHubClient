@@ -598,6 +598,7 @@
                                 @if (!structureData.hideCancelButton) {
                                     <p-button type="button" label="Annuler" severity="secondary" class="w-full sm:w-auto configurable-form-button configurable-form-button-cancel" (onClick)="onCancelClick()" />
                                 }
+                                <ng-content select="[slot=more-controls]"></ng-content>
                                 @if (!structureData.hideSubmitButton) {
                                     <p-button type="submit" label="Soumettre" [disabled]="!isFormValid()" class="w-full sm:w-auto configurable-form-button configurable-form-button-submit" />
                                 }

@@ -1039,6 +1039,7 @@ export interface StatusBooking {
     updatedAt?: Date | null;
     archivedAt?: Date | null;
     name?: string | null;
+    displayName?: string | null;
     color?: string | null;
     icon?: string | null;
 }
@@ -1048,6 +1049,8 @@ export interface StatusBookingDTO {
     readonly id: string;
     /** Nom du statut */
     readonly name: string;
+    /** Nom du statut */
+    readonly displayName: string;
     /** Couleur associée au statut (code hexadécimal) */
     readonly color: string;
     /** Icône associée au statut */

@@ -9,10 +9,11 @@ import { UserMainService } from '../../shared/services/userMain.service';
 import { MessageService } from 'primeng/api';
 import { DatePipe } from '@angular/common';
 import { BaseSideModalComponent } from '../base-side-modal/base-side-modal.component';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
     selector: 'app-modal-book-unbook',
-    imports: [BaseSideModalComponent, ConfigurableFormComponent, DatePipe],
+    imports: [BaseSideModalComponent, ConfigurableFormComponent, DatePipe, ButtonModule],
     templateUrl: './modal-book-unbook.html',
     styleUrl: './modal-book-unbook.scss'
 })
