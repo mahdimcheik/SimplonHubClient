@@ -10,7 +10,7 @@
 import { HttpClient, HttpContext, HttpContextToken, HttpEvent, HttpResponse } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { BooleanResponseDTO, FavoriteCreateDTO, FavoriteResponseDTOListResponseDTO, FavoriteResponseDTOResponseDTO, FavoriteUpdateDTO, ObjectResponseDTO, RequestOptions } from "../models";
+import { BooleanResponseDTO, FavoriteCreateDTO, FavoriteDynamicFilters, FavoriteResponseDTOListResponseDTO, FavoriteResponseDTOResponseDTO, FavoriteUpdateDTO, ObjectResponseDTO, RequestOptions } from "../models";
 import { BASE_PATH_DEFAULT, CLIENT_CONTEXT_TOKEN_DEFAULT } from "../tokens";
 
 @Injectable({ providedIn: "root" })
@@ -24,10 +24,10 @@ export class FavoritesService {
         return context.set(this.clientContextToken, 'default');
     }
 
-    favoritesMyFavoritesGet(observe?: 'body', options?: RequestOptions<'json'>): Observable<FavoriteResponseDTOListResponseDTO>;
-    favoritesMyFavoritesGet(observe?: 'response', options?: RequestOptions<'json'>): Observable<HttpResponse<FavoriteResponseDTOListResponseDTO>>;
-    favoritesMyFavoritesGet(observe?: 'events', options?: RequestOptions<'json'>): Observable<HttpEvent<FavoriteResponseDTOListResponseDTO>>;
-    favoritesMyFavoritesGet(observe?: 'body' | 'events' | 'response', options?: RequestOptions<'arraybuffer' | 'blob' | 'json' | 'text'>): Observable<any> {
+    favoritesMyFavoritesPost(favoriteDynamicFilters?: FavoriteDynamicFilters, observe?: 'body', options?: RequestOptions<'json'>): Observable<FavoriteResponseDTOListResponseDTO>;
+    favoritesMyFavoritesPost(favoriteDynamicFilters?: FavoriteDynamicFilters, observe?: 'response', options?: RequestOptions<'json'>): Observable<HttpResponse<FavoriteResponseDTOListResponseDTO>>;
+    favoritesMyFavoritesPost(favoriteDynamicFilters?: FavoriteDynamicFilters, observe?: 'events', options?: RequestOptions<'json'>): Observable<HttpEvent<FavoriteResponseDTOListResponseDTO>>;
+    favoritesMyFavoritesPost(favoriteDynamicFilters?: FavoriteDynamicFilters, observe?: 'body' | 'events' | 'response', options?: RequestOptions<'arraybuffer' | 'blob' | 'json' | 'text'>): Observable<any> {
         const url = `${this.basePath}/favorites/my-favorites`;
 
         const requestOptions: any = {
@@ -37,23 +37,7 @@ export class FavoritesService {
             context: this.createContextWithClientId(options?.context)
         };
 
-        return this.httpClient.get(url, requestOptions);
-    }
-
-    favoritesStudentStudentIdGet(studentId: string, observe?: 'body', options?: RequestOptions<'json'>): Observable<FavoriteResponseDTOListResponseDTO>;
-    favoritesStudentStudentIdGet(studentId: string, observe?: 'response', options?: RequestOptions<'json'>): Observable<HttpResponse<FavoriteResponseDTOListResponseDTO>>;
-    favoritesStudentStudentIdGet(studentId: string, observe?: 'events', options?: RequestOptions<'json'>): Observable<HttpEvent<FavoriteResponseDTOListResponseDTO>>;
-    favoritesStudentStudentIdGet(studentId: string, observe?: 'body' | 'events' | 'response', options?: RequestOptions<'arraybuffer' | 'blob' | 'json' | 'text'>): Observable<any> {
-        const url = `${this.basePath}/favorites/student/${studentId}`;
-
-        const requestOptions: any = {
-            observe: observe as any,
-            reportProgress: options?.reportProgress,
-            withCredentials: options?.withCredentials,
-            context: this.createContextWithClientId(options?.context)
-        };
-
-        return this.httpClient.get(url, requestOptions);
+        return this.httpClient.post(url, favoriteDynamicFilters, requestOptions);
     }
 
     favoritesMyFansGet(observe?: 'body', options?: RequestOptions<'json'>): Observable<FavoriteResponseDTOListResponseDTO>;

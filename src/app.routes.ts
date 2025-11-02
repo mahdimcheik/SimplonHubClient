@@ -25,6 +25,7 @@ import { GestionCursusesComponent } from './app/modules/teacher/pages/gestion-cu
 import { AdminitrationComponent } from './app/modules/admin/pages/adminitration/adminitration.component';
 import { CalendarStudentComponent } from './app/modules/student/pages/calendar-student/calendar-student.component';
 import { TeacherListComponent } from './app/modules/student/pages/teacher-list/teacher-list.component';
+import { StudentFavoritesComponent } from './app/modules/student/pages/student-favorites/student-favorites.component';
 
 // Define path constants
 const TEACHER_PATH = 'teacher';
@@ -121,7 +122,8 @@ export const appRoutes: Routes = [
         canActivate: [isConnectedGuard],
         children: [
             { path: 'calendar-student', component: CalendarStudentComponent },
-            { path: 'list-teachers', component: TeacherListComponent }
+            { path: 'list-teachers', component: TeacherListComponent },
+            { path: 'favorites', component: StudentFavoritesComponent }
         ]
     },
 

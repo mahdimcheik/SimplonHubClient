@@ -446,6 +446,15 @@ export interface FavoriteCreateDTO {
     note?: string | null;
 }
 
+export interface FavoriteDynamicFilters {
+    first?: number;
+    rows?: number;
+    search?: string | null;
+    globalSearch?: string | null;
+    sorts?: Sort[];
+    filters?: Record<string, FilterItem>;
+}
+
 /** DTO pour l'affichage d'un favori */
 export interface FavoriteResponseDTO {
     /** Identifiant unique du favori */
@@ -454,10 +463,10 @@ export interface FavoriteResponseDTO {
     note?: string | null;
     /** Identifiant de l'étudiant */
     studentId: string;
-    student?: FavoriteUserDTO;
+    student?: UserResponseDTO;
     /** Identifiant du professeur */
     teacherId: string;
-    teacher?: FavoriteUserDTO;
+    teacher?: UserResponseDTO;
     /** Date de création du favori */
     createdAt: Date;
     /** Date de dernière mise à jour */
@@ -482,22 +491,6 @@ export interface FavoriteResponseDTOResponseDTO {
 export interface FavoriteUpdateDTO {
     /** Note ou commentaire */
     note?: string | null;
-}
-
-/** DTO simplifié pour l'utilisateur dans les favoris */
-export interface FavoriteUserDTO {
-    /** Identifiant de l'utilisateur */
-    id: string;
-    /** Prénom */
-    firstName: string;
-    /** Nom de famille */
-    lastName: string;
-    /** Email */
-    email: string;
-    /** Titre/fonction */
-    title?: string | null;
-    /** Description */
-    description?: string | null;
 }
 
 export interface FilterItem {

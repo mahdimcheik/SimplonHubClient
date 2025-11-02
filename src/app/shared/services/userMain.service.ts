@@ -140,6 +140,7 @@ export class UserMainService {
             } else if (this.isStudent()) {
                 this.sideNavItems.set([
                     { label: 'Calendrier', icon: 'pi pi-fw pi-home', routerLink: ['/student/calendar-student'] },
+                    { label: 'Favoris', icon: 'pi pi-fw pi-heart', routerLink: ['/student/favorites'] },
                     { label: 'Liste Professeurs', icon: 'pi pi-fw pi-list', routerLink: ['/student/list-teachers'] }
                 ]);
             }

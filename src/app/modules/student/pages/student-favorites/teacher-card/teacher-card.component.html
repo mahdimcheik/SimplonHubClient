@@ -1,0 +1,12 @@
+<app-base-card>
+    <div header>
+        <h3>{{ teacher()?.firstName }} {{ teacher()?.lastName }}</h3>
+    </div>
+    <div body>
+        <p-image src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/User_icon_2.svg/480px-User_icon_2.svg.png" alt="logo" class="w-10 h-10" />
+    </div>
+    <div footer>
+        <p>{{ teacher()?.title }}</p>
+        <p>{{ teacher()?.description }}</p>
+    </div>
+</app-base-card>
