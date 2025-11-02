@@ -181,14 +181,20 @@ export class SlotsService {
         return this.httpClient.put(url, null, requestOptions);
     }
 
-    slotsDeleteIdDelete(id: string, observe?: 'body', options?: RequestOptions<'json'>): Observable<ObjectResponseDTO>;
-    slotsDeleteIdDelete(id: string, observe?: 'response', options?: RequestOptions<'json'>): Observable<HttpResponse<ObjectResponseDTO>>;
-    slotsDeleteIdDelete(id: string, observe?: 'events', options?: RequestOptions<'json'>): Observable<HttpEvent<ObjectResponseDTO>>;
-    slotsDeleteIdDelete(id: string, observe?: 'body' | 'events' | 'response', options?: RequestOptions<'arraybuffer' | 'blob' | 'json' | 'text'>): Observable<any> {
+    slotsDeleteIdDelete(id: string, forceDelete?: boolean, observe?: 'body', options?: RequestOptions<'json'>): Observable<ObjectResponseDTO>;
+    slotsDeleteIdDelete(id: string, forceDelete?: boolean, observe?: 'response', options?: RequestOptions<'json'>): Observable<HttpResponse<ObjectResponseDTO>>;
+    slotsDeleteIdDelete(id: string, forceDelete?: boolean, observe?: 'events', options?: RequestOptions<'json'>): Observable<HttpEvent<ObjectResponseDTO>>;
+    slotsDeleteIdDelete(id: string, forceDelete?: boolean, observe?: 'body' | 'events' | 'response', options?: RequestOptions<'arraybuffer' | 'blob' | 'json' | 'text'>): Observable<any> {
         const url = `${this.basePath}/slots/delete/${id}`;
+
+        let params = new HttpParams();
+        if (forceDelete != null) {
+            params = HttpParamsBuilder.addToHttpParams(params, forceDelete, 'forceDelete');
+        }
 
         const requestOptions: any = {
             observe: observe as any,
+            params,
             reportProgress: options?.reportProgress,
             withCredentials: options?.withCredentials,
             context: this.createContextWithClientId(options?.context)

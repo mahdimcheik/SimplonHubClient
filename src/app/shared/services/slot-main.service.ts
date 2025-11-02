@@ -60,9 +60,13 @@ export class SlotMainService {
         return confirmedBooking.data;
     }
 
-    async deleteSlot(slotId: string) {
-        await firstValueFrom(this.slotsService.slotsDeleteIdDelete(slotId));
+    async deleteSlot(slotId: string, force: boolean = false) {
+        await firstValueFrom(this.slotsService.slotsDeleteIdDelete(slotId, force));
         this.slots.update((current) => current.filter((s) => s.id !== slotId));
+    }
+
+    async deleteBooking(bookingId: string) {
+        await firstValueFrom(this.slotsService.slotsUnbookIdPost(bookingId));
     }
 
     async getAllTypeSlot() {

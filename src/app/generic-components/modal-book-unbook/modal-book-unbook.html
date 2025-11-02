@@ -18,7 +18,7 @@
         <app-configurable-form [structure]="form()" (onFormSubmit)="submit($event)" (onCancel)="cancel()" [verboseError]="false">
             @if(isBooked()) {
             <div slot="more-controls">
-                <p-button [label]="'Désinscrire'" class="flex-shrink-0" severity="primary" (onClick)="unbook()" />
+                <p-button [label]="'Annuler la réservation'" class="flex-shrink-0" severity="primary" (onClick)="unbook()" />
             </div>
             }
         </app-configurable-form>
