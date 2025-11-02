@@ -1,154 +1,160 @@
 import { Component, computed, inject, linkedSignal, model, OnInit, output, signal } from '@angular/core';
 import { ConfigurableFormComponent } from '../configurable-form/configurable-form.component';
 import { EventInput } from '@fullcalendar/core/index.js';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { Structure } from '../configurable-form/related-models';
-import { BookingUpdateDTO, SlotResponseDTO, TypeSlotResponseDTO } from '../../../api';
+import { BookingUpdateDTO, SlotResponseDTO } from '../../../api';
 import { SlotMainService } from '../../shared/services/slot-main.service';
 import { UserMainService } from '../../shared/services/userMain.service';
 import { MessageService } from 'primeng/api';
 import { DatePipe } from '@angular/common';
 import { BaseSideModalComponent } from '../base-side-modal/base-side-modal.component';
 import { ButtonModule } from 'primeng/button';
+import { ConfirmModalComponent } from '../confirm-modal/confirm-modal.component';
 
 @Component({
     selector: 'app-modal-book-unbook',
-    imports: [BaseSideModalComponent, ConfigurableFormComponent, DatePipe, ButtonModule],
+    imports: [BaseSideModalComponent, ConfigurableFormComponent, DatePipe, ButtonModule, ConfirmModalComponent],
     templateUrl: './modal-book-unbook.html',
     styleUrl: './modal-book-unbook.scss'
 })
-export class ModalBookUnbookComponent implements OnInit {
-    fb = inject(FormBuilder);
-    slotMainService = inject(SlotMainService);
-    userMainService = inject(UserMainService);
-    messageService = inject(MessageService);
+export class ModalBookUnbookComponent {
+    private readonly slotMainService = inject(SlotMainService);
+    private readonly userMainService = inject(UserMainService);
+    private readonly messageService = inject(MessageService);
 
-    user = this.userMainService.userConnected;
-    event = model<EventInput | null>(null);
-    visible = model(false);
-    title = computed(() => (this.event()?.extendedProps?.['slot'] ? 'Réserver ce créneau' : 'Désinscrire de ce créneau'));
-    slot = linkedSignal<SlotResponseDTO | null>(() => {
-        const slot = this.event()?.extendedProps?.['slot'];
-        if (slot) {
-            return slot;
-        }
-        return null;
+    // Modal state
+    readonly event = model<EventInput | null>(null);
+    readonly visible = model(false);
+    showDeleteModal = signal(false);
+
+    // Computed properties
+    readonly user = this.userMainService.userConnected;
+    readonly slot = linkedSignal<SlotResponseDTO | null>(() => this.event()?.extendedProps?.['slot'] ?? null);
+    readonly isBooked = linkedSignal<boolean>(() => !!this.slot()?.booking?.student?.id);
+    readonly isPassed = computed(() => {
+        const dateFrom = this.slot()?.dateFrom;
+        return dateFrom ? new Date(dateFrom) < new Date() : false;
     });
+    readonly isOwnBooking = computed(() => this.slot()?.booking?.student?.id === this.user()?.id);
+    readonly canEditBooking = computed(() => !this.isPassed() && (!this.isBooked() || this.isOwnBooking()));
 
-    isBooked = linkedSignal<boolean>(() => {
-        return !!this.slot()?.booking?.student?.id;
-    });
+    // Title and form
+    readonly title = computed(() => (this.isBooked() ? 'Modifier la réservation' : 'Réserver ce créneau'));
+    readonly submitButtonTitle = computed(() => (this.isBooked() ? 'Modifier' : 'Réserver'));
 
-    submitButtonTitle = computed(() => {
-        return this.isBooked() ? 'Modifier' : 'Réserver';
-    });
-    ispassed = computed(() => {
-        return new Date(this.slot()?.dateFrom!) < new Date();
-    });
-
-    start = computed(() => {
-        const event = this.event();
-        if (!event?.start) return null;
-        return event.start instanceof Date ? event.start : new Date(event?.start as string);
-    });
-
-    end = computed(() => {
-        const event = this.event();
-        if (!event?.end) return null;
-
-        return event.end instanceof Date ? event.end : new Date(event?.end as string);
-    });
-
-    typeId = computed(() => {
-        return this.slot()?.typeId ?? '';
-    });
-
-    form = computed<Structure>(() => {
-        return {
-            id: 'slot',
-            name: '',
-            label: '',
-            submitButtonLabel: this.submitButtonTitle(),
-            formFieldGroups: [
-                {
-                    id: 'informations',
-                    name: 'Informations',
-                    label: 'Informations',
-                    fields: [
-                        { id: 'title', label: 'Titre', name: 'title', type: 'text', required: true, value: this.slot()?.booking?.title, fullWidth: true },
-                        { id: 'description', label: 'Description', name: 'description', type: 'textarea', required: true, value: this.slot()?.booking?.description, fullWidth: true }
-                    ]
-                }
-            ]
-        };
-    });
-
-    typesSlot = signal<TypeSlotResponseDTO[]>([]);
-
-    // output
-    onExit = output<void>();
-
-    ngOnInit(): void {
-        this.loadData();
-    }
-
-    async loadData() {
-        const types = await this.slotMainService.getTypeSlot();
-        this.typesSlot.set(types);
-    }
-
-    async submit(event: FormGroup) {
-        try {
-            if (!this.slot()?.booking) {
-                await this.slotMainService.bookSlot({
-                    ...event.value.informations,
-                    studentId: this.user()?.id ?? '',
-                    slotId: this.slot()?.id ?? ''
-                });
-                this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Créneau reservé avec succès' });
-                this.visible.set(false);
-            } else {
-                await this.updateBooking({
-                    id: this.slot()?.booking?.id ?? '',
-                    ...event.value.informations
-                });
-                this.visible.set(false);
-                this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Créneau mis à jour avec succès' });
+    readonly form = computed<Structure>(() => ({
+        id: 'slot',
+        name: '',
+        label: '',
+        submitButtonLabel: this.submitButtonTitle(),
+        formFieldGroups: [
+            {
+                id: 'informations',
+                name: 'Informations',
+                label: 'Informations',
+                fields: [
+                    {
+                        id: 'title',
+                        label: 'Titre',
+                        name: 'title',
+                        type: 'text',
+                        required: true,
+                        value: this.slot()?.booking?.title,
+                        fullWidth: true
+                    },
+                    {
+                        id: 'description',
+                        label: 'Description',
+                        name: 'description',
+                        type: 'textarea',
+                        required: true,
+                        value: this.slot()?.booking?.description,
+                        fullWidth: true
+                    }
+                ]
             }
-        } catch (error) {
-            this.messageService.add({ severity: 'error', summary: 'Erreur', detail: 'Une erreur est survenue lors de la réservation du créneau.' });
-        } finally {
-            this.cancel();
-        }
+        ]
+    }));
+
+    // Outputs
+    readonly onExit = output<void>();
+
+    private getSlotId(): string {
+        return this.slot()?.id ?? '';
     }
 
-    async updateBooking(newBooking: BookingUpdateDTO) {
-        try {
-            await this.slotMainService.updateBooking(newBooking);
-            // await this.slotMainService.unbookSlot(this.slot()?.id ?? '');
-            this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Créneau désinscrit avec succès' });
-            this.visible.set(false);
-        } catch (error) {
-            this.messageService.add({ severity: 'error', summary: 'Erreur', detail: 'Une erreur est survenue lors de la désinscription du créneau.' });
-        } finally {
-            this.cancel();
-        }
+    private getBookingId(): string {
+        return this.slot()?.booking?.id ?? '';
     }
 
-    async unbook() {
-        try {
-            await this.slotMainService.unbookSlot(this.slot()?.booking?.id ?? '');
-            this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Créneau désinscrit avec succès' });
-            this.visible.set(false);
-        } catch (error) {
-            this.messageService.add({ severity: 'error', summary: 'Erreur', detail: 'Une erreur est survenue lors de la désinscription du créneau.' });
-        } finally {
-            this.cancel();
-        }
+    private getUserId(): string {
+        return this.user()?.id ?? '';
     }
 
-    cancel() {
+    private closeModal(): void {
         this.visible.set(false);
         this.onExit.emit();
+    }
+
+    private showSuccess(detail: string): void {
+        this.messageService.add({
+            severity: 'success',
+            summary: 'Succès',
+            detail
+        });
+    }
+
+    private showError(detail: string): void {
+        this.messageService.add({
+            severity: 'error',
+            summary: 'Erreur',
+            detail
+        });
+    }
+
+    async submit(event: FormGroup): Promise<void> {
+        try {
+            const formData = event.value.informations;
+
+            if (this.isBooked()) {
+                await this.updateBooking({
+                    id: this.getBookingId(),
+                    ...formData
+                });
+                this.showSuccess('Réservation mise à jour avec succès');
+            } else {
+                await this.slotMainService.bookSlot({
+                    ...formData,
+                    studentId: this.getUserId(),
+                    slotId: this.getSlotId()
+                });
+                this.showSuccess('Créneau réservé avec succès');
+            }
+        } catch (error) {
+            const action = this.isBooked() ? 'la mise à jour' : 'la réservation';
+            this.showError(`Une erreur est survenue lors de ${action} du créneau.`);
+        } finally {
+            this.closeModal();
+        }
+    }
+
+    private async updateBooking(bookingData: BookingUpdateDTO): Promise<void> {
+        await this.slotMainService.updateBooking(bookingData);
+    }
+
+    async unbook(): Promise<void> {
+        try {
+            await this.slotMainService.unbookSlot(this.getBookingId());
+            this.showSuccess('Réservation annulée avec succès');
+        } catch (error) {
+            this.showError("Une erreur est survenue lors de l'annulation de la réservation.");
+        } finally {
+            this.closeModal();
+        }
+    }
+
+    cancel(): void {
+        this.closeModal();
     }
 }

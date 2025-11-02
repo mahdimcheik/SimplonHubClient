@@ -1,39 +1,52 @@
 <app-base-side-modal [(visible)]="visible" [title]="title()" [position]="'right'" (onHide)="cancel()">
     <div content class="p-4">
         @if (slot()) {
+            <!-- Slot Information -->
             <div class="flex flex-col gap-2 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
                 <p class="m-0"><strong>De :</strong> {{ slot()?.dateFrom | date: 'dd/MM/yyyy à HH:mm' }}</p>
                 <p class="m-0"><strong>À :</strong> {{ slot()?.dateTo | date: 'HH:mm' }}</p>
                 <p class="m-0"><strong>Professeur :</strong> {{ slot()?.teacher?.firstName }} {{ slot()?.teacher?.lastName }} - {{ slot()?.type?.name }}</p>
             </div>
-            @if (slot()?.booking?.student) {
-                <div class="p-2 rounded-md mt-2" [class.bg-green-100]="slot()?.booking?.status?.name == 'confirmed'" [class.bg-yellow-100]="slot()?.booking?.status?.name == 'waiting'">
-                    <i class="pi pi-check"></i>
-                    <span>{{ slot()?.booking?.status?.name == 'confirmed' ? 'Réservation acceptée' : 'Réservation en attente' }}</span>
+
+            <!-- Booking Details -->
+            @if (hasBooking()) {
+                <!-- Booking Status Badge -->
+                <div
+                    class="p-2 rounded-md mt-2"
+                    [class.bg-green-100]="bookingStatus() === 'confirmed'"
+                    [class.bg-yellow-100]="bookingStatus() === 'waiting'"
+                    [class.dark:bg-green-900]="bookingStatus() === 'confirmed'"
+                    [class.dark:bg-yellow-900]="bookingStatus() === 'waiting'"
+                >
+                    <i class="pi" [class.pi-check]="bookingStatus() === 'confirmed'" [class.pi-clock]="bookingStatus() === 'waiting'"></i>
+                    <span>{{ bookingStatus() === 'confirmed' ? 'Réservation acceptée' : 'Réservation en attente' }}</span>
                 </div>
+
+                <!-- Booking Information -->
                 <div class="flex flex-col gap-2 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg mt-2">
-                    <!-- student -->
                     <p class="m-0"><strong>Étudiant :</strong> {{ slot()?.booking?.student?.firstName }} {{ slot()?.booking?.student?.lastName }}</p>
-                    <!-- title -->
                     <p class="m-0"><strong>Titre :</strong> {{ slot()?.booking?.title }}</p>
-                    <!-- description -->
                     <p class="m-0"><strong>Description :</strong> {{ slot()?.booking?.description }}</p>
                 </div>
+
+                <!-- Booking Actions -->
                 @if (slot()?.booking?.status) {
                     <div class="flex gap-2 justify-end mt-2">
-                        @if (slot()?.booking?.status?.name == 'waiting') {
-                            <p-button [label]="'Accepter la réservation'" class="flex-shrink-0" severity="primary" (onClick)="acceptBooking()" />
+                        @if (bookingStatus() === 'waiting') {
+                            <p-button label="Accepter la réservation" class="flex-shrink-0" severity="success" (onClick)="acceptBooking()" />
                         }
-                        <p-button [label]="slot()?.booking?.status?.name == 'waiting' ? 'Refuser la réservation' : 'Annuler la réservation'" class="flex-shrink-0" severity="danger" (onClick)="showRejectConfirm.set(true)" />
+                        <p-button [label]="bookingStatus() === 'waiting' ? 'Refuser la réservation' : 'Annuler la réservation'" class="flex-shrink-0" severity="danger" (onClick)="showRejectConfirm.set(true)" />
                     </div>
                 }
             }
         }
-        @if (!slot()?.booking) {
+
+        <!-- Slot Form (only shown when no booking) -->
+        @if (!hasBooking()) {
             <app-configurable-form [structure]="form()" (onFormSubmit)="submit($event)" (onCancel)="cancel()" [verboseError]="false">
-                @if (slot()?.id) {
+                @if (isEditMode()) {
                     <div slot="more-controls">
-                        <p-button [label]="'Supprimer le créneau'" class="flex-shrink-0" severity="primary" (onClick)="showDeleteConfirm.set(true)" />
+                        <p-button label="Supprimer le créneau" class="flex-shrink-0" severity="danger" (onClick)="showDeleteConfirm.set(true)" />
                     </div>
                 }
             </app-configurable-form>
@@ -41,42 +54,46 @@
     </div>
 </app-base-side-modal>
 
+<!-- Delete Slot Confirmation Modal -->
 @if (showDeleteConfirm()) {
     <app-confirm-modal
         [(visible)]="showDeleteConfirm"
-        [title]="'Confirmer la suppression'"
-        [question]="'Êtes-vous sûr de vouloir supprimer ce créneau ? Cette action est irréversible.'"
-        [confirmText]="'Supprimer'"
-        [cancelText]="'Annuler'"
-        [severity]="'danger'"
+        title="Confirmer la suppression"
+        question="Êtes-vous sûr de vouloir supprimer ce créneau ? Cette action est irréversible."
+        confirmText="Supprimer"
+        cancelText="Annuler"
+        severity="danger"
         (onConfirm)="deleteSlot()"
         (onCancel)="showDeleteConfirm.set(false)"
         (onClose)="showDeleteConfirm.set(false)"
     >
-        <div slot="info" class="mt-4 text-sm text-gray-600">
-            <p>Cette action supprimera définitivement le créneau.</p>
+        <div slot="info" class="mt-4 text-sm text-gray-600 dark:text-gray-400">
+            <p class="m-0">Cette action supprimera définitivement le créneau.</p>
         </div>
     </app-confirm-modal>
 }
 
+<!-- Reject Booking Confirmation Modal -->
 @if (showRejectConfirm()) {
     <app-confirm-modal
         [(visible)]="showRejectConfirm"
-        [title]="'Confirmer le rejet'"
-        [question]="'Êtes-vous sûr de vouloir rejeter cette réservation ? Cette action est irréversible.'"
-        [confirmText]="'Rejeter'"
-        [cancelText]="'Annuler'"
-        [severity]="'danger'"
+        title="Confirmer le rejet"
+        question="Êtes-vous sûr de vouloir rejeter cette réservation ? Cette action est irréversible."
+        confirmText="Rejeter"
+        cancelText="Annuler"
+        severity="danger"
         (onConfirm)="rejectBooking()"
         (onCancel)="showRejectConfirm.set(false)"
         (onClose)="showRejectConfirm.set(false)"
     >
-        <div slot="info" class="mt-4 text-sm text-gray-600">
+        <div slot="info" class="mt-4 text-sm text-gray-600 dark:text-gray-400">
             <div class="flex items-center py-2">
                 <p-checkbox inputId="deleteSlotAndReservation" name="deleteSlotAndReservation" [ngModel]="deleteSlotAndReservation()" (ngModelChange)="deleteSlotAndReservation.set($event)" [binary]="true" />
-                <label for="deleteSlotAndReservation" class="ml-2"> Supprimer le créneau et la réservation </label>
+                <label for="deleteSlotAndReservation" class="ml-2 cursor-pointer"> Supprimer le créneau et la réservation </label>
             </div>
-            <p>Cette action rejettera définitivement la réservation.</p>
+            <p class="m-0 mt-2">
+                {{ deleteSlotAndReservation() ? 'Le créneau et la réservation seront définitivement supprimés.' : 'Cette action rejettera définitivement la réservation.' }}
+            </p>
         </div>
     </app-confirm-modal>
 }

@@ -1,27 +1,53 @@
 <app-base-side-modal [(visible)]="visible" [title]="title()" [position]="'right'" (onHide)="cancel()">
     <div content class="flex flex-col gap-4 p-4">
+        <!-- Slot Information -->
         <div class="flex flex-col gap-2 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
-            <p class="m-0"><strong>De :</strong> {{ slot()?.dateFrom | date :'dd/MM/yyyy à HH:mm'}}</p>
-            <p class="m-0"><strong>À :</strong> {{ slot()?.dateTo | date :'HH:mm'}}</p>
+            <p class="m-0"><strong>De :</strong> {{ slot()?.dateFrom | date: 'dd/MM/yyyy à HH:mm' }}</p>
+            <p class="m-0"><strong>À :</strong> {{ slot()?.dateTo | date: 'HH:mm' }}</p>
             <p class="m-0"><strong>Professeur :</strong> {{ slot()?.teacher?.firstName }} {{ slot()?.teacher?.lastName }} - {{ slot()?.type?.name }}</p>
         </div>
+
+        <!-- Existing Booking Information -->
         @if (slot()?.booking?.student) {
-        <div class="flex flex-col gap-2 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg mt-2">
-            <!-- student -->
+        <div class="flex flex-col gap-2 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
             <p class="m-0"><strong>Étudiant :</strong> {{ slot()?.booking?.student?.firstName }} {{ slot()?.booking?.student?.lastName }}</p>
-            <!-- title -->
             <p class="m-0"><strong>Titre :</strong> {{ slot()?.booking?.title }}</p>
-            <!-- description -->
             <p class="m-0"><strong>Description :</strong> {{ slot()?.booking?.description }}</p>
         </div>
-        } @if (!ispassed() &&(!isBooked() || (isBooked() && slot()?.booking?.student?.id === user()?.id))) {
+        }
+
+        <!-- Booking Form -->
+        @if (canEditBooking()) {
         <app-configurable-form [structure]="form()" (onFormSubmit)="submit($event)" (onCancel)="cancel()" [verboseError]="false">
-            @if(isBooked()) {
+            @if (isBooked()) {
             <div slot="more-controls">
-                <p-button [label]="'Annuler la réservation'" class="flex-shrink-0" severity="primary" (onClick)="unbook()" />
+                <p-button label="Annuler la réservation" class="flex-shrink-0" severity="danger" (onClick)="showDeleteModal.set(true)" />
             </div>
             }
         </app-configurable-form>
         }
+
+        <!-- Past Slot Warning -->
+        @if (isPassed()) {
+        <div class="p-4 bg-yellow-50 dark:bg-yellow-900 border border-yellow-200 dark:border-yellow-700 rounded-lg">
+            <p class="m-0 text-sm text-yellow-800 dark:text-yellow-200">Ce créneau est déjà passé et ne peut plus être modifié.</p>
+        </div>
+        }
     </div>
 </app-base-side-modal>
+
+<!-- Reject Booking Confirmation Modal -->
+@if (showDeleteModal()) {
+<app-confirm-modal
+    [(visible)]="showDeleteModal"
+    title="Confirmer l'annulation"
+    question="Êtes-vous sûr de vouloir annuler cette réservation ? Cette action est irréversible."
+    confirmText="Valider"
+    cancelText="Annuler"
+    severity="danger"
+    (onConfirm)="unbook()"
+    (onCancel)="showDeleteModal.set(false)"
+    (onClose)="showDeleteModal.set(false)"
+>
+</app-confirm-modal>
+}
