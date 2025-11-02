@@ -6,6 +6,7 @@ import { UserResponseDTO } from '../../../../../../api/models';
 import { ICellRendererAngularComp } from '../../../../../generic-components/smart-grid';
 import { Router } from '@angular/router';
 import { ChipModule } from 'primeng/chip';
+import { FavoritesMainService } from '../../../../../shared/services/favorites-main.service';
 
 @Component({
     selector: 'app-card-user',
@@ -15,6 +16,8 @@ import { ChipModule } from 'primeng/chip';
 })
 export class CardUserComponent implements ICellRendererAngularComp {
     router = inject(Router);
+    favoritesService = inject(FavoritesMainService);
+
     data = model.required<UserResponseDTO>();
     roles = computed(() =>
         this.data()
@@ -24,6 +27,7 @@ export class CardUserComponent implements ICellRendererAngularComp {
     languages = computed(() => this.data().languages);
     programmingLanguages = computed(() => this.data().programmingLanguages);
     onShowMore = output<UserResponseDTO>();
+    onFavorites = output<UserResponseDTO>();
 
     onViewClick($event: Event) {
         $event.preventDefault();
@@ -35,5 +39,9 @@ export class CardUserComponent implements ICellRendererAngularComp {
         $event.preventDefault();
         $event.stopPropagation();
         this.router.navigate(['/student/calendar-student'], { queryParams: { teacherId: this.data().id } });
+    }
+
+    async addToFavorites() {
+        await this.favoritesService.addFavorite(this.data().id);
     }
 }

@@ -110,13 +110,10 @@ export class TeacherListComponent {
     constructor() {
         this.getStatuses();
         this.getLanguages();
-        effect(
-            () => {
-                const state = this.filterParams();
-                this.loadUsers(state);
-            },
-            { allowSignalWrites: true }
-        );
+        effect(() => {
+            const state = this.filterParams();
+            this.loadUsers(state);
+        });
     }
 
     async getStatuses() {
