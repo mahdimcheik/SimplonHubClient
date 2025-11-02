@@ -9,10 +9,12 @@ import { MessageService } from 'primeng/api';
 import { BaseSideModalComponent } from '../base-side-modal/base-side-modal.component';
 import { ConfigurableFormComponent } from '../configurable-form/configurable-form.component';
 import { DatePipe } from '@angular/common';
+import { ButtonModule } from 'primeng/button';
+import { ConfirmModalComponent } from '../confirm-modal/confirm-modal.component';
 
 @Component({
     selector: 'app-modal-create-edit-slot',
-    imports: [BaseSideModalComponent, ConfigurableFormComponent, DatePipe],
+    imports: [BaseSideModalComponent, ConfigurableFormComponent, DatePipe, ButtonModule, ConfirmModalComponent],
     templateUrl: './modal-create-edit-slot.component.html',
     styleUrl: './modal-create-edit-slot.component.scss'
 })
@@ -22,6 +24,7 @@ export class ModalCreateEditSlotComponent implements OnInit {
     userMainService = inject(UserMainService);
     messageService = inject(MessageService);
 
+    showDeleteConfirm = signal(false);
     user = this.userMainService.userConnected;
     event = model<EventInput | null>(null);
     visible = model(false);
@@ -32,6 +35,9 @@ export class ModalCreateEditSlotComponent implements OnInit {
             return slot;
         }
         return null;
+    });
+    isBooked = computed(() => {
+        return !!this.slot()?.booking?.student?.id;
     });
     start = computed(() => {
         const event = this.event();
@@ -55,6 +61,7 @@ export class ModalCreateEditSlotComponent implements OnInit {
             id: 'slot',
             name: 'Créneau',
             label: 'Créneau',
+            submitButtonLabel: this.slot() ? 'Editer' : 'Créer',
             formFieldGroups: [
                 {
                     id: 'informations',
@@ -104,6 +111,18 @@ export class ModalCreateEditSlotComponent implements OnInit {
             }
         } catch (error) {
             this.messageService.add({ severity: 'error', summary: 'Erreur', detail: 'Une erreur est survenue lors de la création du créneau.' });
+        } finally {
+            this.cancel();
+        }
+    }
+
+    async deleteSlot() {
+        try {
+            await this.slotMainService.deleteSlot(this.slot()?.id ?? '');
+            this.visible.set(false);
+            this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Créneau supprimé avec succès' });
+        } catch (error) {
+            this.messageService.add({ severity: 'error', summary: 'Erreur', detail: 'Une erreur est survenue lors de la suppression du créneau.' });
         } finally {
             this.cancel();
         }

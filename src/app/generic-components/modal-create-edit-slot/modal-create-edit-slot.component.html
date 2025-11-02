@@ -6,19 +6,41 @@
                 <p class="m-0"><strong>À :</strong> {{ slot()?.dateTo | date: 'HH:mm' }}</p>
                 <p class="m-0"><strong>Professeur :</strong> {{ slot()?.teacher?.firstName }} {{ slot()?.teacher?.lastName }} - {{ slot()?.type?.name }}</p>
             </div>
-            <div class="flex flex-col gap-2 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg mt-2">
-                <!-- student -->
-                @if (slot()?.booking?.student) {
+            @if (slot()?.booking?.student) {
+                <div class="flex flex-col gap-2 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg mt-2">
+                    <!-- student -->
                     <p class="m-0"><strong>Étudiant :</strong> {{ slot()?.booking?.student?.firstName }} {{ slot()?.booking?.student?.lastName }}</p>
                     <!-- title -->
                     <p class="m-0"><strong>Titre :</strong> {{ slot()?.booking?.title }}</p>
                     <!-- description -->
                     <p class="m-0"><strong>Description :</strong> {{ slot()?.booking?.description }}</p>
-                }
-            </div>
+                </div>
+            }
         }
         @if (!slot()?.booking) {
-            <app-configurable-form [structure]="form()" (onFormSubmit)="submit($event)" (onCancel)="cancel()" [verboseError]="false"> </app-configurable-form>
+            <app-configurable-form [structure]="form()" (onFormSubmit)="submit($event)" (onCancel)="cancel()" [verboseError]="false">
+                <div slot="more-controls">
+                    <p-button [label]="'Supprimer le créneau'" class="flex-shrink-0" severity="primary" (onClick)="showDeleteConfirm.set(true)" />
+                </div>
+            </app-configurable-form>
         }
     </div>
 </app-base-side-modal>
+
+@if (showDeleteConfirm()) {
+    <app-confirm-modal
+        [(visible)]="showDeleteConfirm"
+        [title]="'Confirmer la suppression'"
+        [question]="'Êtes-vous sûr de vouloir supprimer ce créneau ? Cette action est irréversible.'"
+        [confirmText]="'Supprimer'"
+        [cancelText]="'Annuler'"
+        [severity]="'danger'"
+        (onConfirm)="deleteSlot()"
+        (onCancel)="showDeleteConfirm.set(false)"
+        (onClose)="showDeleteConfirm.set(false)"
+    >
+        <div slot="info" class="mt-4 text-sm text-gray-600">
+            <p>Cette action supprimera définitivement l'adresse sélectionnée de votre profil.</p>
+        </div>
+    </app-confirm-modal>
+}
