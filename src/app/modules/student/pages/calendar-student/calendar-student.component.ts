@@ -25,7 +25,7 @@ import { DatePipe } from '@angular/common';
 
 @Component({
     selector: 'app-calendar-student',
-    imports: [FullCalendarModule, ModalBookUnbookComponent, ModalQuickInfosComponent, DividerModule, DatePipe],
+    imports: [FullCalendarModule, ModalBookUnbookComponent, ModalQuickInfosComponent, DividerModule],
     templateUrl: './calendar-student.component.html',
     styleUrl: './calendar-student.component.scss'
 })

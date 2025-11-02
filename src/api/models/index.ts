@@ -426,6 +426,80 @@ export interface ExperienceUpdateDTO {
     userId: string;
 }
 
+export interface Favorite {
+    id: string;
+    createdAt: Date;
+    updatedAt?: Date | null;
+    archivedAt?: Date | null;
+    note?: string | null;
+    student?: UserApp;
+    studentId?: string;
+    teacher?: UserApp;
+    teacherId?: string;
+}
+
+/** DTO pour créer un nouveau favori */
+export interface FavoriteCreateDTO {
+    /** Identifiant du professeur à ajouter aux favoris */
+    teacherId: string;
+    /** Note ou commentaire optionnel */
+    note?: string | null;
+}
+
+/** DTO pour l'affichage d'un favori */
+export interface FavoriteResponseDTO {
+    /** Identifiant unique du favori */
+    id: string;
+    /** Note ou commentaire sur le favori */
+    note?: string | null;
+    /** Identifiant de l'étudiant */
+    studentId: string;
+    student?: FavoriteUserDTO;
+    /** Identifiant du professeur */
+    teacherId: string;
+    teacher?: FavoriteUserDTO;
+    /** Date de création du favori */
+    createdAt: Date;
+    /** Date de dernière mise à jour */
+    updatedAt?: Date | null;
+}
+
+export interface FavoriteResponseDTOListResponseDTO {
+    message: string;
+    status: number;
+    data?: FavoriteResponseDTO[];
+    count?: number | null;
+}
+
+export interface FavoriteResponseDTOResponseDTO {
+    message: string;
+    status: number;
+    data?: FavoriteResponseDTO;
+    count?: number | null;
+}
+
+/** DTO pour mettre à jour un favori */
+export interface FavoriteUpdateDTO {
+    /** Note ou commentaire */
+    note?: string | null;
+}
+
+/** DTO simplifié pour l'utilisateur dans les favoris */
+export interface FavoriteUserDTO {
+    /** Identifiant de l'utilisateur */
+    id: string;
+    /** Prénom */
+    firstName: string;
+    /** Nom de famille */
+    lastName: string;
+    /** Email */
+    email: string;
+    /** Titre/fonction */
+    title?: string | null;
+    /** Description */
+    description?: string | null;
+}
+
 export interface FilterItem {
     value: any | null;
     matchMode: string | null;
@@ -1183,6 +1257,8 @@ export interface UserApp {
     languages?: Language[];
     programmingLanguages?: ProgrammingLanguage[];
     userRoles?: GuidIdentityUserRole[];
+    favoriteTeachers?: Favorite[];
+    fanStudents?: Favorite[];
 }
 
 export interface UserAppDynamicFilters {
