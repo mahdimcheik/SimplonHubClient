@@ -52,12 +52,14 @@
                             >
                                 <div class="space-y-2 configurable-form-field-container configurable-form-field">
                                     <!-- Field Label -->
-                                    <label [for]="element.id" class="block text-sm font-medium configurable-form-field-label">
-                                        <span class="configurable-form-field-label-text">{{ element.label }}</span>
-                                        @if (element.required) {
-                                            <span class="text-red-500 ml-1 configurable-form-field-required">*</span>
-                                        }
-                                    </label>
+                                    @if (element.type != 'checkbox') {
+                                        <label [for]="element.id" class="block text-sm font-medium configurable-form-field-label">
+                                            <span class="configurable-form-field-label-text">{{ element.label }}</span>
+                                            @if (element.required) {
+                                                <span class="text-red-500 ml-1 configurable-form-field-required">*</span>
+                                            }
+                                        </label>
+                                    }
 
                                     <!-- Input Container -->
                                     <div class="relative configurable-form-input-container">
@@ -229,27 +231,7 @@
                                                 class="configurable-form-input configurable-form-file-input"
                                             />
                                         }
-
-                                        <!-- Field Status Icon -->
-                                        @if (isFormTouched()) {
-                                            <!-- <div class="absolute right-3 top-3 configurable-form-field-status">
-                                                @if (!isDirectFieldInvalid(element.name) && element.type !== 'checkbox' && element.type !== 'radio' && element.type !== 'file') {
-                                                    <i class="pi pi-check-circle text-green-500 text-sm configurable-form-field-status-valid"></i>
-                                                }
-                                                @if (isDirectFieldInvalid(element.name)) {
-                                                    <i class="pi pi-exclamation-circle text-red-500 text-sm configurable-form-field-status-invalid"></i>
-                                                }
-                                            </div> -->
-                                        }
                                     </div>
-
-                                    <!-- Individual Field Error Message -->
-                                    <!-- @if (getDirectFieldError(element.name); as errorMessage) {
-                                        <div class="flex items-start gap-2 mt-2 configurable-form-field-error">
-                                            <i class="pi pi-exclamation-circle text-red-500 text-sm mt-0.5 flex-shrink-0 configurable-form-field-error-icon"></i>
-                                            <p class="text-sm text-red-600 leading-relaxed configurable-form-field-error-message">{{ errorMessage }}</p>
-                                        </div>
-                                    } -->
                                 </div>
                             </div>
                         }
@@ -351,12 +333,14 @@
                                             [class.lg:col-span-1]="!field.fullWidth && field.type !== 'textarea'"
                                         >
                                             <!-- Field Label -->
-                                            <label [for]="field.id" class="block text-sm font-medium configurable-form-field-label">
-                                                <span class="configurable-form-field-label-text">{{ field.label }}</span>
-                                                @if (field.required) {
-                                                    <span class="text-red-500 ml-1 configurable-form-field-required">*</span>
-                                                }
-                                            </label>
+                                            @if (field.type != 'checkbox') {
+                                                <label [for]="field.id" class="block text-sm font-medium configurable-form-field-label">
+                                                    <span class="configurable-form-field-label-text">{{ field.label }}</span>
+                                                    @if (field.required) {
+                                                        <span class="text-red-500 ml-1 configurable-form-field-required">*</span>
+                                                    }
+                                                </label>
+                                            }
 
                                             <!-- Input Container -->
                                             <div class="relative configurable-form-input-container">
@@ -543,21 +527,7 @@
                                                         class="configurable-form-input configurable-form-file-input"
                                                     />
                                                 }
-
-                                                <!-- Field Status Icon -->
-                                                <!-- @if (isGroupTouched(element.id)) {
-                                                    <div class="absolute right-3 top-3 configurable-form-field-status">
-                                                        @if (!isFieldInvalid(element.id, field.name) && field.type !== 'checkbox' && field.type !== 'radio' && field.type !== 'file') {
-                                                            <i class="pi pi-check-circle text-green-500 text-sm configurable-form-field-status-valid"></i>
-                                                        }
-                                                        @if (isFieldInvalid(element.id, field.name)) {
-                                                            <i class="pi pi-exclamation-circle text-red-500 text-sm configurable-form-field-status-invalid"></i>
-                                                        }
-                                                    </div>
-                                                } -->
                                             </div>
-
-                                            <!-- Individual Field Error Message -->
                                             @if (getFieldError(element.id, field.name); as errorMessage) {
                                                 <div class="flex items-start gap-2 mt-2 configurable-form-field-error">
                                                     <i class="pi pi-exclamation-circle text-red-500 text-sm mt-0.5 flex-shrink-0 configurable-form-field-error-icon"></i>
@@ -577,21 +547,7 @@
                     <div class="sticky bottom-0 px-6 py-4 mt-8 -mx-6 -mb-6 rounded-b-xl configurable-form-actions">
                         <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 configurable-form-actions-content">
                             <!-- Form Status Summary -->
-                            <div class="flex items-center gap-2 configurable-form-status">
-                                <!-- @if (isFormValid()) {
-                                    <div class="flex items-center gap-2 text-green-600 configurable-form-status-valid">
-                                        <i class="pi pi-check-circle text-lg"></i>
-                                        <span class="text-sm font-medium">Formulaire valide</span>
-                                    </div>
-                                } @else {
-                                    @if (isFormTouched()) {
-                                        <div class="flex items-center gap-2 text-red-600 configurable-form-status-invalid">
-                                            <i class="pi pi-exclamation-triangle text-lg"></i>
-                                            <span class="text-sm font-medium">Veuillez corriger les erreurs</span>
-                                        </div>
-                                    }
-                                } -->
-                            </div>
+                            <div class="flex items-center gap-2 configurable-form-status"></div>
 
                             <!-- Action Buttons -->
                             <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto configurable-form-buttons">

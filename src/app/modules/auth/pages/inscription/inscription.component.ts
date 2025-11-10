@@ -149,7 +149,7 @@ export class InscriptionComponent implements OnInit {
                             label: 'Mot de passe',
                             required: true,
                             placeholder: 'Mot de passe',
-                            validation: [Validators.required, Validators.minLength(8), passwordStrengthValidator()]
+                            validation: [Validators.required, passwordStrengthValidator()]
                         },
                         {
                             id: 'confirmPassword',
