@@ -26,6 +26,7 @@ export class StudentFavoritesComponent {
     statuses = signal<StatusAccountDTO[]>([]);
     roles = signal<RoleAppResponseDTO[]>([]);
     languages = signal<LanguageResponseDTO[]>([]);
+    forceRender = signal(false);
 
     columns = computed<DynamicColDef[]>(() => {
         const statuses = this.statuses();
@@ -82,6 +83,7 @@ export class StudentFavoritesComponent {
         this.getStatuses();
         this.getLanguages();
         effect(() => {
+            const _ = this.forceRender();
             const filters = this.filterParams();
             this.favoritesService.getAllFavorites(filters);
         });
@@ -117,5 +119,8 @@ export class StudentFavoritesComponent {
     async loadData() {
         const filters = this.filterParams();
         const favorites = await this.favoritesService.getAllFavorites(filters);
+    }
+    resetFilter() {
+        this.forceRender.set(!this.forceRender());
     }
 }

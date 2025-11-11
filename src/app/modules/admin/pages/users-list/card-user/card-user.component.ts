@@ -53,11 +53,11 @@ export class CardUserComponent implements ICellRendererAngularComp {
     closeConfirmModal() {
         this.showConfirmModal.set(false);
     }
-    confirm() {
+    async confirm() {
         if (this.data().isFavorite) {
-            this.removeFromFavorites();
+            await this.removeFromFavorites();
         } else {
-            this.addToFavorites();
+            await this.addToFavorites();
         }
         this.params()?.resetFilter?.();
         this.showConfirmModal.set(false);

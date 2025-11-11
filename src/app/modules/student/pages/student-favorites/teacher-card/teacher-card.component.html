@@ -1,5 +1,5 @@
-<app-base-card cardClass="w-full lg:w-[200px]" (click)="seeProfile()">
-    <div header class="p-4 flex items-center justify-center w-full">
+<app-base-card cardClass="w-full lg:w-[200px] ">
+    <div header class="p-4 flex items-center justify-center w-full cursor-pointer" (click)="seeProfile()" pTooltip="Voir le profil du professeur">
         <h3 class="text-lg font-bold">{{ teacher()?.firstName }} {{ teacher()?.lastName }}</h3>
     </div>
     <div body>
@@ -22,8 +22,23 @@
                 <p-chip [label]="'Aucune langage précisé'" [style]="{ 'background-color': 'gray', 'font-size': '10px', color: 'white' }" />
             }
         </div>
-        <div class="flex justify-center w-full mt-2">
-            <p-button outlined severity="info" icon="pi pi-calendar-plus" [label]="'Réserver'" (click)="goBookPage($event)" />
+        <div class="flex justify-center w-full mt-2 gap-2">
+            <p-button outlined severity="danger" icon="pi pi-heart" (click)="showconfirmModal($event)" pTooltip="Supprimer des favoris" />
+
+            <p-button outlined severity="info" icon="pi pi-calendar-plus" [label]="'Réserver'" (click)="goBookPage($event)" pTooltip="Réserver un rendez-vous" />
         </div>
     </div>
 </app-base-card>
+@if (showConfirmModal()) {
+    <app-confirm-modal
+        [(visible)]="showConfirmModal"
+        [title]="`Confirmation de suppression de ${teacher()?.firstName} ${teacher()?.lastName}`"
+        [question]="`Êtes-vous sûr de vouloir supprimer ${teacher()?.firstName} ${teacher()?.lastName} de vos favoris?`"
+        [confirmText]="`Supprimer`"
+        [cancelText]="'Annuler'"
+        [severity]="'danger'"
+        (onConfirm)="confirm()"
+        (onCancel)="closeConfirmModal()"
+        (onClose)="closeConfirmModal()"
+    />
+}
