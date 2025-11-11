@@ -12,6 +12,7 @@
         [height]="'815px'"
         [storageName]="'teachers-list-state'"
         [itemRendererComponent]="cardUserComponent"
+        [itemRendererComponentParams]="{ resetFilter: resetFilter.bind(this) }"
         (onRowClick)="onRowClick($event)"
         [lineItemComponent]="cardUserComponent"
     >

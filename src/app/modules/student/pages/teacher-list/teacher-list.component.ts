@@ -24,6 +24,7 @@ export class TeacherListComponent {
     loading = signal(false);
     totalRecords = signal(0);
     viewMode = signal<'grid' | 'list'>('grid');
+    forceRender = signal(false);
 
     // Custom components
     customComponents = signal<{ [key: string]: Type<ICellRendererAngularComp> }>({
@@ -111,9 +112,16 @@ export class TeacherListComponent {
         this.getStatuses();
         this.getLanguages();
         effect(() => {
+            const _ = this.forceRender();
             const state = this.filterParams();
             this.loadUsers(state);
         });
+    }
+
+    resetFilter() {
+        console.log('Reset Filter');
+        // this.filterParams.set(INITIAL_STATE);
+        this.forceRender.set(!this.forceRender());
     }
 
     async getStatuses() {

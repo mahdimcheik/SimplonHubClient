@@ -30,7 +30,8 @@ export class SmartGridModernizedComponent<T extends Record<string, any>> impleme
     storageName = input<string>('');
     searchValue = signal<string>('');
     customComponents = model<{ [key: string]: Type<ICellRendererAngularComp> }>({});
-    itemRendererComponent = input<Type<any>>(); // Component to render each data item
+    itemRendererComponent = input<Type<ICellRendererAngularComp>>(); // Component to render each data item
+    itemRendererComponentParams = input<any>();
     itemPropertyName = input<string>(); // Optional: property name to pass data to the component (e.g., 'user', 'product')
     dateFilterMatchModes = DATE_FILTER_MATCH_MODES;
     lineItemComponent = input<Type<ICellRendererAngularComp>>();
@@ -54,6 +55,7 @@ export class SmartGridModernizedComponent<T extends Record<string, any>> impleme
         });
         effect(() => {
             const state = this.tableState();
+            console.log('Table State Changed:', state);
         });
     }
 
@@ -139,6 +141,16 @@ export class SmartGridModernizedComponent<T extends Record<string, any>> impleme
         this.tableState.update((state) => ({
             ...state,
             filters,
+            first: 0
+        }));
+    }
+
+    resetFilter(): void {
+        console.log('Clear Filter:');
+
+        this.tableState.update((state) => ({
+            ...state,
+            filters: {},
             first: 0
         }));
     }

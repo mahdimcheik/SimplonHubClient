@@ -28,7 +28,21 @@
     </div>
     <div class="flex gap-2">
         <p-button (click)="bookAppointment($event)" label="Réserver" />
-        <p-button outlined severity="info" (click)="addToFavorites()"><i class="pi pi-heart" style="font-size: 16px" [style.color]="data().isFavorite ? 'red' : 'black'"></i></p-button>
+        <p-button outlined severity="info" (click)="showConfirmModal.set(true)"><i class="pi pi-heart" style="font-size: 16px" [style.color]="data().isFavorite ? 'red' : 'black'"></i></p-button>
         <p-button outlined severity="info" icon="pi pi-eye" (click)="onViewClick($event)" />
     </div>
 </div>
+
+@if (showConfirmModal()) {
+    <app-confirm-modal
+        [(visible)]="showConfirmModal"
+        [title]="confirmModalTitle()"
+        [question]="confirmModalQuestion()"
+        [confirmText]="confirmModalConfirmText()"
+        [cancelText]="confirmModalCancelText"
+        [severity]="confirmModalSeverity()"
+        (onConfirm)="confirm()"
+        (onCancel)="closeConfirmModal()"
+        (onClose)="closeConfirmModal()"
+    />
+}
