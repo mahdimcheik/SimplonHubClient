@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, computed, inject, model, output } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { Image } from 'primeng/image';
-import { UserResponseDTO } from '../../../../../../api/models';
+import { TeacherResponseDTO, UserResponseDTO } from '../../../../../../api/models';
 import { ICellRendererAngularComp } from '../../../../../generic-components/smart-grid';
 import { Router } from '@angular/router';
 import { ChipModule } from 'primeng/chip';
@@ -18,7 +18,7 @@ export class CardUserComponent implements ICellRendererAngularComp {
     router = inject(Router);
     favoritesService = inject(FavoritesMainService);
 
-    data = model.required<UserResponseDTO>();
+    data = model.required<TeacherResponseDTO>();
     roles = computed(() =>
         this.data()
             .roles?.map((role) => role.displayName)
@@ -26,8 +26,8 @@ export class CardUserComponent implements ICellRendererAngularComp {
     );
     languages = computed(() => this.data().languages);
     programmingLanguages = computed(() => this.data().programmingLanguages);
-    onShowMore = output<UserResponseDTO>();
-    onFavorites = output<UserResponseDTO>();
+    onShowMore = output<TeacherResponseDTO>();
+    onFavorites = output<TeacherResponseDTO>();
 
     onViewClick($event: Event) {
         $event.preventDefault();

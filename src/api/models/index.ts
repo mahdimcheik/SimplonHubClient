@@ -1151,6 +1151,31 @@ export interface TeacherDTO {
     title?: string | null;
 }
 
+export interface TeacherResponseDTO {
+    id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    dateOfBirth?: Date;
+    title?: string | null;
+    description?: string | null;
+    phoneNumber?: string | null;
+    status?: StatusAccountDTO;
+    gender?: GenderDTO;
+    roles: RoleAppResponseDTO[];
+    languages?: LanguageResponseDTO[];
+    programmingLanguages?: ProgrammingLanguageResponseDTO[];
+    formations?: FormationResponseDTO[];
+    isFavorite?: boolean;
+}
+
+export interface TeacherResponseDTOListResponseDTO {
+    message: string;
+    status: number;
+    data?: TeacherResponseDTO[];
+    count?: number | null;
+}
+
 export interface TypeSlot {
     id: string;
     createdAt: Date;
