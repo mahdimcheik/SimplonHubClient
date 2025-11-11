@@ -1,1 +1,9 @@
-<app-smart-grid-modernized [(data)]="teachers" [columns]="columns()" [lineItemComponent]="teacherCardComponent" [(tableState)]="filterParams" [(totalRecords)]="totalRecords" [(loading)]="loading"></app-smart-grid-modernized>
+<app-smart-grid-modernized
+    [(data)]="teachers"
+    [columns]="columns()"
+    [styleClass]="'flex flex-wrap gap-2'"
+    [lineItemComponent]="teacherCardComponent"
+    [(tableState)]="filterParams"
+    [(totalRecords)]="totalRecords"
+    [(loading)]="loading"
+></app-smart-grid-modernized>

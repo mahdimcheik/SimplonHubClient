@@ -34,6 +34,7 @@ export class SmartGridModernizedComponent<T extends Record<string, any>> impleme
     itemPropertyName = input<string>(); // Optional: property name to pass data to the component (e.g., 'user', 'product')
     dateFilterMatchModes = DATE_FILTER_MATCH_MODES;
     lineItemComponent = input<Type<ICellRendererAngularComp>>();
+    styleClass = input<string>('');
 
     // output
     onRowClick = output<T | T[] | undefined>();

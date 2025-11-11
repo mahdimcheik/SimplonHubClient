@@ -222,7 +222,7 @@
         </div>
     </div>
     <!-- content -->
-    <div class="gap-1 bg-white p-4 rounded-md dark:bg-gray-800 flex flex-col overflow-y-auto" [style]="`height: calc( ${height()} - 100px )`">
+    <div class="gap-1 bg-white p-4 rounded-md dark:bg-gray-800 overflow-y-auto" [style]="`height: calc( ${height()} - 100px )`" [class]="styleClass()">
         @for (item of data(); track item[columns()[0].field] || $index) {
             <ng-container *ngComponentOutlet="lineItemComponent() ?? null; inputs: { data: item }" />
         }
