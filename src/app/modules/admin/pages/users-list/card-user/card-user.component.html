@@ -44,5 +44,9 @@
         (onConfirm)="confirm()"
         (onCancel)="closeConfirmModal()"
         (onClose)="closeConfirmModal()"
-    />
+    >
+        <div slot="info">
+            <app-configurable-form #formComponent [structure]="structure()" (onFormSubmit)="submit($event)" (onCancel)="closeConfirmModal()" (onClose)="closeConfirmModal()" />
+        </div>
+    </app-confirm-modal>
 }

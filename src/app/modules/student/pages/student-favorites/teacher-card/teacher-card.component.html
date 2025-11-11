@@ -1,6 +1,11 @@
 <app-base-card cardClass="w-full lg:w-[200px] ">
-    <div header class="p-4 flex items-center justify-center w-full cursor-pointer" (click)="seeProfile()" pTooltip="Voir le profil du professeur">
-        <h3 class="text-lg font-bold">{{ teacher()?.firstName }} {{ teacher()?.lastName }}</h3>
+    <div header class="p-4 flex items-center justify-center w-full cursor-pointer" (click)="seeProfile()">
+        <h3 class="text-lg font-bold flex items-center gap-2">
+            @if (data()?.note) {
+                <i class="pi pi-info-circle" style="font-size: 16px; color: rgb(33, 156, 197)" [pTooltip]="data()?.note!"></i>
+            }
+            <span pTooltip="Voir le profil du professeur"> {{ teacher()?.firstName }} {{ teacher()?.lastName }} </span>
+        </h3>
     </div>
     <div body>
         <p-image src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/User_icon_2.svg/480px-User_icon_2.svg.png" alt="logo" class="w-4 h-4" />
@@ -40,5 +45,6 @@
         (onConfirm)="confirm()"
         (onCancel)="closeConfirmModal()"
         (onClose)="closeConfirmModal()"
-    />
+    >
+    </app-confirm-modal>
 }

@@ -1,7 +1,7 @@
-import { Component, computed, effect, inject, OnInit, signal, Type } from '@angular/core';
+import { Component, computed, effect, inject, linkedSignal, OnInit, signal, Type } from '@angular/core';
 import { SmartGridModernizedComponent } from '../../../../generic-components/smart-grid-modernized/smart-grid-modernized.component';
 import { TeacherCardComponent } from './teacher-card/teacher-card.component';
-import { LanguageResponseDTO, RoleAppResponseDTO, StatusAccountDTO, UserResponseDTO } from '../../../../../api';
+import { LanguageResponseDTO, RoleAppResponseDTO, StatusAccountDTO, TeacherResponseDTO, UserResponseDTO } from '../../../../../api';
 import { CustomTableState, DynamicColDef, ICellRendererAngularComp, INITIAL_STATE } from '../../../../generic-components/smart-grid';
 import { FavoritesMainService } from '../../../../shared/services/favorites-main.service';
 import { UserMainService } from '../../../../shared/services/userMain.service';
@@ -17,7 +17,8 @@ export class StudentFavoritesComponent {
     favoritesService = inject(FavoritesMainService);
     userService = inject(UserMainService);
 
-    teachers = this.favoritesService.favorites;
+    favorites = this.favoritesService.favorites;
+    teachers = linkedSignal(() => this.favorites().map((favorite) => favorite.teacher!));
     customComponents = signal<{ [key: string]: Type<ICellRendererAngularComp> }>({});
     filterParams = signal<CustomTableState>(INITIAL_STATE);
     totalRecords = signal(0);

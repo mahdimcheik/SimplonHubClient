@@ -1,6 +1,6 @@
 import { Component, computed, inject, model, OnInit, signal } from '@angular/core';
 import { BaseCardComponent } from '../../../../../generic-components/base-card/base-card.component';
-import { LanguageResponseDTO, ProgrammingLanguage, UserResponseDTO } from '../../../../../../api';
+import { FavoriteResponseDTO, LanguageResponseDTO, ProgrammingLanguage, TeacherResponseDTO, UserResponseDTO } from '../../../../../../api';
 import { ImageModule } from 'primeng/image';
 import { ICellRendererAngularComp } from '../../../../../generic-components/smart-grid';
 import { ChipModule } from 'primeng/chip';
@@ -21,15 +21,13 @@ export class TeacherCardComponent implements ICellRendererAngularComp, OnInit {
     favoritesService = inject(FavoritesMainService);
 
     showConfirmModal = signal<boolean>(false);
-    data = model<UserResponseDTO>();
+    data = model<FavoriteResponseDTO>();
     params = model<{ resetFilter: () => void }>();
-    teacher = computed<UserResponseDTO | undefined>(() => this.data() as UserResponseDTO | undefined);
+    teacher = computed<TeacherResponseDTO | undefined>(() => this.data()?.teacher!);
     programmingLanguages = computed<ProgrammingLanguage[]>(() => this.teacher()?.programmingLanguages?.slice(0, 3) ?? []);
     languages = computed<LanguageResponseDTO[]>(() => this.teacher()?.languages?.slice(0, 3) ?? []);
 
-    ngOnInit(): void {
-        console.log('teacher', this.teacher());
-    }
+    ngOnInit(): void {}
 
     seeProfile() {
         this.router.navigate(['/teacher/profile/', this.teacher()?.id]);
@@ -49,7 +47,7 @@ export class TeacherCardComponent implements ICellRendererAngularComp, OnInit {
         this.showConfirmModal.set(false);
     }
     async confirm() {
-        await this.favoritesService.removeFavorite(this.data()?.id ?? '');
+        await this.favoritesService.removeFavorite(this.teacher()?.id ?? '');
         this.params()?.resetFilter?.();
         this.showConfirmModal.set(false);
     }

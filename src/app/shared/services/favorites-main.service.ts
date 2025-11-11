@@ -1,5 +1,5 @@
 import { inject, Injectable, signal } from '@angular/core';
-import { FavoriteDynamicFilters, FavoriteResponseDTO, FavoritesService, UserResponseDTO } from '../../../api';
+import { FavoriteDynamicFilters, FavoriteResponseDTO, FavoritesService, TeacherResponseDTO, UserResponseDTO } from '../../../api';
 import { firstValueFrom } from 'rxjs';
 
 @Injectable({
@@ -8,15 +8,15 @@ import { firstValueFrom } from 'rxjs';
 export class FavoritesMainService {
     favoritesService = inject(FavoritesService);
 
-    favorites = signal<UserResponseDTO[]>([]);
+    favorites = signal<FavoriteResponseDTO[]>([]);
 
     async getAllFavorites(filters: FavoriteDynamicFilters) {
         const favorites = await firstValueFrom(this.favoritesService.favoritesMyFavoritesPost(filters));
-        this.favorites.set(favorites.data?.map((favorite) => favorite.teacher!) || []);
-        return this.favorites();
+        this.favorites.set(favorites.data || []);
+        return favorites.data;
     }
-    async addFavorite(teacherId: string) {
-        const favorite = await firstValueFrom(this.favoritesService.favoritesAddPost({ teacherId }));
+    async addFavorite(teacherId: string, note: string) {
+        const favorite = await firstValueFrom(this.favoritesService.favoritesAddPost({ teacherId, note }));
         return favorite.data;
     }
     async removeFavorite(favoriteId: string) {
