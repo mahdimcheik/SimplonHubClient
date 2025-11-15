@@ -59,7 +59,7 @@ export class StudentFavoritesComponent {
                 optionLabel: 'name',
                 optionValue: 'id',
                 filterable: true,
-                filterField: 'languages/Id',
+                filterField: 'Teacher/languages/Id',
                 cellRenderer: 'options',
                 cellRendererParams: {
                     field: 'userLanguages',
