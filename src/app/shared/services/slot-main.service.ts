@@ -94,4 +94,10 @@ export class SlotMainService {
         this.slots.update((current) => current.map((s) => (s.id === slotId ? unbookedSlot.data! : s)));
         return unbookedSlot.data;
     }
+
+    // get bookings
+    async getBookingsByStudent(filters: CustomTableState, studentId: string, teacherId: string) {
+        const bookings = await firstValueFrom(this.slotsService.slotsBookingsPost(filters, studentId, teacherId));
+        return bookings;
+    }
 }

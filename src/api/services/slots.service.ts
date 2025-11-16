@@ -10,7 +10,7 @@
 import { HttpClient, HttpContext, HttpContextToken, HttpEvent, HttpParams, HttpResponse } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { BookingCreateDTO, BookingUpdateDTO, ObjectResponseDTO, RequestOptions, SlotCreateDTO, SlotDynamicFilters, SlotResponseDTOListResponseDTO, SlotResponseDTOResponseDTO, SlotUpdateDTO } from "../models";
+import { BookingCreateDTO, BookingDetailsDTOListResponseDTO, BookingDynamicFilters, BookingUpdateDTO, ObjectResponseDTO, RequestOptions, SlotCreateDTO, SlotDynamicFilters, SlotResponseDTOListResponseDTO, SlotResponseDTOResponseDTO, SlotUpdateDTO } from "../models";
 import { BASE_PATH_DEFAULT, CLIENT_CONTEXT_TOKEN_DEFAULT } from "../tokens";
 import { HttpParamsBuilder } from "../utils/http-params-builder";
 
@@ -235,19 +235,28 @@ export class SlotsService {
         return this.httpClient.post(url, null, requestOptions);
     }
 
-    slotsBookingsPost(slotDynamicFilters?: SlotDynamicFilters, observe?: 'body', options?: RequestOptions<'json'>): Observable<SlotResponseDTOListResponseDTO>;
-    slotsBookingsPost(slotDynamicFilters?: SlotDynamicFilters, observe?: 'response', options?: RequestOptions<'json'>): Observable<HttpResponse<SlotResponseDTOListResponseDTO>>;
-    slotsBookingsPost(slotDynamicFilters?: SlotDynamicFilters, observe?: 'events', options?: RequestOptions<'json'>): Observable<HttpEvent<SlotResponseDTOListResponseDTO>>;
-    slotsBookingsPost(slotDynamicFilters?: SlotDynamicFilters, observe?: 'body' | 'events' | 'response', options?: RequestOptions<'arraybuffer' | 'blob' | 'json' | 'text'>): Observable<any> {
+    slotsBookingsPost(bookingDynamicFilters?: BookingDynamicFilters, studentId?: string, teacherId?: string, observe?: 'body', options?: RequestOptions<'json'>): Observable<BookingDetailsDTOListResponseDTO>;
+    slotsBookingsPost(bookingDynamicFilters?: BookingDynamicFilters, studentId?: string, teacherId?: string, observe?: 'response', options?: RequestOptions<'json'>): Observable<HttpResponse<BookingDetailsDTOListResponseDTO>>;
+    slotsBookingsPost(bookingDynamicFilters?: BookingDynamicFilters, studentId?: string, teacherId?: string, observe?: 'events', options?: RequestOptions<'json'>): Observable<HttpEvent<BookingDetailsDTOListResponseDTO>>;
+    slotsBookingsPost(bookingDynamicFilters?: BookingDynamicFilters, studentId?: string, teacherId?: string, observe?: 'body' | 'events' | 'response', options?: RequestOptions<'arraybuffer' | 'blob' | 'json' | 'text'>): Observable<any> {
         const url = `${this.basePath}/slots/bookings`;
+
+        let params = new HttpParams();
+        if (studentId != null) {
+            params = HttpParamsBuilder.addToHttpParams(params, studentId, 'studentId');
+        }
+        if (teacherId != null) {
+            params = HttpParamsBuilder.addToHttpParams(params, teacherId, 'teacherId');
+        }
 
         const requestOptions: any = {
             observe: observe as any,
+            params,
             reportProgress: options?.reportProgress,
             withCredentials: options?.withCredentials,
             context: this.createContextWithClientId(options?.context)
         };
 
-        return this.httpClient.post(url, slotDynamicFilters, requestOptions);
+        return this.httpClient.post(url, bookingDynamicFilters, requestOptions);
     }
 }

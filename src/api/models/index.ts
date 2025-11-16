@@ -140,7 +140,30 @@ export interface BookingDetailsDTO {
     readonly description?: string | null;
     status?: StatusBookingDTO;
     student?: UserResponseDTO;
-    slot?: SlotResponseDTO;
+    teacher?: UserResponseDTO;
+}
+
+export interface BookingDetailsDTOListResponseDTO {
+    message: string;
+    status: number;
+    data?: BookingDetailsDTO[];
+    count?: number | null;
+}
+
+export interface BookingDetailsDTOResponseDTO {
+    message: string;
+    status: number;
+    data?: BookingDetailsDTO;
+    count?: number | null;
+}
+
+export interface BookingDynamicFilters {
+    first?: number;
+    rows?: number;
+    search?: string | null;
+    globalSearch?: string | null;
+    sorts?: Sort[];
+    filters?: Record<string, FilterItem>;
 }
 
 export interface BookingUpdateDTO {

@@ -141,7 +141,12 @@ export class UserMainService {
                 this.sideNavItems.set([
                     { label: 'Calendrier', icon: 'pi pi-fw pi-home', routerLink: ['/student/calendar-student'] },
                     { label: 'Favoris', icon: 'pi pi-fw pi-heart', routerLink: ['/student/favorites'] },
-                    { label: 'Liste Professeurs', icon: 'pi pi-fw pi-list', routerLink: ['/student/list-teachers'] }
+                    { label: 'Liste Professeurs', icon: 'pi pi-fw pi-list', routerLink: ['/student/list-teachers'] },
+                    {
+                        label: 'Mes Réservations',
+                        icon: 'pi pi-fw pi-calendar',
+                        routerLink: ['/student/reservation-list']
+                    }
                 ]);
             }
         });
