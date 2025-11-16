@@ -234,4 +234,20 @@ export class SlotsService {
 
         return this.httpClient.post(url, null, requestOptions);
     }
+
+    slotsBookingsPost(slotDynamicFilters?: SlotDynamicFilters, observe?: 'body', options?: RequestOptions<'json'>): Observable<SlotResponseDTOListResponseDTO>;
+    slotsBookingsPost(slotDynamicFilters?: SlotDynamicFilters, observe?: 'response', options?: RequestOptions<'json'>): Observable<HttpResponse<SlotResponseDTOListResponseDTO>>;
+    slotsBookingsPost(slotDynamicFilters?: SlotDynamicFilters, observe?: 'events', options?: RequestOptions<'json'>): Observable<HttpEvent<SlotResponseDTOListResponseDTO>>;
+    slotsBookingsPost(slotDynamicFilters?: SlotDynamicFilters, observe?: 'body' | 'events' | 'response', options?: RequestOptions<'arraybuffer' | 'blob' | 'json' | 'text'>): Observable<any> {
+        const url = `${this.basePath}/slots/bookings`;
+
+        const requestOptions: any = {
+            observe: observe as any,
+            reportProgress: options?.reportProgress,
+            withCredentials: options?.withCredentials,
+            context: this.createContextWithClientId(options?.context)
+        };
+
+        return this.httpClient.post(url, slotDynamicFilters, requestOptions);
+    }
 }

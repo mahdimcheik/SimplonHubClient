@@ -140,6 +140,7 @@ export interface BookingDetailsDTO {
     readonly description?: string | null;
     status?: StatusBookingDTO;
     student?: UserResponseDTO;
+    slot?: SlotResponseDTO;
 }
 
 export interface BookingUpdateDTO {
