@@ -140,7 +140,7 @@ export interface BookingDetailsDTO {
     readonly description?: string | null;
     status?: StatusBookingDTO;
     student?: UserResponseDTO;
-    teacher?: UserResponseDTO;
+    slot?: SlotDetailsDTO;
 }
 
 export interface BookingDetailsDTOListResponseDTO {
@@ -986,6 +986,19 @@ export interface SlotCreateDTO {
     teacherId: string;
     /** Identifiant du type de créneau */
     typeId: string;
+}
+
+export interface SlotDetailsDTO {
+    /** Identifiant unique du créneau */
+    id: string;
+    /** Date et heure de début du créneau */
+    dateFrom: Date;
+    /** Date et heure de fin du créneau */
+    dateTo: Date;
+    teacher?: UserResponseDTO;
+    /** Identifiant du type de créneau */
+    typeId: string;
+    type?: TypeSlotResponseDTO;
 }
 
 export interface SlotDynamicFilters {

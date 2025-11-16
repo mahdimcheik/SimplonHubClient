@@ -8,10 +8,12 @@ import { CardUserComponent } from '../../../admin/pages/users-list/card-user/car
 import { firstValueFrom } from 'rxjs';
 import { SmartGridModernizedComponent } from '../../../../generic-components/smart-grid-modernized/smart-grid-modernized.component';
 import { SlotMainService } from '../../../../shared/services/slot-main.service';
+import { DatePipe } from '@angular/common';
 
 @Component({
     selector: 'app-reservation-list',
     imports: [SmartGridModernizedComponent, SmartGridComponent],
+    providers: [DatePipe],
     templateUrl: './reservation-list.component.html',
     styleUrl: './reservation-list.component.scss'
 })
@@ -19,6 +21,7 @@ export class ReservationListComponent {
     adminService = inject(AdminMainService);
     slotService = inject(SlotMainService);
     userService = inject(UserMainService);
+    private datePipe = inject(DatePipe);
     // Table state
     filterParams = signal<CustomTableState>(INITIAL_STATE);
     loading = signal(false);
@@ -35,11 +38,6 @@ export class ReservationListComponent {
     // Data
     bookings = signal<BookingDetailsDTO[]>([]);
 
-    // Options for filters
-    statuses = signal<StatusAccountDTO[]>([]);
-    roles = signal<RoleAppResponseDTO[]>([]);
-    languages = signal<LanguageResponseDTO[]>([]);
-
     // Item renderer component
     cardUserComponent = CardUserComponent;
 
@@ -47,13 +45,13 @@ export class ReservationListComponent {
     columns = computed<DynamicColDef[]>(() => {
         return [
             {
-                field: 'teacher',
+                field: 'slot',
                 header: 'Nom du professeur',
                 type: 'text',
                 sortField: 'teacher',
                 width: '200px',
                 valueFormatter: (data: any) => {
-                    const teacher = data as TeacherResponseDTO;
+                    const teacher = data.teacher as TeacherResponseDTO;
                     return teacher ? `${teacher.firstName} ${teacher.lastName}` : '';
                 }
             },
@@ -69,6 +67,24 @@ export class ReservationListComponent {
                 header: 'Description',
                 type: 'text',
                 sortField: 'description'
+            },
+            {
+                field: 'slot',
+                header: 'Date de début',
+                type: 'date',
+                valueFormatter: (data: any) => {
+                    const date = new Date(data.dateFrom);
+                    return this.datePipe.transform(date, 'dd/MM/yyyy HH:mm') ?? 'pas défini';
+                }
+            },
+            {
+                field: 'slot',
+                header: 'Date de fin',
+                type: 'date',
+                valueFormatter: (data: any) => {
+                    const date = new Date(data.dateTo);
+                    return this.datePipe.transform(date!, 'HH:mm') ?? 'pas défini';
+                }
             }
         ];
     });
@@ -89,17 +105,15 @@ export class ReservationListComponent {
         }
     }
     constructor() {
+        let firstRun = true;
         effect(() => {
-            const _ = this.forceRender();
             const state = this.filterParams();
+            if (firstRun) {
+                firstRun = false;
+                return;
+            }
             this.loadUsers(state);
         });
-    }
-
-    resetFilter() {
-        console.log('Reset Filter');
-        // this.filterParams.set(INITIAL_STATE);
-        this.forceRender.set(!this.forceRender());
     }
     // on row click
     onRowClick(event: any) {
