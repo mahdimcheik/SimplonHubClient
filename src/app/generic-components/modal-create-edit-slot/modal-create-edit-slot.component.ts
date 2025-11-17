@@ -46,7 +46,7 @@ export class ModalCreateEditSlotComponent implements OnInit {
     // Date computeds
     readonly start = computed(() => this.parseEventDate(this.event()?.start));
     readonly end = computed(() => this.parseEventDate(this.event()?.end));
-    readonly typeId = computed(() => this.slot()?.typeId ?? '');
+    readonly typeId = computed(() => this.slot()?.typeId ?? this.typesSlot()[0]?.id ?? '');
 
     // Form data
 
