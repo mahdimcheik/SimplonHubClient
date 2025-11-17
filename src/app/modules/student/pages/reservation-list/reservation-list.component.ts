@@ -52,7 +52,6 @@ export class ReservationListComponent {
                 header: 'Nom du professeur',
                 type: 'text',
                 sortField: 'teacher',
-                width: '200px',
                 valueFormatter: (data: any) => {
                     const teacher = data.teacher as TeacherResponseDTO;
                     return teacher ? `${teacher.firstName} ${teacher.lastName}` : '';
@@ -66,14 +65,14 @@ export class ReservationListComponent {
                 field: 'title',
                 header: 'Titre',
                 type: 'text',
-                sortField: 'title',
-                width: '200px'
+                sortField: 'title'
             },
             {
                 field: 'description',
                 header: 'Description',
                 type: 'text',
-                sortField: 'description'
+                sortField: 'description',
+                width: '300px'
             },
             {
                 field: 'slot',
@@ -106,7 +105,8 @@ export class ReservationListComponent {
     async loadUsers(state: CustomTableState) {
         try {
             this.loading.set(true);
-            const response = await this.slotService.getBookingsByStudent(state, this.userService.userConnected().id!, '');
+            state.filters = { ...state.filters, studentId: { value: this.userService.userConnected().id!, matchMode: 'equals' } };
+            const response = await this.slotService.getBookingsByStudent(state);
             this.bookings.set(response.data ?? []);
             this.totalRecords.set(response.count ?? 0);
         } catch (error) {

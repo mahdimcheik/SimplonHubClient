@@ -23,8 +23,9 @@ export class DurationPipe implements PipeTransform {
 
         if (isNaN(t1) || isNaN(t2)) return null;
 
+        const minutes = Math.abs(((t1 - t2) / (1000 * 60)) % 60);
         const hours = Math.abs((t1 - t2) / (1000 * 60 * 60));
         // round to 2 decimal places
-        return (Math.round(hours * 100) / 100).toString();
+        return '' + (hours > 0 ? `${Math.floor(hours)}h ` : '') + (minutes > 0 ? `${Math.floor(minutes)}min` : '');
     }
 }

@@ -96,7 +96,7 @@ export class SlotMainService {
     }
 
     // get bookings
-    async getBookingsByStudent(filters: CustomTableState, studentId: string, teacherId: string) {
+    async getBookingsByStudent(filters: CustomTableState, studentId?: string, teacherId?: string) {
         const bookings = await firstValueFrom(this.slotsService.slotsBookingsPost(filters, studentId, teacherId));
         return bookings;
     }
