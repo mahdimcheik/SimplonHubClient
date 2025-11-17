@@ -100,6 +100,7 @@ export const appRoutes: Routes = [
         children: [
             // Settings
             { path: '', component: CalendarTeacherComponent },
+            { path: 'calendar-teacher', component: CalendarTeacherComponent },
             { path: SETTINGS_PATH, component: SettingsComponent },
             { path: PROFILE_PATH + '/:id', component: ProfileTeacherComponent },
             { path: RESERVATION_PATH + '/list', component: UsersListComponent },

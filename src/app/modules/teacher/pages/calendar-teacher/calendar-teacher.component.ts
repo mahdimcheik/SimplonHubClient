@@ -72,7 +72,6 @@ export class CalendarTeacherComponent implements OnInit {
     initialView = computed(() => (window.innerWidth < 768 ? 'timeGridDay' : 'timeGridWeek'));
 
     onResize = (event: EventResizeDoneArg) => {
-        console.log(event);
         this.selectedEvent.set({ extendedProps: { slot: event.oldEvent.extendedProps?.['slot'] as SlotResponseDTO }, start: event.event?.start as Date, end: event.event?.end as Date });
         this.createEventVisible.set(true);
     };
@@ -87,7 +86,6 @@ export class CalendarTeacherComponent implements OnInit {
 
     onStartDrag = (dragInfo: any) => {
         this.selectedEvent.set(dragInfo);
-        console.log(dragInfo);
         return !dragInfo.extendedProps?.['slot']?.studentId && dragInfo.start > DateTime.now().toJSDate();
     };
 
@@ -165,16 +163,33 @@ export class CalendarTeacherComponent implements OnInit {
 
     async loadData() {
         const slots = await this.slotMainService.getAllSlots(this.filters());
-        this.sourceEvents.set(
-            slots.map((slot) => ({
+        const events = slots.map((slot) => {
+            return {
                 title: slot?.type?.name ?? '',
                 start: slot.dateFrom,
                 end: slot.dateTo,
                 extendedProps: {
-                    slot: slot
+                    slot: slot,
+                    passed: new Date(slot.dateFrom) < new Date(),
+                    upcoming: new Date(slot.dateFrom) > new Date()
                 }
-            }))
-        );
+            };
+        });
+        console.log('events ', events);
+
+        this.sourceEvents.set(events);
+        // this.sourceEvents.set(
+        //     slots.map((slot) => ({
+        //         title: slot?.type?.name ?? '',
+        //         start: slot.dateFrom,
+        //         end: slot.dateTo,
+        //         extendedProps: {
+        //             slot: slot,
+        //             passed: new Date(slot.dateFrom) < new Date(),
+        //             upcoming: new Date(slot.dateFrom) > new Date()
+        //         }
+        //     }))
+        // );
     }
     editEvent() {
         this.selectedEvent.set(this.selectedEvent() as EventInput);

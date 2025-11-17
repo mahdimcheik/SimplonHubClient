@@ -41,13 +41,14 @@ export class ModalCreateEditSlotComponent implements OnInit {
     readonly hasBooking = computed(() => !!this.slot()?.booking?.student?.id);
     readonly bookingStatus = computed(() => this.slot()?.booking?.status?.name);
 
+    readonly typesSlot = signal<TypeSlotResponseDTO[]>([]);
+
     // Date computeds
     readonly start = computed(() => this.parseEventDate(this.event()?.start));
     readonly end = computed(() => this.parseEventDate(this.event()?.end));
     readonly typeId = computed(() => this.slot()?.typeId ?? '');
 
     // Form data
-    readonly typesSlot = signal<TypeSlotResponseDTO[]>([]);
 
     // Form structure
     readonly form = computed<Structure>(() => ({
@@ -152,11 +153,15 @@ export class ModalCreateEditSlotComponent implements OnInit {
     }
 
     async submit(event: FormGroup): Promise<void> {
+        console.log('event formg group', event);
+
         try {
             const formData = {
                 ...event.value.informations,
                 teacherId: this.getUserId()
             };
+
+            console.log('event', event);
 
             if (this.isEditMode()) {
                 await this.slotMainService.updateSlot(this.getSlotId(), formData);
