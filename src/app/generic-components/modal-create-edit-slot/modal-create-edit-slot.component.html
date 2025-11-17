@@ -32,6 +32,8 @@
                 <!-- Booking Actions -->
                 @if (slot()?.booking?.status) {
                     <div class="flex gap-2 justify-end mt-2">
+                        <p-button label="Annuler" class="flex-shrink-0" severity="danger" (onClick)="cancel()" />
+
                         @if (bookingStatus() === 'waiting') {
                             <p-button label="Accepter la réservation" class="flex-shrink-0" severity="success" (onClick)="acceptBooking()" />
                         }
