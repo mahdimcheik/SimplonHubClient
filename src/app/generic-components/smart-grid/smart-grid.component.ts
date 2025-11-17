@@ -113,7 +113,7 @@ export class SmartGridComponent<T extends Record<string, any>> implements OnInit
     }
 
     getDateFilterMatchMode(field: string): string {
-        return this.tableState().filters?.[field]?.matchMode ?? 'dateIs';
+        return this.tableState().filters?.[field]?.matchMode ?? 'equals';
     }
 
     onTextFilterChange(value: string, column: DynamicColDef): void {

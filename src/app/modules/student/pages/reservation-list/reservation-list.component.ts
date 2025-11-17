@@ -9,11 +9,13 @@ import { firstValueFrom } from 'rxjs';
 import { SmartGridModernizedComponent } from '../../../../generic-components/smart-grid-modernized/smart-grid-modernized.component';
 import { SlotMainService } from '../../../../shared/services/slot-main.service';
 import { DatePipe } from '@angular/common';
+import { DateTime } from 'luxon';
+import { DurationPipe } from '../../../../shared/pipes/duration.pipe';
 
 @Component({
     selector: 'app-reservation-list',
-    imports: [SmartGridModernizedComponent, SmartGridComponent],
-    providers: [DatePipe],
+    imports: [SmartGridModernizedComponent, SmartGridComponent, DurationPipe],
+    providers: [DatePipe, DurationPipe],
     templateUrl: './reservation-list.component.html',
     styleUrl: './reservation-list.component.scss'
 })
@@ -22,6 +24,7 @@ export class ReservationListComponent {
     slotService = inject(SlotMainService);
     userService = inject(UserMainService);
     private datePipe = inject(DatePipe);
+    private durationPipe = inject(DurationPipe);
     // Table state
     filterParams = signal<CustomTableState>(INITIAL_STATE);
     loading = signal(false);
@@ -53,7 +56,11 @@ export class ReservationListComponent {
                 valueFormatter: (data: any) => {
                     const teacher = data.teacher as TeacherResponseDTO;
                     return teacher ? `${teacher.firstName} ${teacher.lastName}` : '';
-                }
+                },
+                filterable: true,
+                filterField: 'slot/teacher/lastName',
+                sortable: true,
+                specialFilter: true
             },
             {
                 field: 'title',
@@ -75,15 +82,19 @@ export class ReservationListComponent {
                 valueFormatter: (data: any) => {
                     const date = new Date(data.dateFrom);
                     return this.datePipe.transform(date, 'dd/MM/yyyy HH:mm') ?? 'pas défini';
-                }
+                },
+                filterable: true,
+                filterField: 'slot/dateFrom',
+                sortable: true
             },
             {
                 field: 'slot',
-                header: 'Date de fin',
-                type: 'date',
+                header: 'Durée en heures',
+                type: 'text',
                 valueFormatter: (data: any) => {
                     const date = new Date(data.dateTo);
-                    return this.datePipe.transform(date!, 'HH:mm') ?? 'pas défini';
+                    const startTime = new Date(data.dateFrom);
+                    return this.durationPipe.transform(date, startTime) ?? 'pas défini';
                 }
             }
         ];
@@ -105,13 +116,8 @@ export class ReservationListComponent {
         }
     }
     constructor() {
-        let firstRun = true;
         effect(() => {
             const state = this.filterParams();
-            if (firstRun) {
-                firstRun = false;
-                return;
-            }
             this.loadUsers(state);
         });
     }
