@@ -11,10 +11,11 @@ import { SlotMainService } from '../../../../shared/services/slot-main.service';
 import { DatePipe } from '@angular/common';
 import { DateTime } from 'luxon';
 import { DurationPipe } from '../../../../shared/pipes/duration.pipe';
+import { ModalReservationDetailComponent } from '../../../components/modal-reservation-detail/modal-reservation-detail.component';
 
 @Component({
     selector: 'app-reservation-list',
-    imports: [SmartGridModernizedComponent, SmartGridComponent, DurationPipe],
+    imports: [SmartGridModernizedComponent, SmartGridComponent, ModalReservationDetailComponent],
     providers: [DatePipe, DurationPipe],
     templateUrl: './reservation-list.component.html',
     styleUrl: './reservation-list.component.scss'
@@ -31,6 +32,8 @@ export class ReservationListComponent {
     totalRecords = signal(0);
     viewMode = signal<'grid' | 'list'>('grid');
     forceRender = signal(false);
+    modalDetailVisible = signal(false);
+    selectedReservation = signal<BookingDetailsDTO>({} as BookingDetailsDTO);
 
     // Custom components
     customComponents = signal<{ [key: string]: Type<ICellRendererAngularComp> }>({
@@ -124,5 +127,10 @@ export class ReservationListComponent {
     // on row click
     onRowClick(event: any) {
         console.log('onRowClick', event);
+        this.selectedReservation.set(event);
+        this.modalDetailVisible.set(true);
+    }
+    close() {
+        this.selectedReservation.set({} as BookingDetailsDTO);
     }
 }

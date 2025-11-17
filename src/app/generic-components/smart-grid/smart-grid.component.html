@@ -33,7 +33,7 @@
             <!-- Header -->
             <ng-template pTemplate="header">
                 <tr>
-                    @for (column of columns(); track column.field) {
+                    @for (column of columns(); track column.field + $index) {
                         <th [style.min-width]="column.width || 'auto'">
                             <div class="flex items-center justify-between gap-2">
                                 <!-- Column header with sort -->
@@ -147,7 +147,7 @@
             <!-- Body -->
             <ng-template pTemplate="body" let-item>
                 <tr [pSelectableRow]="item">
-                    @for (column of columns(); track column.field) {
+                    @for (column of columns(); track column.field + $index) {
                         <td>
                             @if (column.cellRenderer) {
                                 <!-- Custom cell renderer -->

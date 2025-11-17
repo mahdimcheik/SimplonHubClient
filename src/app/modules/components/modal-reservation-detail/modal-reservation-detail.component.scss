@@ -1,0 +1,17 @@
+// Modal reservation details styles
+.reservation-details-modal {
+    .p-drawer-header {
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .p-drawer-footer {
+        border-top: 1px solid #e5e7eb;
+    }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+    .reservation-details-grid {
+        grid-template-columns: 1fr;
+    }
+}

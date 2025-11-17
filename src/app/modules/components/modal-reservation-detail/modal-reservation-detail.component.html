@@ -1,0 +1,100 @@
+<p-drawer [(visible)]="visibleRight" position="right" closable="true" [modal]="true" (onHide)="close()" class="bg-black" styleClass="!w-full md:!w-100 lg:!w-[50rem] md:!mb-0 lg:!mb-0">
+    <ng-template pTemplate="header">
+        <div class="flex items-center gap-3">
+            <i class="pi pi-calendar text-primary text-xl"></i>
+            <h3 class="text-lg font-semibold">Détails de la réservation</h3>
+        </div>
+    </ng-template>
+
+    @if (reservation(); as res) {
+        <div class="space-y-6">
+            <!-- Header Section -->
+            <div class="border-b pb-4">
+                <div class="flex items-center gap-3 mb-3">
+                    <div>
+                        <h4 class="font-semibold text-lg">{{ res.student?.firstName }} {{ res.student?.lastName }}</h4>
+                        <p class="text-sm">{{ res.title }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Details Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Date et heure -->
+                <div class="space-y-4">
+                    <h5 class="font-semibold flex items-center gap-2">
+                        <i class="pi pi-clock text-primary"></i>
+                        Date et heure
+                    </h5>
+                    <div class="space-y-2 pl-6">
+                        <div class="flex justify-between">
+                            <span>Début:</span>
+                            <span class="font-medium">{{ res.slot?.dateFrom | date: 'dd/MM/yyyy HH:mm' }}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Fin:</span>
+                            <span class="font-medium">{{ res.slot?.dateTo | date: 'dd/MM/yyyy HH:mm' }}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Durée:</span>
+                            <span class="font-medium">{{ durationComputed() }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <h5 class="font-semibold flex items-center gap-2">
+                        <i class="pi pi-clock text-primary"></i>
+                        Type :{{ reservation().slot?.type?.name }}
+                    </h5>
+                    <div class="space-y-2 pl-6">
+                        <div>
+                            <p-chip [label]="reservation().slot?.type?.name" [icon]="reservation().slot?.type?.icon ?? ''" [style]="{ 'background-color': reservation().slot?.type?.color }" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Informations techniques -->
+            @if (authService.isAdmin() && (res.id || res.slot?.id)) {
+                <div class="space-y-3">
+                    <h5 class="font-semibold flex items-center gap-2">
+                        <i class="pi pi-info-circle text-primary"></i>
+                        Informations techniques
+                    </h5>
+                    <div class="rounded-lg p-4 space-y-2 text-sm bg-gray-50 dark:bg-gray-700">
+                        @if (res.id) {
+                            <div class="flex justify-between">
+                                <span>ID Réservation:</span>
+                                <span class="font-mono">{{ res.id }}</span>
+                            </div>
+                        }
+                        @if (res.slot?.id) {
+                            <div class="flex justify-between">
+                                <span>ID Créneau:</span>
+                                <span class="font-mono">{{ res.slot?.id }}</span>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+
+            <!-- Description -->
+            @if (res.description) {
+                <div class="space-y-3">
+                    <h5 class="font-semibold flex items-center gap-2">
+                        <i class="pi pi-file-text text-primary"></i>
+                        Description
+                    </h5>
+                    <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+                        <p class="leading-relaxed">{{ res.description }}</p>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+
+    <ng-template pTemplate="footer">
+        <div class="flex justify-end gap-3 pt-4 border-t">
+            <p-button label="Fermer" severity="secondary" (onClick)="close()" />
+        </div>
+    </ng-template>
+</p-drawer>
