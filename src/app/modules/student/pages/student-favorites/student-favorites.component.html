@@ -1,0 +1,14 @@
+<header class="flex flex-row justify-between items-center gap-2">
+    <h1 class="text-2xl font-bold">Liste des mes favoris</h1>
+</header>
+<app-smart-grid-modernized
+    [(data)]="favorites"
+    [columns]="columns()"
+    [styleClass]="'flex flex-wrap gap-2'"
+    [lineItemComponent]="teacherCardComponent"
+    [itemRendererComponentParams]="{ resetFilter: resetFilter.bind(this) }"
+    [(tableState)]="filterParams"
+    [(totalRecords)]="totalRecords"
+    [height]="'815px'"
+    [(loading)]="loading"
+></app-smart-grid-modernized>

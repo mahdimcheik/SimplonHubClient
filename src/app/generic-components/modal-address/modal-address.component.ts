@@ -1,17 +1,16 @@
 import { Component, computed, inject, model } from '@angular/core';
 import { ConfigurableFormComponent } from '../configurable-form/configurable-form.component';
-import { DialogModule } from 'primeng/dialog';
 import { FormGroup } from '@angular/forms';
 import { Structure } from '../configurable-form/related-models';
 import { AddressesMainService } from '../../shared/services/addresses-main.service';
 import { UserMainService } from '../../shared/services/userMain.service';
 import { MessageService } from 'primeng/api';
 import { AddressCreateDTO, AddressResponseDTO } from '../../../api';
-import { DrawerModule } from 'primeng/drawer';
+import { BaseSideModalComponent } from '../base-side-modal/base-side-modal.component';
 
 @Component({
     selector: 'app-modal-address',
-    imports: [DialogModule, ConfigurableFormComponent, DrawerModule],
+    imports: [BaseSideModalComponent, ConfigurableFormComponent],
     templateUrl: './modal-address.component.html',
     styleUrl: './modal-address.component.scss'
 })

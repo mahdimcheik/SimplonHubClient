@@ -13,6 +13,7 @@ export { CategoryCursusService } from "./categoryCursus.service";
 export { CursusService } from "./cursus.service";
 export { ExperiencesService } from "./experiences.service";
 export { FakeDataService } from "./fakeData.service";
+export { FavoritesService } from "./favorites.service";
 export { FormationsService } from "./formations.service";
 export { GendersService } from "./genders.service";
 export { LanguagesService } from "./languages.service";

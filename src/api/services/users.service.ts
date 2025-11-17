@@ -10,7 +10,7 @@
 import { HttpClient, HttpContext, HttpContextToken, HttpEvent, HttpResponse } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { RequestOptions, UserAppDynamicFilters, UserResponseDTOListResponseDTO } from "../models";
+import { RequestOptions, TeacherResponseDTOListResponseDTO, UserAppDynamicFilters, UserResponseDTOListResponseDTO } from "../models";
 import { BASE_PATH_DEFAULT, CLIENT_CONTEXT_TOKEN_DEFAULT } from "../tokens";
 
 @Injectable({ providedIn: "root" })
@@ -40,9 +40,9 @@ export class UsersService {
         return this.httpClient.post(url, userAppDynamicFilters, requestOptions);
     }
 
-    usersListTeachersPost(userAppDynamicFilters?: UserAppDynamicFilters, observe?: 'body', options?: RequestOptions<'json'>): Observable<UserResponseDTOListResponseDTO>;
-    usersListTeachersPost(userAppDynamicFilters?: UserAppDynamicFilters, observe?: 'response', options?: RequestOptions<'json'>): Observable<HttpResponse<UserResponseDTOListResponseDTO>>;
-    usersListTeachersPost(userAppDynamicFilters?: UserAppDynamicFilters, observe?: 'events', options?: RequestOptions<'json'>): Observable<HttpEvent<UserResponseDTOListResponseDTO>>;
+    usersListTeachersPost(userAppDynamicFilters?: UserAppDynamicFilters, observe?: 'body', options?: RequestOptions<'json'>): Observable<TeacherResponseDTOListResponseDTO>;
+    usersListTeachersPost(userAppDynamicFilters?: UserAppDynamicFilters, observe?: 'response', options?: RequestOptions<'json'>): Observable<HttpResponse<TeacherResponseDTOListResponseDTO>>;
+    usersListTeachersPost(userAppDynamicFilters?: UserAppDynamicFilters, observe?: 'events', options?: RequestOptions<'json'>): Observable<HttpEvent<TeacherResponseDTOListResponseDTO>>;
     usersListTeachersPost(userAppDynamicFilters?: UserAppDynamicFilters, observe?: 'body' | 'events' | 'response', options?: RequestOptions<'arraybuffer' | 'blob' | 'json' | 'text'>): Observable<any> {
         const url = `${this.basePath}/users/list-teachers`;
 

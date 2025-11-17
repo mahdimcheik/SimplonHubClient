@@ -25,6 +25,9 @@ import { GestionCursusesComponent } from './app/modules/teacher/pages/gestion-cu
 import { AdminitrationComponent } from './app/modules/admin/pages/adminitration/adminitration.component';
 import { CalendarStudentComponent } from './app/modules/student/pages/calendar-student/calendar-student.component';
 import { TeacherListComponent } from './app/modules/student/pages/teacher-list/teacher-list.component';
+import { StudentFavoritesComponent } from './app/modules/student/pages/student-favorites/student-favorites.component';
+import { ReservationListComponent } from './app/modules/student/pages/reservation-list/reservation-list.component';
+import { ReservationListByTeacherComponent } from './app/modules/teacher/pages/reservation-list-by-teacher/reservation-list-by-teacher.component';
 
 // Define path constants
 const TEACHER_PATH = 'teacher';
@@ -97,10 +100,12 @@ export const appRoutes: Routes = [
         children: [
             // Settings
             { path: '', component: CalendarTeacherComponent },
+            { path: 'calendar-teacher', component: CalendarTeacherComponent },
             { path: SETTINGS_PATH, component: SettingsComponent },
             { path: PROFILE_PATH + '/:id', component: ProfileTeacherComponent },
             { path: RESERVATION_PATH + '/list', component: UsersListComponent },
-            { path: CONTACT_PATH, component: GestionCursusesComponent }
+            { path: CONTACT_PATH, component: GestionCursusesComponent },
+            { path: 'reservation-list', component: ReservationListByTeacherComponent }
         ]
     },
 
@@ -120,8 +125,10 @@ export const appRoutes: Routes = [
         component: AppLayout,
         canActivate: [isConnectedGuard],
         children: [
-            { path: '', component: CalendarStudentComponent },
-            { path: 'teacher-list', component: TeacherListComponent }
+            { path: 'calendar-student', component: CalendarStudentComponent },
+            { path: 'list-teachers', component: TeacherListComponent },
+            { path: 'favorites', component: StudentFavoritesComponent },
+            { path: 'reservation-list', component: ReservationListComponent }
         ]
     },
 

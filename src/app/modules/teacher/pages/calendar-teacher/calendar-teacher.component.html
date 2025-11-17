@@ -1,25 +1,45 @@
 <full-calendar [options]="calendarOptions()" #calendar [events]="sourceEvents()" class="h-full">
     <ng-template #eventContent let-arg>
-        <div class="custom-event w-full h-full flex justify-center" [style.backgroundColor]="arg.event.extendedProps.slot?.type?.color ?? 'red'">
-            <strong class="text-white w-full text-center h-[20px] border-b border-white rounded-t-md px-2">{{ arg.event.title }}</strong
+        @let slot = arg.event.extendedProps?.slot;
+        <div
+            class="custom-event w-full h-full flex flex-col border border-2 relative"
+            [style.backgroundColor]="arg.event.extendedProps.slot?.type?.color ?? 'yellow'"
+            [class.border-blue-500]="arg.event.extendedProps.passed ?? false"
+            [class.border-green-500]="arg.event.extendedProps.upcoming ?? false"
+        >
+            <strong class="w-full text-center h-[20px] border-b border-white rounded-t-md px-2 !text-teal-800 py-1">{{ arg.event.title }}</strong
             ><br />
-            @if (arg.event.extendedProps.description) {
-                <small>{{ arg.event.extendedProps.description }}</small>
+            @if (slot?.booking) {
+                <!-- étudiant -->
+                @if (slot.booking?.student) {
+                    <div class="w-full h-[20px] px-2 flex flex-col !text-emerald-600">
+                        <small>Pour :{{ slot.booking?.student?.firstName }} {{ slot.booking?.student?.lastName }}</small>
+                    </div>
+                }
+                <div class="w-full h-[20px] px-2 flex flex-col !text-emerald-600">
+                    <small>{{ slot.booking?.title }}</small>
+                    <p>{{ slot.booking?.description }}</p>
+                </div>
+            }
+            @if (slot?.booking?.status?.name == 'waiting') {
+                <div class="w-full h-full absolute bottom-0 left-0 flex items-center justify-center" [style.background-color]="'rgba(0, 0, 0, 0.25)'">
+                    <small [style.color]="slot.booking?.status?.color ?? 'white'">{{ slot.booking?.status?.displayName }}</small>
+                </div>
             }
         </div>
     </ng-template>
 </full-calendar>
 
 @if (quickInfosVisible()) {
-    <app-modal-quick-infos
-        [(visible)]="quickInfosVisible"
-        (close)="quickInfosVisible.set(false)"
-        [event]="selectedEvent()"
-        [showSubmitButton]="false"
-        [showEditButton]="true"
-        (onEdit)="editEvent()"
-        (onClose)="quickInfosVisible.set(false)"
-    ></app-modal-quick-infos>
+    <app-modal-quick-infos [(visible)]="quickInfosVisible" (close)="quickInfosVisible.set(false)" [event]="selectedEvent()" [showSubmitButton]="false" [showEditButton]="true" (onEdit)="editEvent()" (onClose)="quickInfosVisible.set(false)">
+        @let slot = selectedEvent().extendedProps?.['slot'];
+        <div slot="info-booking">
+            @if (slot?.booking) {
+                <p>Titre : {{ slot?.booking?.title }}</p>
+                <p>Description : {{ slot?.booking?.description }}</p>
+            }
+        </div>
+    </app-modal-quick-infos>
 }
 @if (createEventVisible()) {
     <app-modal-create-edit-slot [(visible)]="createEventVisible" (close)="createEventVisible.set(false)" [event]="selectedEvent()" (onExit)="loadData()"></app-modal-create-edit-slot>

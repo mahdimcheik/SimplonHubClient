@@ -1,5 +1,5 @@
 import { inject, Injectable, signal } from '@angular/core';
-import { SlotCreateDTO, SlotResponseDTO, SlotsService, SlotUpdateDTO, TypeSlotResponseDTO, TypeSlotService } from '../../../api';
+import { BookingCreateDTO, BookingUpdateDTO, SlotCreateDTO, SlotResponseDTO, SlotsService, SlotUpdateDTO, TypeSlotResponseDTO, TypeSlotService } from '../../../api';
 import { firstValueFrom } from 'rxjs';
 import { CustomTableState } from '../../generic-components/smart-grid';
 
@@ -27,6 +27,17 @@ export class SlotMainService {
         return slots.data || [];
     }
 
+    async getSlotById(slotId: string) {
+        const slot = await firstValueFrom(this.slotsService.slotsIdGet(slotId));
+        return slot.data;
+    }
+
+    async getAllSlotsByStudent(dateFrom: Date, dateTo: Date, teacherId?: string) {
+        const slots = await firstValueFrom(this.slotsService.slotsStudentGet(dateFrom, dateTo, teacherId));
+        this.slots.set(slots.data || []);
+        return slots.data || [];
+    }
+
     async createSlot(slot: SlotCreateDTO) {
         const newSlot = await firstValueFrom(this.slotsService.slotsCreatePost(slot));
         this.slots.update((current) => [...current, newSlot.data!]);
@@ -39,9 +50,23 @@ export class SlotMainService {
         return updatedSlot.data;
     }
 
-    async deleteSlot(slotId: string) {
-        await firstValueFrom(this.slotsService.slotsDeleteIdDelete(slotId));
+    async updateBooking(booking: BookingUpdateDTO) {
+        const updatedBooking = await firstValueFrom(this.slotsService.slotsUpdateBookingPut(booking));
+        return updatedBooking.data;
+    }
+
+    async confirmBooking(bookingId: string) {
+        const confirmedBooking = await firstValueFrom(this.slotsService.slotsConfirmBookingIdPut(bookingId));
+        return confirmedBooking.data;
+    }
+
+    async deleteSlot(slotId: string, force: boolean = false) {
+        await firstValueFrom(this.slotsService.slotsDeleteIdDelete(slotId, force));
         this.slots.update((current) => current.filter((s) => s.id !== slotId));
+    }
+
+    async deleteBooking(bookingId: string) {
+        await firstValueFrom(this.slotsService.slotsUnbookIdPost(bookingId));
     }
 
     async getAllTypeSlot() {
@@ -55,5 +80,24 @@ export class SlotMainService {
         const typeSlot = await firstValueFrom(this.typeSlotService.typeslotAllGet());
         this.TypeSlot.set(typeSlot.data || []);
         return typeSlot.data || [];
+    }
+
+    // book slot
+    async bookSlot(booking: BookingCreateDTO) {
+        const bookedSlot = await firstValueFrom(this.slotsService.slotsBookPost(booking));
+        return bookedSlot.data;
+    }
+
+    // unbook slot
+    async unbookSlot(slotId: string) {
+        const unbookedSlot = await firstValueFrom(this.slotsService.slotsUnbookIdPost(slotId));
+        this.slots.update((current) => current.map((s) => (s.id === slotId ? unbookedSlot.data! : s)));
+        return unbookedSlot.data;
+    }
+
+    // get bookings
+    async getBookings(filters: CustomTableState, studentId?: string, teacherId?: string) {
+        const bookings = await firstValueFrom(this.slotsService.slotsBookingsPost(filters, studentId, teacherId));
+        return bookings;
     }
 }

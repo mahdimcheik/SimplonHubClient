@@ -4,7 +4,7 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { SmartGridModernizedComponent } from '../../../../generic-components/smart-grid-modernized/smart-grid-modernized.component';
 import { CardUserComponent } from '../../../admin/pages/users-list/card-user/card-user.component';
 import { ActionButtonRendererComponent, CustomTableState, DynamicColDef, ICellRendererAngularComp, INITIAL_STATE } from '../../../../generic-components/smart-grid';
-import { LanguageResponseDTO, RoleAppResponseDTO, StatusAccountDTO, UserResponseDTO } from '../../../../../api';
+import { LanguageResponseDTO, RoleAppResponseDTO, StatusAccountDTO, TeacherResponseDTO, UserResponseDTO } from '../../../../../api';
 import { OptionsRendererComponent } from '../../../../generic-components/smart-grid/options-component';
 import { UserMainService } from '../../../../shared/services/userMain.service';
 import { AdminMainService } from '../../../../shared/services/admin-main.service';
@@ -24,6 +24,7 @@ export class TeacherListComponent {
     loading = signal(false);
     totalRecords = signal(0);
     viewMode = signal<'grid' | 'list'>('grid');
+    forceRender = signal(false);
 
     // Custom components
     customComponents = signal<{ [key: string]: Type<ICellRendererAngularComp> }>({
@@ -32,7 +33,7 @@ export class TeacherListComponent {
     });
 
     // Data
-    users = signal<UserResponseDTO[]>([]);
+    users = signal<TeacherResponseDTO[]>([]);
 
     // Options for filters
     statuses = signal<StatusAccountDTO[]>([]);
@@ -110,13 +111,17 @@ export class TeacherListComponent {
     constructor() {
         this.getStatuses();
         this.getLanguages();
-        effect(
-            () => {
-                const state = this.filterParams();
-                this.loadUsers(state);
-            },
-            { allowSignalWrites: true }
-        );
+        effect(() => {
+            const _ = this.forceRender();
+            const state = this.filterParams();
+            this.loadUsers(state);
+        });
+    }
+
+    resetFilter() {
+        console.log('Reset Filter');
+        // this.filterParams.set(INITIAL_STATE);
+        this.forceRender.set(!this.forceRender());
     }
 
     async getStatuses() {

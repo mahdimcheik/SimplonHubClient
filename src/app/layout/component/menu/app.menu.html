@@ -11,7 +11,7 @@
     @for (item of sideNavItems(); track item.label) {
     <li>
         @if (item.routerLink && item.visible !== false) {
-        <a class="menu-link" (click)="item.command" [routerLink]="item.routerLink" routerLinkActive="active-route" [routerLinkActiveOptions]="{ exact: true, queryParams: 'subset' }">
+        <a class="menu-link" (click)="item.command" [routerLink]="item.routerLink" routerLinkActive="active-route" [routerLinkActiveOptions]="{ exact: false }">
             <i [ngClass]="item.icon" class="layout-menuitem-icon"></i>
             <span class="layout-menuitem-text">{{ item.label }}</span>
         </a>
@@ -20,7 +20,7 @@
     }
     <div class="last-items mb-2">
         <li>
-            <a class="menu-link" [routerLink]="'settings'" routerLinkActive="active-route" [routerLinkActiveOptions]="{ exact: true }">
+            <a class="menu-link" [routerLink]="'settings'" routerLinkActive="active-route" [routerLinkActiveOptions]="{ exact: true, queryParams: 'ignored' }">
                 <i [ngClass]="settingsItem.icon" class="layout-menuitem-icon"></i>
                 <span class="layout-menuitem-text">{{ settingsItem.label }}</span>
             </a>

@@ -1,0 +1,50 @@
+<app-base-card cardClass="  lg:max-w-[200px] max-w-full">
+    <div header class="p-4 flex items-center justify-center w-full cursor-pointer" (click)="seeProfile()">
+        <h3 class="text-lg font-bold flex items-center gap-2">
+            @if (data()?.note) {
+                <i class="pi pi-info-circle" style="font-size: 16px; color: rgb(33, 156, 197)" [pTooltip]="data()?.note!"></i>
+            }
+            <span pTooltip="Voir le profil du professeur"> {{ teacher()?.firstName }} {{ teacher()?.lastName }} </span>
+        </h3>
+    </div>
+    <div body>
+        <p-image src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/User_icon_2.svg/480px-User_icon_2.svg.png" alt="logo" class="w-4 h-4" />
+    </div>
+    <div footer class="min-h-[100px] flex flex-col gap-2">
+        <div class="flex gap-2">
+            @for (language of languages(); track language.id) {
+                <p-chip [label]="language.name" [style]="{ 'background-color': language.color, 'font-size': '10px' }" />
+            }
+            @if (!languages() || languages()!.length === 0) {
+                <p-chip [label]="'Aucune langue précisée'" [style]="{ 'background-color': 'gray', 'font-size': '10px', color: 'white' }" />
+            }
+        </div>
+        <div class="flex gap-2">
+            @for (programmingLanguage of programmingLanguages(); track programmingLanguage.name) {
+                <p-chip [label]="programmingLanguage.name" [style]="{ 'background-color': programmingLanguage.color, 'font-size': '10px' }" />
+            }
+            @if (!programmingLanguages() || programmingLanguages()!.length === 0) {
+                <p-chip [label]="'Aucune langage précisé'" [style]="{ 'background-color': 'gray', 'font-size': '10px', color: 'white' }" />
+            }
+        </div>
+        <div class="flex justify-center w-full mt-2 gap-2">
+            <p-button outlined severity="danger" icon="pi pi-heart" (click)="showconfirmModal($event)" pTooltip="Supprimer des favoris" />
+
+            <p-button outlined severity="info" icon="pi pi-calendar-plus" [label]="'Réserver'" (click)="goBookPage($event)" pTooltip="Réserver un rendez-vous" />
+        </div>
+    </div>
+</app-base-card>
+@if (showConfirmModal()) {
+    <app-confirm-modal
+        [(visible)]="showConfirmModal"
+        [title]="`Confirmation de suppression de ${teacher()?.firstName} ${teacher()?.lastName}`"
+        [question]="`Êtes-vous sûr de vouloir supprimer ${teacher()?.firstName} ${teacher()?.lastName} de vos favoris?`"
+        [confirmText]="`Supprimer`"
+        [cancelText]="'Annuler'"
+        [severity]="'danger'"
+        (onConfirm)="confirm()"
+        (onCancel)="closeConfirmModal()"
+        (onClose)="closeConfirmModal()"
+    >
+    </app-confirm-modal>
+}

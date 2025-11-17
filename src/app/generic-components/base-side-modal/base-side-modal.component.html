@@ -1,0 +1,25 @@
+<p-drawer [(visible)]="visible" [position]="position()" [modal]="true" [style]="{ width: width() }" (onHide)="onHide()" [closeOnEscape]="true">
+    <ng-template pTemplate="header">
+        <div class="flex items-center justify-between gap-3 w-full min-w-[300px] w-full">
+            <div class="flex items-center gap-3">
+                <i [class]="iconClass()" class="text-2xl"></i>
+                <span class="text-md font-semibold text-gray-800 dark:text-white m-0">{{ title() }}</span>
+            </div>
+        </div>
+    </ng-template>
+    <ng-template pTemplate="content">
+        <div class="flex flex-col gap-3 w-full h-full min-w-[300px] w-full">
+            <div class="flex flex-col gap-3 w-full min-w-[300px] w-full">
+                <img [src]="layoutService.layoutConfig().darkTheme ? 'assets/latestWhite.svg' : 'assets/latestBlack.svg'" alt="logo" class="w-full h-auto" />
+            </div>
+            <ng-content select="[content]"></ng-content>
+        </div>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <div class="flex items-center justify-between gap-3 w-full min-h-[25px] min-w-[300px] w-full">
+            <ng-content select="[footer-start]"></ng-content>
+            <ng-content select="[footer-end]"></ng-content>
+        </div>
+    </ng-template>
+</p-drawer>

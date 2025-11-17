@@ -7,7 +7,7 @@ export function emailValidator(): ValidatorFn {
     };
 }
 export function passwordStrengthValidator(): ValidatorFn {
-    let pattern = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8,16}$/;
+    let pattern = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8,20}$/;
 
     return (control: AbstractControl): ValidationErrors | null => {
         if (!control.value.match(pattern)) {
@@ -22,7 +22,7 @@ export function passwordValidator(password: string, passwordConfirmation: string
         // date are formated as 'yyyy-mm-dd'
         const value1 = control.get(password)?.value;
         const value2 = control.get(passwordConfirmation)?.value;
-        let pattern = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8,16}$/;
+        let pattern = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8,20}$/;
         if (!value1.match(pattern)) {
             return {
                 weakPassword: 'Mot de passe faible'

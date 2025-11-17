@@ -1,10 +1,8 @@
 import { Component, computed, DestroyRef, inject, linkedSignal, model, OnInit, signal } from '@angular/core';
 import { SmartSectionComponent } from '../smart-section/smart-section.component';
 import { Image } from 'primeng/image';
-import { LanguageResponseDTO, LanguagesService, ProgrammingLanguageResponseDTO, UserResponseDTO, UserUpdateDTO } from '../../../api';
+import { UserResponseDTO, UserUpdateDTO } from '../../../api';
 import { ChipsListComponent } from '../chips-list/chips-list.component';
-import { DialogModule } from 'primeng/dialog';
-import { DrawerModule } from 'primeng/drawer';
 import { ConfigurableFormComponent } from '../configurable-form/configurable-form.component';
 import { Structure } from '../configurable-form/related-models';
 import { LanguagesMainService } from '../../shared/services/languages.store.service';
@@ -15,10 +13,12 @@ import { MessageService } from 'primeng/api';
 import { CursusesMainService } from '../../shared/services/cursuses-main.service';
 import { ActivatedRoute } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { TitleCasePipe } from '@angular/common';
+import { BaseSideModalComponent } from '../base-side-modal/base-side-modal.component';
 
 @Component({
     selector: 'app-personnal-infos',
-    imports: [SmartSectionComponent, Image, DrawerModule, DialogModule, ConfigurableFormComponent, ChipsListComponent],
+    imports: [SmartSectionComponent, Image, BaseSideModalComponent, ConfigurableFormComponent, ChipsListComponent, TitleCasePipe],
     templateUrl: './personnal-infos.component.html',
     styleUrl: './personnal-infos.component.scss'
 })
@@ -35,6 +35,11 @@ export class PersonnalInfosComponent implements OnInit {
     languages = this.languagesService.languages;
     editMode = model(false);
     userId = signal<string>(this.userservice.userConnected().id);
+    roles = computed(() =>
+        this.user()
+            .roles?.map((role) => role.displayName)
+            .join(', ')
+    );
 
     // options pour les multiselects
     languagesOptions = this.languagesService.allLanguages;

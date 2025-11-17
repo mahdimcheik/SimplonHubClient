@@ -1,0 +1,22 @@
+<div class="w-full lg:w-[300px] flex flex-col" [class]="cardClass()">
+    <p-card [class]="'h-full flex flex-col'">
+        <!-- Header Section -->
+        <ng-template pTemplate="header">
+            <div class="flex flex-col" [class]="headerClass()">
+                <ng-content select="[header]"></ng-content>
+            </div>
+        </ng-template>
+
+        <!-- Body Section -->
+        <div class="flex-1 flex flex-col" [class]="bodyClass()">
+            <ng-content select="[body]"></ng-content>
+        </div>
+
+        <!-- Footer Section -->
+        <ng-template pTemplate="footer">
+            <div class="flex flex-col" [class]="footerClass()">
+                <ng-content select="[footer]"></ng-content>
+            </div>
+        </ng-template>
+    </p-card>
+</div>

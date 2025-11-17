@@ -120,16 +120,56 @@ export interface Booking {
     description?: string | null;
     slotId?: string;
     slot?: Slot;
-    orderId?: string;
-    order?: Order;
+    status?: StatusBooking;
+    statusId?: string;
     studentId?: string;
     student?: UserApp;
 }
 
+export interface BookingCreateDTO {
+    title?: string | null;
+    description?: string | null;
+    student?: UserResponseDTO;
+    slotId?: string;
+    studentId?: string;
+}
+
 export interface BookingDetailsDTO {
+    readonly id?: string;
     readonly title?: string | null;
     readonly description?: string | null;
+    status?: StatusBookingDTO;
     student?: UserResponseDTO;
+    slot?: SlotDetailsDTO;
+}
+
+export interface BookingDetailsDTOListResponseDTO {
+    message: string;
+    status: number;
+    data?: BookingDetailsDTO[];
+    count?: number | null;
+}
+
+export interface BookingDetailsDTOResponseDTO {
+    message: string;
+    status: number;
+    data?: BookingDetailsDTO;
+    count?: number | null;
+}
+
+export interface BookingDynamicFilters {
+    first?: number;
+    rows?: number;
+    search?: string | null;
+    globalSearch?: string | null;
+    sorts?: Sort[];
+    filters?: Record<string, FilterItem>;
+}
+
+export interface BookingUpdateDTO {
+    id: string;
+    title: string;
+    description?: string | null;
 }
 
 export interface BooleanResponseDTO {
@@ -408,6 +448,73 @@ export interface ExperienceUpdateDTO {
     dateTo?: Date | null;
     /** Identifiant de l'utilisateur associé */
     userId: string;
+}
+
+export interface Favorite {
+    id: string;
+    createdAt: Date;
+    updatedAt?: Date | null;
+    archivedAt?: Date | null;
+    note?: string | null;
+    student?: UserApp;
+    studentId?: string;
+    teacher?: UserApp;
+    teacherId?: string;
+}
+
+/** DTO pour créer un nouveau favori */
+export interface FavoriteCreateDTO {
+    /** Identifiant du professeur à ajouter aux favoris */
+    teacherId: string;
+    /** Note ou commentaire optionnel */
+    note?: string | null;
+}
+
+export interface FavoriteDynamicFilters {
+    first?: number;
+    rows?: number;
+    search?: string | null;
+    globalSearch?: string | null;
+    sorts?: Sort[];
+    filters?: Record<string, FilterItem>;
+}
+
+/** DTO pour l'affichage d'un favori */
+export interface FavoriteResponseDTO {
+    /** Identifiant unique du favori */
+    id: string;
+    /** Note ou commentaire sur le favori */
+    note?: string | null;
+    /** Identifiant de l'étudiant */
+    studentId: string;
+    student?: UserResponseDTO;
+    /** Identifiant du professeur */
+    teacherId: string;
+    teacher?: UserResponseDTO;
+    /** Date de création du favori */
+    createdAt: Date;
+    /** Date de dernière mise à jour */
+    updatedAt?: Date | null;
+}
+
+export interface FavoriteResponseDTOListResponseDTO {
+    message: string;
+    status: number;
+    data?: FavoriteResponseDTO[];
+    count?: number | null;
+}
+
+export interface FavoriteResponseDTOResponseDTO {
+    message: string;
+    status: number;
+    data?: FavoriteResponseDTO;
+    count?: number | null;
+}
+
+/** DTO pour mettre à jour un favori */
+export interface FavoriteUpdateDTO {
+    /** Note ou commentaire */
+    note?: string | null;
 }
 
 export interface FilterItem {
@@ -712,7 +819,6 @@ export interface Order {
     reductionAmount?: number;
     studentId?: string;
     student?: UserApp;
-    bookings?: Booking[];
 }
 
 export interface PasswordRecoveryInput {
@@ -828,6 +934,7 @@ export interface RoleAppResponseDTO {
     /** Nom normalisé du rôle (en majuscules) */
     normalizedName?: string | null;
     color?: string | null;
+    displayName?: string | null;
     /** Date de création de l'enregistrement */
     createdAt: Date;
     /** Date de dernière mise à jour */
@@ -879,6 +986,19 @@ export interface SlotCreateDTO {
     teacherId: string;
     /** Identifiant du type de créneau */
     typeId: string;
+}
+
+export interface SlotDetailsDTO {
+    /** Identifiant unique du créneau */
+    id: string;
+    /** Date et heure de début du créneau */
+    dateFrom: Date;
+    /** Date et heure de fin du créneau */
+    dateTo: Date;
+    teacher?: UserResponseDTO;
+    /** Identifiant du type de créneau */
+    typeId: string;
+    type?: TypeSlotResponseDTO;
 }
 
 export interface SlotDynamicFilters {
@@ -1023,6 +1143,30 @@ export interface StatusAccountUpdateDTO {
     icon?: string | null;
 }
 
+export interface StatusBooking {
+    id: string;
+    createdAt: Date;
+    updatedAt?: Date | null;
+    archivedAt?: Date | null;
+    name?: string | null;
+    displayName?: string | null;
+    color?: string | null;
+    icon?: string | null;
+}
+
+export interface StatusBookingDTO {
+    /** Identifiant unique du statut */
+    readonly id: string;
+    /** Nom du statut */
+    readonly name: string;
+    /** Nom du statut */
+    readonly displayName: string;
+    /** Couleur associée au statut (code hexadécimal) */
+    readonly color: string;
+    /** Icône associée au statut */
+    readonly icon?: string | null;
+}
+
 export interface StringResponseDTO {
     message: string;
     status: number;
@@ -1042,6 +1186,31 @@ export interface TeacherDTO {
     email: string;
     /** Titre de l'enseignant */
     title?: string | null;
+}
+
+export interface TeacherResponseDTO {
+    id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    dateOfBirth?: Date;
+    title?: string | null;
+    description?: string | null;
+    phoneNumber?: string | null;
+    status?: StatusAccountDTO;
+    gender?: GenderDTO;
+    roles: RoleAppResponseDTO[];
+    languages?: LanguageResponseDTO[];
+    programmingLanguages?: ProgrammingLanguageResponseDTO[];
+    formations?: FormationResponseDTO[];
+    isFavorite?: boolean;
+}
+
+export interface TeacherResponseDTOListResponseDTO {
+    message: string;
+    status: number;
+    data?: TeacherResponseDTO[];
+    count?: number | null;
 }
 
 export interface TypeSlot {
@@ -1143,6 +1312,8 @@ export interface UserApp {
     languages?: Language[];
     programmingLanguages?: ProgrammingLanguage[];
     userRoles?: GuidIdentityUserRole[];
+    favoriteTeachers?: Favorite[];
+    fanStudents?: Favorite[];
 }
 
 export interface UserAppDynamicFilters {
@@ -1219,6 +1390,9 @@ export interface UserResponseDTO {
     status?: StatusAccountDTO;
     gender?: GenderDTO;
     roles: RoleAppResponseDTO[];
+    languages?: LanguageResponseDTO[];
+    programmingLanguages?: ProgrammingLanguageResponseDTO[];
+    formations?: FormationResponseDTO[];
 }
 
 export interface UserResponseDTOListResponseDTO {

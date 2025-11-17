@@ -1,0 +1,19 @@
+<header class="flex flex-row justify-between items-center gap-2">
+    <h1 class="text-2xl font-bold">Liste des réservations</h1>
+</header>
+<div class="gap-2 flex flex-col" style="height: 900px">
+    <app-smart-grid
+        [(data)]="bookings"
+        [columns]="columns()"
+        [(customComponents)]="customComponents"
+        [(tableState)]="filterParams"
+        [(totalRecords)]="totalRecords"
+        [(loading)]="loading"
+        [height]="'815px'"
+        [storageName]="'reservations-list-state'"
+        (onRowClick)="onRowClick($event)"
+    >
+    </app-smart-grid>
+</div>
+
+<app-modal-reservation-detail [(visibleRight)]="modalDetailVisible" [reservation]="selectedReservation()" (onClose)="close()"></app-modal-reservation-detail>

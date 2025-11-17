@@ -6,8 +6,8 @@ import { ToolbarInput } from '@fullcalendar/core/index.js';
 })
 export class CalendarSetupService {
     slotDuration = signal<string>('00:15:00');
-    slotMinTime = signal<string>('06:00');
-    slotMaxTime = signal<string>('22:00');
+    slotMinTime = signal<string>('08:00');
+    slotMaxTime = signal<string>('20:00');
     allDaySlot = signal<boolean>(true);
     navLinks = signal<boolean>(true);
     eventStartEditable = signal<boolean>(true);

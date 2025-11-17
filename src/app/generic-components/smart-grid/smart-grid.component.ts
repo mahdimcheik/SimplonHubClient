@@ -50,18 +50,7 @@ export class SmartGridComponent<T extends Record<string, any>> implements OnInit
     // Date filter configuration
     dateFilterMatchModes = DATE_FILTER_MATCH_MODES;
 
-    constructor() {
-        // Debug effect to monitor state changes
-        effect(() => {
-            const state = this.tableState();
-            console.log('Table State Changed:', {
-                filters: state.filters,
-                sorts: state.sorts,
-                first: state.first,
-                rows: state.rows
-            });
-        });
-    }
+    constructor() {}
 
     ngOnInit(): void {
         this.getStateFromLocalStorage();
@@ -113,7 +102,7 @@ export class SmartGridComponent<T extends Record<string, any>> implements OnInit
     }
 
     getDateFilterMatchMode(field: string): string {
-        return this.tableState().filters?.[field]?.matchMode ?? 'dateIs';
+        return this.tableState().filters?.[field]?.matchMode ?? 'equals';
     }
 
     onTextFilterChange(value: string, column: DynamicColDef): void {

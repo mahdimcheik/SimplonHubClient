@@ -1,17 +1,16 @@
-import { Component, computed, inject, model, signal } from '@angular/core';
+import { Component, computed, inject, model } from '@angular/core';
 import { ConfigurableFormComponent } from '../configurable-form/configurable-form.component';
-import { Drawer } from 'primeng/drawer';
-import { DialogModule } from 'primeng/dialog';
 import { FormGroup } from '@angular/forms';
 import { Structure } from '../configurable-form/related-models';
 import { CursusesMainService } from '../../shared/services/cursuses-main.service';
 import { UserMainService } from '../../shared/services/userMain.service';
 import { MessageService } from 'primeng/api';
 import { CursusCreateDTO, CursusResponseDTO } from '../../../api';
+import { BaseSideModalComponent } from '../base-side-modal/base-side-modal.component';
 
 @Component({
     selector: 'app-modal-cursus',
-    imports: [Drawer, DialogModule, ConfigurableFormComponent],
+    imports: [BaseSideModalComponent, ConfigurableFormComponent],
     templateUrl: './modal-cursus.component.html',
     styleUrl: './modal-cursus.component.scss'
 })
