@@ -53,10 +53,6 @@ export class SmartGridModernizedComponent<T extends Record<string, any>> impleme
             ...customComps,
             default: ActionButtonRendererComponent
         });
-        effect(() => {
-            const state = this.tableState();
-            console.log('Table State Changed:', state);
-        });
     }
 
     ngOnInit(): void {}

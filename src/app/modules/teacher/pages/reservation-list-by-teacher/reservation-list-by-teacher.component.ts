@@ -14,13 +14,13 @@ import { DurationPipe } from '../../../../shared/pipes/duration.pipe';
 import { ModalReservationDetailComponent } from '../../../components/modal-reservation-detail/modal-reservation-detail.component';
 
 @Component({
-    selector: 'app-reservation-list',
+    selector: 'app-reservation-list-by-teacher',
     imports: [SmartGridModernizedComponent, SmartGridComponent, ModalReservationDetailComponent],
     providers: [DatePipe, DurationPipe],
-    templateUrl: './reservation-list.component.html',
-    styleUrl: './reservation-list.component.scss'
+    templateUrl: './reservation-list-by-teacher.component.html',
+    styleUrl: './reservation-list-by-teacher.component.scss'
 })
-export class ReservationListComponent {
+export class ReservationListByTeacherComponent {
     adminService = inject(AdminMainService);
     slotService = inject(SlotMainService);
     userService = inject(UserMainService);
@@ -51,16 +51,16 @@ export class ReservationListComponent {
     columns = computed<DynamicColDef[]>(() => {
         return [
             {
-                field: 'slot',
-                header: 'Nom du professeur',
+                field: 'student',
+                header: "Nom de l'étudiant",
                 type: 'text',
-                sortField: 'teacher',
+                sortField: 'student',
                 valueFormatter: (data: any) => {
-                    const teacher = data.teacher as TeacherResponseDTO;
-                    return teacher ? `${teacher.firstName} ${teacher.lastName}` : '';
+                    const student = data as TeacherResponseDTO;
+                    return student ? `${student.firstName} ${student.lastName}` : '';
                 },
                 filterable: true,
-                filterField: 'slot/teacher/lastName',
+                filterField: 'student/lastName',
                 sortable: true,
                 specialFilter: true
             },
@@ -108,12 +108,12 @@ export class ReservationListComponent {
     async loadUsers(state: CustomTableState) {
         try {
             this.loading.set(true);
-            state.filters = { ...state.filters, studentId: { value: this.userService.userConnected().id!, matchMode: 'equals' } };
+            state.filters = { ...state.filters, teacherId: { value: this.userService.userConnected().id!, matchMode: 'equals' } };
             const response = await this.slotService.getBookings(state);
             this.bookings.set(response.data ?? []);
             this.totalRecords.set(response.count ?? 0);
         } catch (error) {
-            console.error('Error loading teachers:', error);
+            console.error('Error loading reservations by teacher:', error);
         } finally {
             this.loading.set(false);
         }
@@ -126,7 +126,6 @@ export class ReservationListComponent {
     }
     // on row click
     onRowClick(event: any) {
-        console.log('onRowClick', event);
         this.selectedReservation.set(event);
         this.modalDetailVisible.set(true);
     }

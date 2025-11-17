@@ -176,8 +176,6 @@ export class CalendarStudentComponent implements OnInit {
                 }
             };
         });
-
-        console.log(events);
         this.sourceEvents.set(events);
     }
 

@@ -27,6 +27,7 @@ import { CalendarStudentComponent } from './app/modules/student/pages/calendar-s
 import { TeacherListComponent } from './app/modules/student/pages/teacher-list/teacher-list.component';
 import { StudentFavoritesComponent } from './app/modules/student/pages/student-favorites/student-favorites.component';
 import { ReservationListComponent } from './app/modules/student/pages/reservation-list/reservation-list.component';
+import { ReservationListByTeacherComponent } from './app/modules/teacher/pages/reservation-list-by-teacher/reservation-list-by-teacher.component';
 
 // Define path constants
 const TEACHER_PATH = 'teacher';
@@ -102,7 +103,8 @@ export const appRoutes: Routes = [
             { path: SETTINGS_PATH, component: SettingsComponent },
             { path: PROFILE_PATH + '/:id', component: ProfileTeacherComponent },
             { path: RESERVATION_PATH + '/list', component: UsersListComponent },
-            { path: CONTACT_PATH, component: GestionCursusesComponent }
+            { path: CONTACT_PATH, component: GestionCursusesComponent },
+            { path: 'reservation-list', component: ReservationListByTeacherComponent }
         ]
     },
 

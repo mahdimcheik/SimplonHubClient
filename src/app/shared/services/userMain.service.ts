@@ -131,11 +131,9 @@ export class UserMainService {
             } else if (this.isTeacher()) {
                 this.sideNavItems.set([
                     { label: 'Tableau de bord', icon: 'pi pi-fw pi-home', routerLink: ['/teacher'] },
-                    { label: 'Réservations', icon: 'pi pi-fw pi-list', routerLink: ['/teacher/reservation/list'] },
+                    { label: 'Mes Réservations', icon: 'pi pi-fw pi-list', routerLink: ['/teacher/reservation-list'] },
                     { label: 'Calendrier', icon: 'pi pi-fw pi-calendar', routerLink: ['/teacher/reservation/calendar-for-student'] },
-                    { label: 'Mes Commandes', icon: 'pi pi-cart-arrow-down', routerLink: ['/teacher/reservation/orders-student'] },
-                    { label: 'Profil', icon: 'pi pi-fw pi-user', routerLink: ['/teacher/profile/me'] },
-                    { label: 'Contact', icon: 'pi pi-fw pi-at', routerLink: ['/teacher/contact'] }
+                    { label: 'Profil', icon: 'pi pi-fw pi-user', routerLink: ['/teacher/profile/me'] }
                 ]);
             } else if (this.isStudent()) {
                 this.sideNavItems.set([
