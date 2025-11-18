@@ -3,7 +3,7 @@
     "version": 1,
     "newProjectRoot": "projects",
     "projects": {
-        "main-boilerplate": {
+        "simplonHub": {
             "projectType": "application",
             "schematics": {
                 "@schematics/angular:component": {
