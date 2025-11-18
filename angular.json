@@ -36,7 +36,7 @@
                         ],
                         "scripts": []
                     },
-                    "configurations": {
+                 "configurations": {
                         "production": {
                             "budgets": [
                                 {
@@ -68,7 +68,18 @@
                                 "with": "src/environments/environment.development.ts"
                               }
                             ]
-                        }                        
+                        },
+                        "testing": {
+                            "optimization": false,
+                            "extractLicenses": false,
+                            "sourceMap": true,
+                            "fileReplacements": [
+                              {
+                                "replace": "src/environments/environment.ts",
+                                "with": "src/environments/environment.testing.ts"
+                              }
+                            ]
+                        }
                     },
                     "defaultConfiguration": "production"
                 },
