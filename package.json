@@ -1,5 +1,5 @@
 {
-  "name": "SimplonHub",
+  "name": "SimplonHubClient",
   "version": "20.0.0",
   "scripts": {
     "ng": "ng serve --ssl true --ssl-key key.pem --ssl-cert cert.pem --port 4201",

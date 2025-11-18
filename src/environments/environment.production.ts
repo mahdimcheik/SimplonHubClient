@@ -1,5 +1,3 @@
 export const environment = {
-    production: true,
-    API_URL: '__API_URL__',
-    SYNCFUSION_LICENSE: '__SYNCFUSION_LICENSE__'
+    API_URL: 'https://api.skill-hive.fr'
 };
