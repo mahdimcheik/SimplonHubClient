@@ -7,19 +7,8 @@ FROM build AS production
 COPY . .
 RUN npm run build:prod
 
-FROM build AS testing
-COPY . .
-RUN npm run build:test
-
-
 FROM nginx:alpine as prod-runtime
 COPY --from=production /app/dist/simplon-hub/browser /usr/share/nginx/html
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
-
-FROM nginx:alpine as test-runtime
-COPY --from=testing /app/dist/simplon-hub/browser /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]

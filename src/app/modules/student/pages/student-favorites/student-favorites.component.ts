@@ -9,7 +9,7 @@ import { firstValueFrom } from 'rxjs';
 
 @Component({
     selector: 'app-student-favorites',
-    imports: [SmartGridModernizedComponent, TeacherCardComponent],
+    imports: [SmartGridModernizedComponent],
     templateUrl: './student-favorites.component.html',
     styleUrl: './student-favorites.component.scss'
 })

@@ -15,7 +15,7 @@ import { ModalReservationDetailComponent } from '../../../components/modal-reser
 
 @Component({
     selector: 'app-reservation-list-by-teacher',
-    imports: [SmartGridModernizedComponent, SmartGridComponent, ModalReservationDetailComponent],
+    imports: [SmartGridComponent, ModalReservationDetailComponent],
     providers: [DatePipe, DurationPipe],
     templateUrl: './reservation-list-by-teacher.component.html',
     styleUrl: './reservation-list-by-teacher.component.scss'
