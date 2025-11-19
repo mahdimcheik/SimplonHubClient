@@ -76,35 +76,13 @@ export class UserMainService {
     // lien de side navbar
     sideNavItems = signal<MenuItem[]>([]);
     landingNavItems = signal<MenuItem[]>([]);
+    authNavItems = signal<MenuItem[]>([]);
 
     // pour la page qui je suis ?
     teacherDetails = signal({} as UserResponseDTO);
 
     refreshAccessToken = signal<string | null>(null);
     token = signal<string>('');
-
-    typesGenderList: GenderDropDown[] = [
-        {
-            id: '1',
-            name: 'Homme',
-            value: EnumGender.Homme
-        },
-        {
-            id: '2',
-            name: 'Femme',
-            value: EnumGender.Femme
-        },
-        {
-            id: '3',
-            name: 'Non-binaire',
-            value: EnumGender.NonBinaire
-        },
-        {
-            id: '4',
-            name: 'Autre',
-            value: EnumGender.Autre
-        }
-    ];
 
     constructor() {
         effect(() => {
@@ -133,8 +111,11 @@ export class UserMainService {
                     { label: 'Tableau de bord', icon: 'pi pi-fw pi-home', routerLink: ['/teacher/calendar-teacher'] },
                     { label: 'Calendrier', icon: 'pi pi-fw pi-home', routerLink: ['/teacher/calendar-teacher'] },
                     { label: 'Mes Réservations', icon: 'pi pi-fw pi-list', routerLink: ['/teacher/reservation-list'] },
-                    // { label: 'Calendrier', icon: 'pi pi-fw pi-calendar', routerLink: ['/teacher/reservation/calendar-for-student'] },
                     { label: 'Profil', icon: 'pi pi-fw pi-user', routerLink: ['/teacher/profile/me'] }
+                ]);
+                this.landingNavItems.set([
+                    { label: 'Tableau de bord', icon: 'pi pi-fw pi-home', routerLink: ['/admin'] },
+                    { label: 'Utilisateurs', icon: 'pi pi-users', routerLink: ['/admin/users-list'] }
                 ]);
             } else if (this.isStudent()) {
                 this.sideNavItems.set([
@@ -145,6 +126,34 @@ export class UserMainService {
                         label: 'Mes Réservations',
                         icon: 'pi pi-fw pi-calendar',
                         routerLink: ['/student/reservation-list']
+                    }
+                ]);
+                this.landingNavItems.set([
+                    { label: 'Tableau de bord', icon: 'pi pi-fw pi-home', routerLink: ['/admin'] },
+                    { label: 'Utilisateurs', icon: 'pi pi-users', routerLink: ['/admin/users-list'] }
+                ]);
+            }
+
+            if (this.userConnected().email) {
+                this.authNavItems.set([
+                    {
+                        label: 'Profil',
+                        icon: 'pi pi-user'
+                    },
+                    {
+                        label: 'Déconnexion',
+                        icon: 'pi pi-sign-out'
+                    }
+                ]);
+            } else {
+                this.authNavItems.set([
+                    {
+                        label: 'Se connecter',
+                        icon: 'pi pi-sign-in'
+                    },
+                    {
+                        label: "S'inscrire",
+                        icon: 'pi pi-user-plus'
                     }
                 ]);
             }
