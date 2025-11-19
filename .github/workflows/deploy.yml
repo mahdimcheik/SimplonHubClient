@@ -40,4 +40,4 @@ jobs:
           script: |
             export FRONT_IMAGE_VERSION=${{ env.FRONT_IMAGE_VERSION }}
             docker pull mahdimcheik/simplon-hub-client:${{ env.FRONT_IMAGE_VERSION }}
-            docker compose -f /home/home/simplon-hub/frontend/docker-compose.yml up -d --force-recreate
+            docker compose -f /home/mahdi/simplon-hub/frontend/docker-compose.yml up -d --force-recreate
