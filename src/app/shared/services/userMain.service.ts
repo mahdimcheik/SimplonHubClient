@@ -1,4 +1,4 @@
-import { Injectable, computed, effect, inject, signal } from '@angular/core';
+import { Injectable, computed, effect, inject, signal, untracked } from '@angular/core';
 import { catchError, firstValueFrom, map, Observable, of, switchMap, tap } from 'rxjs';
 import { MenuItem, MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
@@ -76,35 +76,13 @@ export class UserMainService {
     // lien de side navbar
     sideNavItems = signal<MenuItem[]>([]);
     landingNavItems = signal<MenuItem[]>([]);
+    authNavItems = signal<MenuItem[]>([]);
 
     // pour la page qui je suis ?
     teacherDetails = signal({} as UserResponseDTO);
 
     refreshAccessToken = signal<string | null>(null);
     token = signal<string>('');
-
-    typesGenderList: GenderDropDown[] = [
-        {
-            id: '1',
-            name: 'Homme',
-            value: EnumGender.Homme
-        },
-        {
-            id: '2',
-            name: 'Femme',
-            value: EnumGender.Femme
-        },
-        {
-            id: '3',
-            name: 'Non-binaire',
-            value: EnumGender.NonBinaire
-        },
-        {
-            id: '4',
-            name: 'Autre',
-            value: EnumGender.Autre
-        }
-    ];
 
     constructor() {
         effect(() => {
@@ -119,8 +97,9 @@ export class UserMainService {
                     { label: 'Profil', icon: 'pi pi-fw pi-calendar', routerLink: ['/dashboard/profile/me'] }
                 ]);
                 this.landingNavItems.set([
+                    { label: 'Accueil', icon: 'pi pi-home', routerLink: ['/'] },
                     { label: 'Tableau de bord', icon: 'pi pi-fw pi-home', routerLink: ['/admin'] },
-                    { label: 'Utilisateurs', icon: 'pi pi-users', routerLink: ['/admin/users-list'] }
+                    { label: 'Qui sommes nous', icon: 'pi pi-users', routerLink: ['/landing/about-us'] }
                 ]);
             } else if (this.isSuperAdmin()) {
                 this.sideNavItems.set([
@@ -128,13 +107,22 @@ export class UserMainService {
                     { label: 'Utilisateurs', icon: 'pi pi-users', routerLink: ['/admin/users-list'] },
                     { label: 'Paramètres', icon: 'pi pi-cog', routerLink: ['/admin/adminitration'] }
                 ]);
+                this.landingNavItems.set([
+                    { label: 'Accueil', icon: 'pi pi-home', routerLink: ['/'] },
+                    { label: 'Tableau de bord', icon: 'pi pi-fw pi-home', routerLink: ['/admin'] },
+                    { label: 'Qui sommes nous', icon: 'pi pi-users', routerLink: ['/landing/about-us'] }
+                ]);
             } else if (this.isTeacher()) {
                 this.sideNavItems.set([
                     { label: 'Tableau de bord', icon: 'pi pi-fw pi-home', routerLink: ['/teacher/calendar-teacher'] },
                     { label: 'Calendrier', icon: 'pi pi-fw pi-home', routerLink: ['/teacher/calendar-teacher'] },
                     { label: 'Mes Réservations', icon: 'pi pi-fw pi-list', routerLink: ['/teacher/reservation-list'] },
-                    // { label: 'Calendrier', icon: 'pi pi-fw pi-calendar', routerLink: ['/teacher/reservation/calendar-for-student'] },
                     { label: 'Profil', icon: 'pi pi-fw pi-user', routerLink: ['/teacher/profile/me'] }
+                ]);
+                this.landingNavItems.set([
+                    { label: 'Accueil', icon: 'pi pi-home', routerLink: ['/'] },
+                    { label: 'Tableau de bord', icon: 'pi pi-fw pi-home', routerLink: ['/admin'] },
+                    { label: 'Qui sommes nous', icon: 'pi pi-users', routerLink: ['/landing/about-us'] }
                 ]);
             } else if (this.isStudent()) {
                 this.sideNavItems.set([
@@ -145,6 +133,42 @@ export class UserMainService {
                         label: 'Mes Réservations',
                         icon: 'pi pi-fw pi-calendar',
                         routerLink: ['/student/reservation-list']
+                    }
+                ]);
+                this.landingNavItems.set([
+                    { label: 'Accueil', icon: 'pi pi-home', routerLink: ['/'] },
+                    { label: 'Tableau de bord', icon: 'pi pi-fw pi-home', routerLink: ['/admin'] },
+                    { label: 'Qui sommes nous', icon: 'pi pi-users', routerLink: ['/landing/about-us'] }
+                ]);
+            } else {
+                this.sideNavItems.set([]);
+                this.landingNavItems.set([
+                    { label: 'Accueil', icon: 'pi pi-home', routerLink: ['/'] },
+                    { label: 'Qui sommes nous', icon: 'pi pi-users', routerLink: ['/landing/about-us'] }
+                ]);
+            }
+
+            const untrackedUser = untracked(this.userConnected);
+            if (untrackedUser.email) {
+                this.authNavItems.set([
+                    {
+                        label: 'Profil',
+                        icon: 'pi pi-user'
+                    },
+                    {
+                        label: 'Déconnexion',
+                        icon: 'pi pi-sign-out'
+                    }
+                ]);
+            } else {
+                this.authNavItems.set([
+                    {
+                        label: 'Se connecter',
+                        icon: 'pi pi-sign-in'
+                    },
+                    {
+                        label: "S'inscrire",
+                        icon: 'pi pi-user-plus'
                     }
                 ]);
             }
@@ -238,6 +262,14 @@ export class UserMainService {
                     this.userConnected.set((res.data as any).user);
                     this.token.set((res.data as any).token);
                 }
+            }),
+            catchError((error) => {
+                this.userConnected.set({} as UserResponseDTO);
+                return of({
+                    message: error.message ?? 'Erreur inconnue',
+                    status: error.status ?? 500,
+                    data: {} as UserInfosWithtoken
+                } as ResponseDTO<UserInfosWithtoken>);
             })
         );
     }

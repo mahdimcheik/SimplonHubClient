@@ -12,10 +12,15 @@ import { MenuModule } from 'primeng/menu';
 import { MenuItem } from 'primeng/api';
 import { Menu } from 'primeng/menu';
 import { TooltipModule } from 'primeng/tooltip';
+import { CommonModule } from '@angular/common';
+import { DrawerModule } from 'primeng/drawer';
+import { BaseSideModalComponent } from '../../../../generic-components/base-side-modal/base-side-modal.component';
+import { MenubarModule } from 'primeng/menubar';
+import { Divider } from 'primeng/divider';
 
 @Component({
     selector: 'topbar-widget',
-    imports: [RouterModule, StyleClassModule, ButtonModule, RippleModule, AvatarModule, MenuModule, TooltipModule],
+    imports: [RouterModule, StyleClassModule, ButtonModule, RippleModule, CommonModule, AvatarModule, MenuModule, TooltipModule, DrawerModule, StyleClassModule, AvatarModule, MenuModule, MenubarModule, Divider],
     templateUrl: './app.topbar-landing.html'
 })
 export class TopbarWidget {
@@ -26,28 +31,18 @@ export class TopbarWidget {
     localStorageService = inject(LocalstorageService);
     router = inject(Router);
 
-    menuItems: MenuItem[] = [
-        {
-            label: 'Profil',
-            icon: 'pi pi-user',
-            command: () => {
-                this.goToProfile();
-            }
-        },
-        {
-            separator: true
-        },
-        {
-            label: 'Déconnexion',
-            icon: 'pi pi-sign-out',
-            command: () => {
-                this.logout();
-            }
-        }
-    ];
+    mobileMenuVisible = signal(false);
+
+    menuItems = this.authService.landingNavItems;
+
+    authItems = this.authService.authNavItems;
 
     toggleDarkMode() {
         this.layoutService.toggleDarkMode();
+    }
+
+    toggleMobileMenu() {
+        this.mobileMenuVisible.update((v) => !v);
     }
 
     toggleMenu(event: Event) {

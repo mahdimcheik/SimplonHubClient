@@ -1,48 +1,51 @@
-<a class="flex items-center mr-4" routerLink="/">
-    <img [src]="layoutService.layoutConfig().darkTheme ? 'assets/latestWhite.svg' : 'assets/latestBlack.svg'" alt="logo" width="150" />
-</a>
+<div class="flex justify-between w-full px-2 py-6 md:px-6">
+    <div class="flex gap-2 items-center">
+        <a pButton [text]="true" severity="secondary" [rounded]="true" class="lg:!hidden" (click)="toggleMobileMenu()">
+            <i class="pi pi-bars !text-2xl"></i>
+        </a>
+        <a class="flex items-center mr-4" routerLink="/">
+            <img [src]="layoutService.layoutConfig().darkTheme ? 'assets/latestWhite.svg' : 'assets/latestBlack.svg'" alt="logo" width="150" />
+        </a>
+    </div>
 
-<a pButton [text]="true" severity="secondary" [rounded]="true" pRipple class="lg:!hidden" pStyleClass="@next" enterClass="hidden" leaveToClass="hidden" [hideOnOutsideClick]="true">
-    <i class="pi pi-bars !text-2xl"></i>
-</a>
+    <div class="flex gap-4 items-center">
+        <button type="button" (click)="toggleDarkMode()">
+            <i [ngClass]="{ 'pi ': true, 'pi-moon': layoutService.isDarkTheme(), 'pi-sun': !layoutService.isDarkTheme() }" [style]="{'font-size': '24px'}"></i>
+        </button>
+        <ul class="list-none p-0 m-0 flex lg:items-center select-none flex-row cursor-pointer gap-2 hidden lg:flex">
+            @for(item of menuItems(); track $index) {
 
-<div class="items-center bg-surface-0 dark:bg-surface-900 grow justify-between hidden lg:flex absolute lg:static w-full left-0 top-full px-12 lg:px-0 z-20 rounded-border">
-    <ul class="list-none p-0 m-0 flex lg:items-center select-none flex-col lg:flex-row cursor-pointer gap-8">
-        <li>
-            <a routerLink="/" pRipple class="px-0 py-4 text-surface-900 dark:text-surface-0 font-medium text-xl">
-                <span>Accueil</span>
-            </a>
-        </li>
-        @if (authService.userConnected().email) {
-        <li>
-            <a routerLink="/teacher" pRipple class="px-0 py-4 text-surface-900 dark:text-surface-0 font-medium text-xl">
-                <span>Tableau de bord</span>
-            </a>
-        </li>
-        }
-        <li>
-            <a routerLink="/teacher" fragment="profile" pRipple class="px-0 py-4 text-surface-900 dark:text-surface-0 font-medium text-xl">
-                <span>Qui je suis</span>
-            </a>
-        </li>
-    </ul>
-    <div class="flex flex-row items-center gap-4 justify-center">
-        <p-button
-            type="button"
-            (onClick)="toggleDarkMode()"
-            outlined="true"
-            [icon]="layoutService.isDarkTheme()?  'pi pi-moon' : 'pi pi-sun'"
-            class="flex border-t lg:border-t-0 border-surface py-4 lg:py-0 mt-4 lg:mt-0 gap-2 flex items-center justify-center"
-        >
-        </p-button>
+            <li>
+                <a [routerLink]="item.routerLink" pRipple class="px-0 py-4 text-surface-900 dark:text-surface-0 font-medium text-xl menu-link" routerLinkActive="active-route" [routerLinkActiveOptions]="{ exact: false }">
+                    <span class="layout-menuitem-text">{{item.label}}</span>
+                </a>
+            </li>
+            }
+        </ul>
 
-        @if(authService.userConnected().email) {
-        <p-button type="button" outlined="true" [icon]="'pi pi-sign-out'" class="flex border-t lg:border-t-0 border-surface py-4 lg:py-0 mt-4 lg:mt-0 gap-2 flex items-center justify-center" (onClick)="authService.logout()"> </p-button>
-        } @else {
-        <!-- <div class="flex border-t lg:border-t-0 border-surface py-4 lg:py-0 mt-4 lg:mt-0 gap-2"> -->
-        <p-button pRipple label="Connexion" routerLink="/auth/login" [rounded]="true" [text]="true" class="flex border-t lg:border-t-0 border-surface py-4 lg:py-0 mt-4 lg:mt-0 gap-2 flex items-center justify-center"></p-button>
-        <p-button pRipple label="Inscription" routerLink="/auth/inscription" [rounded]="true" class="flex border-t lg:border-t-0 border-surface py-4 lg:py-0 mt-4 lg:mt-0 gap-2 flex items-center justify-center"></p-button>
-        <!-- </div> -->
-        }
+        <p-button (click)="menu.toggle($event)" icon="pi pi-ellipsis-v" severity="info" class="hidden lg:flex" />
+        <p-menu #menu [model]="authItems()" [popup]="true" />
     </div>
 </div>
+
+<p-drawer [(visible)]="mobileMenuVisible" position="left" [baseZIndex]="1000" styleClass="!w-full md:!w-100 lg:!w-[50rem] md:!mb-0 lg:!mb-0">
+    <ul class="list-none p-0 m-0 flex select-none flex-col cursor-pointer gap-8 w-full justify-center items-center h-full">
+        @for(item of menuItems(); track $index) {
+        <li>
+            <a [routerLink]="item.routerLink" pRipple class="px-0 py-4 text-surface-900 dark:text-surface-0 font-medium text-xl menu-link" routerLinkActive="active-route" [routerLinkActiveOptions]="{ exact: false }">
+                <i [ngClass]="'pi pi-home'" class="layout-menuitem-icon"></i>
+                <span class="layout-menuitem-text">{{item.label}}</span>
+            </a>
+        </li>
+        }
+        <p-divider layout="horizontal" type="solid" [style]="{width:'100%'}"></p-divider>
+        @for(item of authItems(); track $index) {
+        <li>
+            <a [routerLink]="item.routerLink" pRipple class="px-0 py-4 text-surface-900 dark:text-surface-0 font-medium text-xl menu-link" routerLinkActive="active-route" [routerLinkActiveOptions]="{ exact: false }">
+                <i [ngClass]="'pi pi-home'" class="layout-menuitem-icon"></i>
+                <span class="layout-menuitem-text">{{item.label}}</span>
+            </a>
+        </li>
+        }
+    </ul>
+</p-drawer>

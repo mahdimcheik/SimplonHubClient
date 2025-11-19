@@ -15,7 +15,7 @@ import { ToastModule } from 'primeng/toast';
     template: `<div class="layout-wrapper" [ngClass]="containerClass" (click)="isOutsideClicked($event)">
         <app-topbar></app-topbar>
         <app-sidebar></app-sidebar>
-        <div class="layout-main-container">
+        <div class="layout-main-container ">
             <div class="layout-main">
                 <router-outlet></router-outlet>
             </div>
