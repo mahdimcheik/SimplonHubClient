@@ -1,3 +1,3 @@
 export const environment = {
-    API_URL: 'https://api.skill-hive.fr'
+    API_URL: 'https://api.just-add.click'
 };
