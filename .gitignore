@@ -46,5 +46,5 @@ testem.log
 .DS_Store
 Thumbs.db
 
-# Environment files
-/src/environments/environment.ts
+# Environment files - Note: environment.ts is now tracked to support Angular fileReplacements
+# /src/environments/environment.ts
