@@ -12,10 +12,12 @@ import { MenuModule } from 'primeng/menu';
 import { MenuItem } from 'primeng/api';
 import { Menu } from 'primeng/menu';
 import { TooltipModule } from 'primeng/tooltip';
+import { CommonModule } from '@angular/common';
+import { DrawerModule } from 'primeng/drawer';
 
 @Component({
     selector: 'topbar-widget',
-    imports: [RouterModule, StyleClassModule, ButtonModule, RippleModule, AvatarModule, MenuModule, TooltipModule],
+    imports: [RouterModule, StyleClassModule, ButtonModule, RippleModule, CommonModule, AvatarModule, MenuModule, TooltipModule, DrawerModule],
     templateUrl: './app.topbar-landing.html'
 })
 export class TopbarWidget {
@@ -25,6 +27,8 @@ export class TopbarWidget {
     authService = inject(UserMainService);
     localStorageService = inject(LocalstorageService);
     router = inject(Router);
+
+    mobileMenuVisible = signal(false);
 
     menuItems: MenuItem[] = [
         {
@@ -48,6 +52,10 @@ export class TopbarWidget {
 
     toggleDarkMode() {
         this.layoutService.toggleDarkMode();
+    }
+
+    toggleMobileMenu() {
+        this.mobileMenuVisible.update((v) => !v);
     }
 
     toggleMenu(event: Event) {
