@@ -1,4 +1,4 @@
-<p-drawer [(visible)]="visible" [position]="position()" [modal]="true" [style]="{ width: width() }" (onHide)="onHide()" [closeOnEscape]="true">
+<p-drawer [(visible)]="visible" [position]="position()" [modal]="true" (onHide)="onHide()" [closeOnEscape]="true" [styleClass]="widthClass()">
     <ng-template pTemplate="header">
         <div class="flex items-center justify-between gap-3 w-full min-w-[300px] w-full">
             <div class="flex items-center gap-3">
