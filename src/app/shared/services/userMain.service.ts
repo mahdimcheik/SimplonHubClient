@@ -1,4 +1,4 @@
-import { Injectable, computed, effect, inject, signal } from '@angular/core';
+import { Injectable, computed, effect, inject, signal, untracked } from '@angular/core';
 import { catchError, firstValueFrom, map, Observable, of, switchMap, tap } from 'rxjs';
 import { MenuItem, MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
@@ -97,14 +97,20 @@ export class UserMainService {
                     { label: 'Profil', icon: 'pi pi-fw pi-calendar', routerLink: ['/dashboard/profile/me'] }
                 ]);
                 this.landingNavItems.set([
+                    { label: 'Accueil', icon: 'pi pi-home', routerLink: ['/'] },
                     { label: 'Tableau de bord', icon: 'pi pi-fw pi-home', routerLink: ['/admin'] },
-                    { label: 'Utilisateurs', icon: 'pi pi-users', routerLink: ['/admin/users-list'] }
+                    { label: 'Qui sommes nous', icon: 'pi pi-users', routerLink: ['/landing/about-us'] }
                 ]);
             } else if (this.isSuperAdmin()) {
                 this.sideNavItems.set([
                     { label: 'Tableau de bord', icon: 'pi pi-fw pi-home', routerLink: ['/admin'] },
                     { label: 'Utilisateurs', icon: 'pi pi-users', routerLink: ['/admin/users-list'] },
                     { label: 'Paramètres', icon: 'pi pi-cog', routerLink: ['/admin/adminitration'] }
+                ]);
+                this.landingNavItems.set([
+                    { label: 'Accueil', icon: 'pi pi-home', routerLink: ['/'] },
+                    { label: 'Tableau de bord', icon: 'pi pi-fw pi-home', routerLink: ['/admin'] },
+                    { label: 'Qui sommes nous', icon: 'pi pi-users', routerLink: ['/landing/about-us'] }
                 ]);
             } else if (this.isTeacher()) {
                 this.sideNavItems.set([
@@ -114,8 +120,9 @@ export class UserMainService {
                     { label: 'Profil', icon: 'pi pi-fw pi-user', routerLink: ['/teacher/profile/me'] }
                 ]);
                 this.landingNavItems.set([
+                    { label: 'Accueil', icon: 'pi pi-home', routerLink: ['/'] },
                     { label: 'Tableau de bord', icon: 'pi pi-fw pi-home', routerLink: ['/admin'] },
-                    { label: 'Utilisateurs', icon: 'pi pi-users', routerLink: ['/admin/users-list'] }
+                    { label: 'Qui sommes nous', icon: 'pi pi-users', routerLink: ['/landing/about-us'] }
                 ]);
             } else if (this.isStudent()) {
                 this.sideNavItems.set([
@@ -129,12 +136,20 @@ export class UserMainService {
                     }
                 ]);
                 this.landingNavItems.set([
+                    { label: 'Accueil', icon: 'pi pi-home', routerLink: ['/'] },
                     { label: 'Tableau de bord', icon: 'pi pi-fw pi-home', routerLink: ['/admin'] },
-                    { label: 'Utilisateurs', icon: 'pi pi-users', routerLink: ['/admin/users-list'] }
+                    { label: 'Qui sommes nous', icon: 'pi pi-users', routerLink: ['/landing/about-us'] }
+                ]);
+            } else {
+                this.sideNavItems.set([]);
+                this.landingNavItems.set([
+                    { label: 'Accueil', icon: 'pi pi-home', routerLink: ['/'] },
+                    { label: 'Qui sommes nous', icon: 'pi pi-users', routerLink: ['/landing/about-us'] }
                 ]);
             }
 
-            if (this.userConnected().email) {
+            const untrackedUser = untracked(this.userConnected);
+            if (untrackedUser.email) {
                 this.authNavItems.set([
                     {
                         label: 'Profil',
@@ -247,6 +262,14 @@ export class UserMainService {
                     this.userConnected.set((res.data as any).user);
                     this.token.set((res.data as any).token);
                 }
+            }),
+            catchError((error) => {
+                this.userConnected.set({} as UserResponseDTO);
+                return of({
+                    message: error.message ?? 'Erreur inconnue',
+                    status: error.status ?? 500,
+                    data: {} as UserInfosWithtoken
+                } as ResponseDTO<UserInfosWithtoken>);
             })
         );
     }

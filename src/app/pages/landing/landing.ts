@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { RippleModule } from 'primeng/ripple';
 import { StyleClassModule } from 'primeng/styleclass';
@@ -6,6 +6,7 @@ import { ButtonModule } from 'primeng/button';
 import { DividerModule } from 'primeng/divider';
 import { TopbarWidget } from './components/topbar-landing/topbarwidget.component';
 import { FooterWidget } from './components/footerwidget/footerwidget';
+import { UserMainService } from '../../shared/services/userMain.service';
 
 @Component({
     selector: 'app-landing',
