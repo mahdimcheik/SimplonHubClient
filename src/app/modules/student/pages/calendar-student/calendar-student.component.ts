@@ -23,6 +23,7 @@ import { DividerModule } from 'primeng/divider';
 import { ModalQuickInfosComponent } from '../../../../generic-components/modal-quick-infos/modal-quick-infos.component';
 import { DatePipe, TitleCasePipe } from '@angular/common';
 import { Button, ButtonModule } from 'primeng/button';
+import { BreakpointObserver } from '@angular/cdk/layout';
 
 @Component({
     selector: 'app-calendar-student',
@@ -37,6 +38,7 @@ export class CalendarStudentComponent implements OnInit {
     destroyRef = inject(DestroyRef);
     selectedEvent = signal<EventInput>({});
     userMainService = inject(UserMainService);
+    breakpointService = inject(BreakpointObserver);
     calendarSetupService = inject(CalendarSetupService);
     user = this.userMainService.userConnected;
 
@@ -155,6 +157,16 @@ export class CalendarStudentComponent implements OnInit {
                 this.teacherId.set(null);
             }
         });
+    }
+    ngAfterViewInit(): void {
+        this.breakpointService
+            .observe(['(max-width: 767px)'])
+            .pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe((result: any) => {
+                if (result.matches) {
+                    this.viewDay();
+                }
+            });
     }
 
     // si le teacherId est non null, on charge les slots pour le teacherId avec

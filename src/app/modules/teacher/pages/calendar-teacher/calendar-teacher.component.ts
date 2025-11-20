@@ -1,4 +1,4 @@
-import { Component, computed, inject, input, model, OnInit, output, signal, viewChild } from '@angular/core';
+import { Component, computed, DestroyRef, inject, input, model, OnInit, output, signal, viewChild } from '@angular/core';
 import { CalendarApi, CalendarOptions, DateSelectArg, DateSpanApi, EventClickArg, EventDropArg, EventInput, DatesSetArg } from '@fullcalendar/core/index.js';
 import { FullCalendarComponent, FullCalendarModule } from '@fullcalendar/angular';
 import dayGridPlugin from '@fullcalendar/daygrid';
@@ -18,6 +18,8 @@ import { UserMainService } from '../../../../shared/services/userMain.service';
 import { CalendarSetupService } from '../../../../shared/services/calendar-setup.service';
 import { Button, ButtonModule } from 'primeng/button';
 import { DatePipe } from '@angular/common';
+import { BreakpointObserver } from '@angular/cdk/layout';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
     selector: 'app-calendar-teacher',
@@ -30,7 +32,9 @@ export class CalendarTeacherComponent implements OnInit {
     slotMainService = inject(SlotMainService);
     selectedEvent = signal<EventInput>({});
     userMainService = inject(UserMainService);
+    breakpointService = inject(BreakpointObserver);
     calendarSetupService = inject(CalendarSetupService);
+    destroyRef = inject(DestroyRef);
     user = this.userMainService.userConnected;
 
     quickInfosVisible = signal(false);
@@ -162,6 +166,17 @@ export class CalendarTeacherComponent implements OnInit {
     // });
 
     ngOnInit(): void {}
+
+    ngAfterViewInit(): void {
+        this.breakpointService
+            .observe(['(max-width: 767px)'])
+            .pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe((result: any) => {
+                if (result.matches) {
+                    this.viewDay();
+                }
+            });
+    }
 
     async loadData() {
         const slots = await this.slotMainService.getAllSlots(this.filters());
