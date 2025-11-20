@@ -1,0 +1,14 @@
+<div class="flex justify-between p-4 w-full border border-gray-300 rounded-lg" [ngClass]="styleClass()">
+    <div class="start flex flex-col gap-4">
+        <div class="flex gap-2">
+            <span>{{ result() }} <ng-content select="slot=start-left-top"></ng-content></span>
+        </div>
+        <div class="flex gap-2">
+            <span>{{ title() }}</span> <ng-content select="slot=start-right-bottom"></ng-content>
+        </div>
+    </div>
+    <div class="end flex gap-2 items-center justify-center">
+        <i class="{{ icon() }}"></i>
+        <ng-content select="slot=end-left"></ng-content>
+    </div>
+</div>
