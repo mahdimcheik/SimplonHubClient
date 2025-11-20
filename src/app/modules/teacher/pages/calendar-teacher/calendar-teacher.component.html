@@ -1,16 +1,16 @@
-<div class="flex flex-col justify-between w-full md:flex-row">
-    <div class="right flex gap-2">
-        <p-button type="button" icon="pi pi-chevron-left" (onClick)="goPrev()" fluid></p-button>
-        <p-button type="button" icon="pi pi-calendar" (onClick)="goToday()"></p-button>
-        <p-button type="button" icon="pi pi-chevron-right" (onClick)="goNext()"></p-button>
+<div class="flex flex-col justify-between w-full md:flex-row gap-2 md:gap-0">
+    <div class="right flex gap-2 w-full md:w-auto">
+        <button type="button" pbutton (onClick)="goPrev()" [class]="'flex-1 md:flex-none'" severity="secondary"><i class="pi pi-chevron-left"></i></button>
+        <button type="button" pbutton (onClick)="goToday()" [class]="'flex-1 md:flex-none'" severity="secondary"><i class="pi pi-calendar"></i></button>
+        <button type="button" pbutton (onClick)="goNext()" [class]="'flex-1 md:flex-none'" severity="secondary"><i class="pi pi-chevron-right"></i></button>
     </div>
-    <div class="middle flex gap-2 items-center">
+    <div class="middle flex gap-2 items-center justify-center">
         <p class="m-0">{{ startDate() | date: 'dd MMM yyyy' }} - {{ endDate() | date: 'dd MMM yyyy' }}</p>
     </div>
     <div class="left flex gap-2 w-full md:w-auto">
-        <p-button type="button" label="Jour" (onClick)="viewDay()"></p-button>
-        <p-button type="button" label="Semaine" (onClick)="viewWeek()"></p-button>
-        <p-button type="button" label="Mois" (onClick)="viewMonth()"></p-button>
+        <button pbutton type="button" (onClick)="viewDay()" [class]="'flex-1 md:flex-none'">Jour</button>
+        <button pbutton type="button" (onClick)="viewWeek()" [class]="'flex-1 md:flex-none'">Semaine</button>
+        <button pbutton type="button" (onClick)="viewMonth()" [class]="'flex-1 md:flex-none'">Mois</button>
     </div>
 </div>
 <full-calendar [options]="calendarOptions()" #calendar [events]="sourceEvents()" class="h-full">

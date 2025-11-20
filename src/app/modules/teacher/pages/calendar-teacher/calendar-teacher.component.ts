@@ -16,12 +16,12 @@ import { SlotResponseDTO, TypeSlotResponseDTO } from '../../../../../api/models'
 import { CustomTableState } from '../../../../generic-components/smart-grid';
 import { UserMainService } from '../../../../shared/services/userMain.service';
 import { CalendarSetupService } from '../../../../shared/services/calendar-setup.service';
-import { Button } from 'primeng/button';
+import { Button, ButtonModule } from 'primeng/button';
 import { DatePipe } from '@angular/common';
 
 @Component({
     selector: 'app-calendar-teacher',
-    imports: [FullCalendarModule, ModalQuickInfosComponent, ModalCreateEditSlotComponent, Button, DatePipe],
+    imports: [FullCalendarModule, ModalQuickInfosComponent, ModalCreateEditSlotComponent, ButtonModule, DatePipe],
     templateUrl: './calendar-teacher.component.html',
     styleUrl: './calendar-teacher.component.scss'
 })
