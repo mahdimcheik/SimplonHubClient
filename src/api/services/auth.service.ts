@@ -10,7 +10,7 @@
 import { HttpClient, HttpContext, HttpContextToken, HttpEvent, HttpParams, HttpResponse } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { ForgotPasswordInput, LoginOutputDTOResponseDTO, ObjectResponseDTO, PasswordRecoveryInput, PasswordResetResponseDTOResponseDTO, RequestOptions, StringResponseDTO, UserCreateDTO, UserInfosWithtokenResponseDTO, UserLoginDTO, UserResponseDTOResponseDTO, UserUpdateDTO } from "../models";
+import { ForgotPasswordInput, LoginOutputDTOResponseDTO, ObjectResponseDTO, PasswordRecoveryInput, PasswordResetResponseDTOResponseDTO, RequestOptions, StringResponseDTO, UserCreateDTO, UserInfosWithtokenResponseDTO, UserLoginDTO, UserPublicReportResponseDTO, UserResponseDTOResponseDTO, UserUpdateDTO } from "../models";
 import { BASE_PATH_DEFAULT, CLIENT_CONTEXT_TOKEN_DEFAULT } from "../tokens";
 import { HttpParamsBuilder } from "../utils/http-params-builder";
 
@@ -141,6 +141,28 @@ export class AuthService {
     authPublicInformationsGet(userId?: string, observe?: 'events', options?: RequestOptions<'json'>): Observable<HttpEvent<UserResponseDTOResponseDTO>>;
     authPublicInformationsGet(userId?: string, observe?: 'body' | 'events' | 'response', options?: RequestOptions<'arraybuffer' | 'blob' | 'json' | 'text'>): Observable<any> {
         const url = `${this.basePath}/auth/public-informations`;
+
+        let params = new HttpParams();
+        if (userId != null) {
+            params = HttpParamsBuilder.addToHttpParams(params, userId, 'userId');
+        }
+
+        const requestOptions: any = {
+            observe: observe as any,
+            params,
+            reportProgress: options?.reportProgress,
+            withCredentials: options?.withCredentials,
+            context: this.createContextWithClientId(options?.context)
+        };
+
+        return this.httpClient.get(url, requestOptions);
+    }
+
+    authTeacherReportGet(userId?: string, observe?: 'body', options?: RequestOptions<'json'>): Observable<UserPublicReportResponseDTO>;
+    authTeacherReportGet(userId?: string, observe?: 'response', options?: RequestOptions<'json'>): Observable<HttpResponse<UserPublicReportResponseDTO>>;
+    authTeacherReportGet(userId?: string, observe?: 'events', options?: RequestOptions<'json'>): Observable<HttpEvent<UserPublicReportResponseDTO>>;
+    authTeacherReportGet(userId?: string, observe?: 'body' | 'events' | 'response', options?: RequestOptions<'arraybuffer' | 'blob' | 'json' | 'text'>): Observable<any> {
+        const url = `${this.basePath}/auth/teacher-report`;
 
         let params = new HttpParams();
         if (userId != null) {

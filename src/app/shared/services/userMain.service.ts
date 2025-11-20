@@ -37,6 +37,8 @@ import {
     UserInfosWithtoken,
     UserInfosWithtokenResponseDTO,
     UserLoginDTO,
+    UserPublicReport,
+    UserPublicReportResponseDTO,
     UserResponseDTO,
     UserResponseDTOResponseDTO,
     UserUpdateDTO
@@ -282,6 +284,22 @@ export class UserMainService {
                         message: response.message || '',
                         status: response.status || 200,
                         data: response.data as UserResponseDTO
+                    };
+                    return of(legacyResponse);
+                })
+            )
+        );
+        return response;
+    }
+
+    async GetPublicReport(userId: string) {
+        const response = await firstValueFrom(
+            this.authService.authTeacherReportGet(userId).pipe(
+                switchMap((response: UserPublicReportResponseDTO) => {
+                    const legacyResponse: ResponseDTO<UserPublicReport> = {
+                        message: response.message || '',
+                        status: response.status || 200,
+                        data: response.data as UserPublicReport
                     };
                     return of(legacyResponse);
                 })

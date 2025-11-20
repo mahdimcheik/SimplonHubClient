@@ -7,41 +7,10 @@
     </div>
 
     <div class="right-side min-w-[300px] space-y-4">
-        <app-smart-section [title]="'Quick Stats'">
+        <app-public-report></app-public-report>
+        <app-smart-section [title]="'Langues'">
             <ng-template #main>
-                <div class="grid grid-cols-1 gap-3">
-                    <div class="bg-blue-50 p-4 rounded-lg">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="text-2xl font-bold text-blue-600">24</p>
-                                <p class="text-sm text-gray-600">Students</p>
-                            </div>
-                            <i class="pi pi-users text-blue-600 text-2xl"></i>
-                        </div>
-                    </div>
-                    <div class="bg-green-50 p-4 rounded-lg">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="text-2xl font-bold text-green-600">12</p>
-                                <p class="text-sm text-gray-600">Classes</p>
-                            </div>
-                            <i class="pi pi-book text-green-600 text-2xl"></i>
-                        </div>
-                    </div>
-                    <div class="bg-purple-50 p-4 rounded-lg">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="text-2xl font-bold text-purple-600">8</p>
-                                <p class="text-sm text-gray-600">Assignments</p>
-                            </div>
-                            <i class="pi pi-file-edit text-purple-600 text-2xl"></i>
-                        </div>
-                    </div>
-                    <div class="p-4 rounded-lg">
-                        <label class="text-sm font-semibold text-gray-600 dark:text-gray-50">Langues</label>
-                        <app-chips-list [chips]="languages()"></app-chips-list>
-                    </div>
-                </div>
+                <app-chips-list [chips]="languages()"></app-chips-list>
             </ng-template>
         </app-smart-section>
     </div>

@@ -113,6 +113,8 @@ export class PersonnalInfosComponent implements OnInit {
             // charger les langues et langages de programmation de l'utilisateur
             await this.languagesService.getLanguageByUserId(this.userId());
             await this.languagesService.getProgrammingLanguageByUserId(this.userId());
+            // charger le rapport public de l'utilisateur
+            // await this.userservice.tea(this.userId());
 
             // charger les categories et les niveaux de cursus
             await this.cursusService.loadAllCategories();

@@ -1,0 +1,9 @@
+<app-smart-section [title]="'Quick Stats'">
+    <ng-template #main>
+        <div class="grid grid-cols-1 gap-3">
+            <app-smart-kpi [title]="'Students'" [result]="'24'" [icon]="'pi pi-users'" styleClass="bg-blue-50 text-blue-600"></app-smart-kpi>
+            <app-smart-kpi [title]="'Créneaux libres'" [result]="report()?.freeSlotsCount?.toString() ?? 'Aucune donnée'" [icon]="'pi pi-calendar text-purple-600 text-2xl'" styleClass="bg-green-50 text-green-600"></app-smart-kpi>
+            <app-smart-kpi [title]="'Réservations assurées'" [result]="report()?.givenBookingsCount?.toString() ?? 'Aucune donnée'" [icon]="'pi pi-check'" styleClass="bg-yellow-50 text-yellow-600"></app-smart-kpi>
+        </div>
+    </ng-template>
+</app-smart-section>
