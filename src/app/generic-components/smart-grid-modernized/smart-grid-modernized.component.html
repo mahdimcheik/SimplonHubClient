@@ -226,6 +226,12 @@
         @for (item of data(); track $index) {
             <ng-container *ngComponentOutlet="lineItemComponent() ?? null; inputs: { data: item, params: itemRendererComponentParams() }" />
         }
+        @if (data().length === 0) {
+            <div class="flex flex-col items-center gap-2 justify-center w-full" [style]="{minHeight: `${heightNumber() - 190 }px`}">
+                <i class="pi pi-inbox text-4xl text-gray-400"></i>
+                <p class="text-gray-500">Pas de données.</p>
+            </div>
+        }
     </div>
     <div class="flex justify-center bg-white p-4 rounded-md dark:bg-gray-800">
         <p-paginator (onPageChange)="onPageChange($event)" [first]="tableState().first" [rows]="tableState().rows" [totalRecords]="totalRecords()" [rowsPerPageOptions]="[10, 20, 30]" />

@@ -1,5 +1,5 @@
 <div class="table-container h-full">
-    <div class="flex flex-row items-center justify-between bg-white p-2 rounded-t-md dark:bg-gray-800">
+    <div class="flex flex-row items-center justify-between bg-white p-2 rounded-t-md dark:bg-gray-800 mb-2">
         <div class="flex items-center gap-2">
             <h3 class="text-lg font-semibold">{{ title() || 'Données' }}</h3>
             @if (leftContent()) {
@@ -13,7 +13,7 @@
             <input pInputText type="text" placeholder="Rechercher..." [value]="searchValue()" (input)="onSearchChange($event)" />
         </div>
     </div>
-    <div class="content h-full flex flex-col justify-between" [style]="`height: calc(100dvh - ${heightToSubtractPx()})`">
+    <div class="content h-full flex flex-col justify-between" [style]="`height:  ${height()} `">
         <p-table
             #dt
             [value]="data()"
@@ -184,7 +184,7 @@
             <ng-template pTemplate="emptymessage">
                 <tr>
                     <td [attr.colspan]="columns().length" class="text-center p-4">
-                        <div class="flex flex-col items-center gap-2">
+                        <div class="flex flex-col items-center gap-2 justify-center" [style]="{minHeight: `${heightNumber() - 160 }px`}">
                             <i class="pi pi-inbox text-4xl text-gray-400"></i>
                             <p class="text-gray-500">Pas de données.</p>
                         </div>

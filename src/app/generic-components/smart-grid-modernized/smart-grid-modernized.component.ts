@@ -1,4 +1,4 @@
-import { Component, effect, input, model, OnInit, output, signal, Type } from '@angular/core';
+import { Component, computed, effect, input, model, OnInit, output, signal, Type } from '@angular/core';
 import { CustomTableState, DATE_FILTER_MATCH_MODES, DynamicColDef, ICellRendererAngularComp, INITIAL_STATE, SortCriterion, SortOrder } from '../../shared/models/TableColumn ';
 import { ActionButtonRendererComponent } from '../smart-grid/default-component';
 import { InputTextModule } from 'primeng/inputtext';
@@ -26,6 +26,7 @@ export class SmartGridModernizedComponent<T extends Record<string, any>> impleme
     totalRecords = model<number>(0);
     loading = model(false);
     height = input<string>('1000px');
+    heightNumber = computed(() => parseInt(this.height().replace('px', ''), 10));
     title = input<string>('');
     storageName = input<string>('');
     searchValue = signal<string>('');
