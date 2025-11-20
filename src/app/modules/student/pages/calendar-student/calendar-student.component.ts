@@ -21,11 +21,12 @@ import { ModalBookUnbookComponent } from '../../../../generic-components/modal-b
 import { BaseModalComponent } from '../../../../generic-components/base-modal/base-modal.component';
 import { DividerModule } from 'primeng/divider';
 import { ModalQuickInfosComponent } from '../../../../generic-components/modal-quick-infos/modal-quick-infos.component';
-import { DatePipe } from '@angular/common';
+import { DatePipe, TitleCasePipe } from '@angular/common';
+import { Button } from 'primeng/button';
 
 @Component({
     selector: 'app-calendar-student',
-    imports: [FullCalendarModule, ModalBookUnbookComponent, ModalQuickInfosComponent, DividerModule],
+    imports: [FullCalendarModule, ModalBookUnbookComponent, ModalQuickInfosComponent, DividerModule, Button, DatePipe, TitleCasePipe],
     templateUrl: './calendar-student.component.html',
     styleUrl: './calendar-student.component.scss'
 })
@@ -48,6 +49,7 @@ export class CalendarStudentComponent implements OnInit {
     startDate = signal<Date | null>(null);
     endDate = signal<Date | null>(null);
     teacherId = signal<string | null>(null);
+    teacherInfo = signal<any>(null);
 
     sourceEvents = signal<EventInput[]>([]);
 
@@ -148,6 +150,7 @@ export class CalendarStudentComponent implements OnInit {
 
             if (teacherId) {
                 this.teacherId.set(teacherId);
+                this.loadTeacher();
             } else {
                 this.teacherId.set(null);
             }
@@ -179,11 +182,39 @@ export class CalendarStudentComponent implements OnInit {
         this.sourceEvents.set(events);
     }
 
+    // Teacher
+    async loadTeacher() {
+        if (this.teacherId()) {
+            const response = await this.userMainService.getPublicInformations(this.teacherId()!);
+            this.teacherInfo.set(response.data);
+        }
+    }
+
     editEvent() {
         this.selectedEvent.set(this.selectedEvent() as EventInput);
     }
     openEditModal() {
         this.quickInfosVisible.set(false);
         this.bookUnbookVisible.set(true);
+    }
+
+    // api
+    goNext() {
+        this.calendarApi()?.next();
+    }
+    goPrev() {
+        this.calendarApi()?.prev();
+    }
+    goToday() {
+        this.calendarApi()?.today();
+    }
+    viewDay() {
+        this.calendarApi()?.changeView('timeGridDay');
+    }
+    viewWeek() {
+        this.calendarApi()?.changeView('timeGridWeek');
+    }
+    viewMonth() {
+        this.calendarApi()?.changeView('dayGridMonth');
     }
 }

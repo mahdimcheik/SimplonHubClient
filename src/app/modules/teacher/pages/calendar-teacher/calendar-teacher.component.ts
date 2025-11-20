@@ -16,10 +16,12 @@ import { SlotResponseDTO, TypeSlotResponseDTO } from '../../../../../api/models'
 import { CustomTableState } from '../../../../generic-components/smart-grid';
 import { UserMainService } from '../../../../shared/services/userMain.service';
 import { CalendarSetupService } from '../../../../shared/services/calendar-setup.service';
+import { Button } from 'primeng/button';
+import { DatePipe } from '@angular/common';
 
 @Component({
     selector: 'app-calendar-teacher',
-    imports: [FullCalendarModule, ModalQuickInfosComponent, ModalCreateEditSlotComponent],
+    imports: [FullCalendarModule, ModalQuickInfosComponent, ModalCreateEditSlotComponent, Button, DatePipe],
     templateUrl: './calendar-teacher.component.html',
     styleUrl: './calendar-teacher.component.scss'
 })
@@ -178,21 +180,28 @@ export class CalendarTeacherComponent implements OnInit {
         console.log('events ', events);
 
         this.sourceEvents.set(events);
-        // this.sourceEvents.set(
-        //     slots.map((slot) => ({
-        //         title: slot?.type?.name ?? '',
-        //         start: slot.dateFrom,
-        //         end: slot.dateTo,
-        //         extendedProps: {
-        //             slot: slot,
-        //             passed: new Date(slot.dateFrom) < new Date(),
-        //             upcoming: new Date(slot.dateFrom) > new Date()
-        //         }
-        //     }))
-        // );
     }
     editEvent() {
         this.selectedEvent.set(this.selectedEvent() as EventInput);
         this.createEventVisible.set(true);
+    }
+    // api
+    goNext() {
+        this.calendarApi()?.next();
+    }
+    goPrev() {
+        this.calendarApi()?.prev();
+    }
+    goToday() {
+        this.calendarApi()?.today();
+    }
+    viewDay() {
+        this.calendarApi()?.changeView('timeGridDay');
+    }
+    viewWeek() {
+        this.calendarApi()?.changeView('timeGridWeek');
+    }
+    viewMonth() {
+        this.calendarApi()?.changeView('dayGridMonth');
     }
 }

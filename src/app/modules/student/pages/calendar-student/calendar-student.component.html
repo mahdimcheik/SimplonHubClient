@@ -1,4 +1,23 @@
-<full-calendar [options]="calendarOptions()" #calendar class="h-full" [events]="sourceEvents()">
+<div class="flex flex-col justify-between w-full md:flex-row">
+    <div class="right flex gap-2">
+        <p-button type="button" icon="pi pi-chevron-left" (onClick)="goPrev()"></p-button>
+        <p-button type="button" icon="pi pi-calendar" (onClick)="goToday()"></p-button>
+
+        <p-button type="button" icon="pi pi-chevron-right" (onClick)="goNext()"></p-button>
+    </div>
+    <div class="middle flex gap-2 items-center">
+        <p class="m-0">{{ startDate() | date: 'dd MMM yyyy' }} - {{ endDate() | date: 'dd MMM yyyy' }}</p>
+        @if (teacherInfo()) {
+            <p class="m-0 font-semibold">({{ teacherInfo().firstName + ' ' + teacherInfo().lastName | titlecase }})</p>
+        }
+    </div>
+    <div class="left flex gap-2">
+        <p-button type="button" label="Jour" (onClick)="viewDay()"></p-button>
+        <p-button type="button" label="Semaine" (onClick)="viewWeek()"></p-button>
+        <p-button type="button" label="Mois" (onClick)="viewMonth()"></p-button>
+    </div>
+</div>
+<full-calendar [options]="calendarOptions()" #calendar class="h-full !p-0" [events]="sourceEvents()">
     <ng-template #eventContent let-arg>
         @let slot = arg.event.extendedProps?.slot;
         <div
