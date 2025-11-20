@@ -32,9 +32,10 @@ export class SmartGridComponent<T extends Record<string, any>> implements OnInit
     columns = model.required<DynamicColDef[]>();
     searchValue = signal<string>('');
     height = input<string>('1000px');
+    heightNumber = computed(() => parseInt(this.height().replace('px', ''), 10));
     editMode = model<boolean>(false);
     storageName = input<string>('');
-    heightToSubtractPx = input<string>('185px');
+    // heightToSubtractPx = input<string>('185px');
     // Content children
     rightContent = contentChild<TemplateRef<any>>('right');
     leftContent = contentChild<TemplateRef<any>>('left');
