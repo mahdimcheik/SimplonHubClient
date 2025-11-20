@@ -22,11 +22,11 @@ import { BaseModalComponent } from '../../../../generic-components/base-modal/ba
 import { DividerModule } from 'primeng/divider';
 import { ModalQuickInfosComponent } from '../../../../generic-components/modal-quick-infos/modal-quick-infos.component';
 import { DatePipe, TitleCasePipe } from '@angular/common';
-import { Button } from 'primeng/button';
+import { Button, ButtonModule } from 'primeng/button';
 
 @Component({
     selector: 'app-calendar-student',
-    imports: [FullCalendarModule, ModalBookUnbookComponent, ModalQuickInfosComponent, DividerModule, Button, DatePipe, TitleCasePipe],
+    imports: [FullCalendarModule, ModalBookUnbookComponent, ModalQuickInfosComponent, DividerModule, ButtonModule, DatePipe, TitleCasePipe],
     templateUrl: './calendar-student.component.html',
     styleUrl: './calendar-student.component.scss'
 })
