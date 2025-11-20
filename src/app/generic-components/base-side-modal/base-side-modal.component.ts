@@ -21,14 +21,20 @@ export class BaseSideModalComponent {
     title = input<string>('Titre');
     iconClass = input<string>('pi pi-info-circle');
     position = input<'left' | 'right' | 'top' | 'bottom'>('right');
-    width = signal<string>(window.innerWidth < 768 ? '100vw' : '50vw');
+    // width = signal<string>(window.innerWidth < 768 ? '100vw' : '50vw');
+    widthClass = signal<string>(window.innerWidth < 768 ? '!w-[100vw]' : '!w-[50vw]');
 
     constructor() {
         this.breakPointservice
             .observe([Breakpoints.Small, Breakpoints.Medium, Breakpoints.Large, Breakpoints.XLarge])
             .pipe(takeUntilDestroyed(this.destroyRef))
             .subscribe((result) => {
-                this.width.set(result.breakpoints[Breakpoints.Medium] ? '100vw' : '50vw');
+                if (result.breakpoints[Breakpoints.Small]) {
+                    this.widthClass.set('!w-[100vw]');
+                } else {
+                    this.widthClass.set('!w-[50vw]');
+                }
+                // this.width.set(result.breakpoints[Breakpoints.Medium] ? '100vw' : '50vw');
             });
     }
 

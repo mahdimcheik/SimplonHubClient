@@ -13,7 +13,7 @@
             <input pInputText type="text" placeholder="Rechercher..." [value]="searchValue()" (input)="onSearchChange($event)" />
         </div>
     </div>
-    <div class="content h-full flex flex-col justify-between" [style]="`height: calc(100vh - ${heightToSubtractPx()})`">
+    <div class="content h-full flex flex-col justify-between" [style]="`height: calc(100dvh - ${heightToSubtractPx()})`">
         <p-table
             #dt
             [value]="data()"
