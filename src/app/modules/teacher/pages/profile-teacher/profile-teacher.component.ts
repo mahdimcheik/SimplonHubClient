@@ -11,10 +11,12 @@ import { LanguageResponseDTO } from '../../../../../api';
 import { CursusesListComponent } from '../../../../generic-components/cursuses-list/cursuses-list.component';
 import { LanguagesMainService } from '../../../../shared/services/languages.store.service';
 import { UserMainService } from '../../../../shared/services/userMain.service';
+import { SmartKpiComponent } from '../../../../generic-components/smart-kpi/smart-kpi.component';
+import { PublicReportComponent } from '../../../../generic-components/public-report/public-report.component';
 
 @Component({
     selector: 'app-profile-teacher',
-    imports: [SmartSectionComponent, ButtonModule, FormationsListComponent, AddressesListComponent, PersonnalInfosComponent, ChipsListComponent, CursusesListComponent],
+    imports: [SmartSectionComponent, ButtonModule, FormationsListComponent, AddressesListComponent, PersonnalInfosComponent, ChipsListComponent, CursusesListComponent, SmartKpiComponent, PublicReportComponent],
     templateUrl: './profile-teacher.component.html',
     styleUrl: './profile-teacher.component.scss'
 })

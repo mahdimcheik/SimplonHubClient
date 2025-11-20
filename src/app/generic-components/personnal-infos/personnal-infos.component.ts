@@ -113,7 +113,6 @@ export class PersonnalInfosComponent implements OnInit {
             // charger les langues et langages de programmation de l'utilisateur
             await this.languagesService.getLanguageByUserId(this.userId());
             await this.languagesService.getProgrammingLanguageByUserId(this.userId());
-
             // charger les categories et les niveaux de cursus
             await this.cursusService.loadAllCategories();
             await this.cursusService.loadAllLevels();
@@ -140,6 +139,7 @@ export class PersonnalInfosComponent implements OnInit {
             await firstValueFrom(this.userservice.updatePersonnalInfos(updatedUser));
 
             // recharger les infos de l'utilisateur
+            await this.loadUserData();
             await this.languagesService.getLanguageByUserId(this.user().id);
             await this.languagesService.getProgrammingLanguageByUserId(this.user().id);
             //fermer le popup

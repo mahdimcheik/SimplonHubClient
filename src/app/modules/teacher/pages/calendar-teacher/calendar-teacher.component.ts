@@ -1,4 +1,4 @@
-import { Component, computed, inject, input, model, OnInit, output, signal, viewChild } from '@angular/core';
+import { Component, computed, DestroyRef, inject, input, model, OnInit, output, signal, viewChild } from '@angular/core';
 import { CalendarApi, CalendarOptions, DateSelectArg, DateSpanApi, EventClickArg, EventDropArg, EventInput, DatesSetArg } from '@fullcalendar/core/index.js';
 import { FullCalendarComponent, FullCalendarModule } from '@fullcalendar/angular';
 import dayGridPlugin from '@fullcalendar/daygrid';
@@ -16,10 +16,14 @@ import { SlotResponseDTO, TypeSlotResponseDTO } from '../../../../../api/models'
 import { CustomTableState } from '../../../../generic-components/smart-grid';
 import { UserMainService } from '../../../../shared/services/userMain.service';
 import { CalendarSetupService } from '../../../../shared/services/calendar-setup.service';
+import { Button, ButtonModule } from 'primeng/button';
+import { DatePipe } from '@angular/common';
+import { BreakpointObserver } from '@angular/cdk/layout';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
     selector: 'app-calendar-teacher',
-    imports: [FullCalendarModule, ModalQuickInfosComponent, ModalCreateEditSlotComponent],
+    imports: [FullCalendarModule, ModalQuickInfosComponent, ModalCreateEditSlotComponent, ButtonModule, DatePipe],
     templateUrl: './calendar-teacher.component.html',
     styleUrl: './calendar-teacher.component.scss'
 })
@@ -28,7 +32,9 @@ export class CalendarTeacherComponent implements OnInit {
     slotMainService = inject(SlotMainService);
     selectedEvent = signal<EventInput>({});
     userMainService = inject(UserMainService);
+    breakpointService = inject(BreakpointObserver);
     calendarSetupService = inject(CalendarSetupService);
+    destroyRef = inject(DestroyRef);
     user = this.userMainService.userConnected;
 
     quickInfosVisible = signal(false);
@@ -161,6 +167,17 @@ export class CalendarTeacherComponent implements OnInit {
 
     ngOnInit(): void {}
 
+    ngAfterViewInit(): void {
+        this.breakpointService
+            .observe(['(max-width: 767px)'])
+            .pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe((result: any) => {
+                if (result.matches) {
+                    this.viewDay();
+                }
+            });
+    }
+
     async loadData() {
         const slots = await this.slotMainService.getAllSlots(this.filters());
         const events = slots.map((slot) => {
@@ -178,21 +195,28 @@ export class CalendarTeacherComponent implements OnInit {
         console.log('events ', events);
 
         this.sourceEvents.set(events);
-        // this.sourceEvents.set(
-        //     slots.map((slot) => ({
-        //         title: slot?.type?.name ?? '',
-        //         start: slot.dateFrom,
-        //         end: slot.dateTo,
-        //         extendedProps: {
-        //             slot: slot,
-        //             passed: new Date(slot.dateFrom) < new Date(),
-        //             upcoming: new Date(slot.dateFrom) > new Date()
-        //         }
-        //     }))
-        // );
     }
     editEvent() {
         this.selectedEvent.set(this.selectedEvent() as EventInput);
         this.createEventVisible.set(true);
+    }
+    // api
+    goNext() {
+        this.calendarApi()?.next();
+    }
+    goPrev() {
+        this.calendarApi()?.prev();
+    }
+    goToday() {
+        this.calendarApi()?.today();
+    }
+    viewDay() {
+        this.calendarApi()?.changeView('timeGridDay');
+    }
+    viewWeek() {
+        this.calendarApi()?.changeView('timeGridWeek');
+    }
+    viewMonth() {
+        this.calendarApi()?.changeView('dayGridMonth');
     }
 }

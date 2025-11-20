@@ -27,8 +27,8 @@ export class CalendarSetupService {
     height = signal<number>(1000);
 
     headerToolbar = signal<ToolbarInput>({
-        left: 'prev,next today',
-        center: 'title',
-        right: 'dayGridMonth,timeGridWeek,timeGridDay'
+        left: '',
+        center: '',
+        right: ''
     });
 }

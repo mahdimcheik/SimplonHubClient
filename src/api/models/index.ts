@@ -1378,6 +1378,19 @@ export interface UserProgrammingLanguageDTO {
     programmingLanguageId: string;
 }
 
+export interface UserPublicReport {
+    freeSlotsCount?: number;
+    givenBookingsCount?: number;
+    studentsCount?: number;
+}
+
+export interface UserPublicReportResponseDTO {
+    message: string;
+    status: number;
+    data?: UserPublicReport;
+    count?: number | null;
+}
+
 export interface UserResponseDTO {
     id: string;
     firstName: string;
