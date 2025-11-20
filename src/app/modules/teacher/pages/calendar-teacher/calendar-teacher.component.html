@@ -4,8 +4,8 @@
         <div
             class="custom-event w-full h-full flex flex-col border border-2 relative"
             [style.backgroundColor]="arg.event.extendedProps.slot?.type?.color ?? 'yellow'"
-            [class.border-blue-500]="arg.event.extendedProps.passed ?? false"
-            [class.border-green-500]="arg.event.extendedProps.upcoming ?? false"
+            [class.border-blue-100]="arg.event.extendedProps.passed ?? false"
+            [class.border-green-100]="arg.event.extendedProps.upcoming ?? false"
         >
             <strong class="w-full text-center h-[20px] border-b border-white rounded-t-md px-2 !text-teal-800 py-1">{{ arg.event.title }}</strong
             ><br />

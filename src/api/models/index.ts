@@ -1381,6 +1381,7 @@ export interface UserProgrammingLanguageDTO {
 export interface UserPublicReport {
     freeSlotsCount?: number;
     givenBookingsCount?: number;
+    studentsCount?: number;
 }
 
 export interface UserPublicReportResponseDTO {

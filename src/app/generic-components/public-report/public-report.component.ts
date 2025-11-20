@@ -28,7 +28,7 @@ export class PublicReportComponent {
     private async loadUserData() {
         try {
             const userId = this.activatedRoute.snapshot.params['id'];
-            const response = await this.userservice.GetPublicReport(userId);
+            const response = await this.userservice.GetPublicReport(userId && userId != 'me' ? userId : this.userservice.userConnected().id);
             this.report.set(response.data);
         } catch {}
     }
