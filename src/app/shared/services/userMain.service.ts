@@ -363,6 +363,7 @@ export class UserMainService {
         this.userConnected.set({} as UserResponseDTO);
         this.token.set('');
     }
+
     async logout(): Promise<void> {
         this.reset();
         await firstValueFrom(
