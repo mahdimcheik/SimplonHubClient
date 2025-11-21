@@ -1,13 +1,13 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { HeroWidget } from '../../components/herowidget/herowidget';
-import { FeaturesWidget } from '../../components/features/featureswidget';
-import { HighlightsWidget } from '../../components/highlight/highlightswidget';
-import { RippleModule } from 'primeng/ripple';
-import { StyleClassModule } from 'primeng/styleclass';
 import { ButtonModule } from 'primeng/button';
 import { DividerModule } from 'primeng/divider';
+import { RippleModule } from 'primeng/ripple';
+import { StyleClassModule } from 'primeng/styleclass';
 import { UserMainService } from '../../../../shared/services/userMain.service';
+import { FeaturesWidget } from '../../components/features/featureswidget';
+import { HeroWidget } from '../../components/herowidget/herowidget';
+import { HighlightsWidget } from '../../components/highlight/highlightswidget';
 
 @Component({
     selector: 'app-main',
@@ -21,6 +21,8 @@ export class MainComponent implements OnInit {
 
     constructor() {}
     ngOnInit(): void {
-        this.userService.getprofile().subscribe();
+        if (!this.userService.token() || !this.userService.userConnected().id) {
+            this.userService.refreshToken().subscribe();
+        }
     }
 }

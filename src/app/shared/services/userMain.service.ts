@@ -1,14 +1,12 @@
-import { Injectable, computed, effect, inject, signal, untracked } from '@angular/core';
-import { catchError, firstValueFrom, map, Observable, of, switchMap, tap } from 'rxjs';
-import { MenuItem, MessageService } from 'primeng/api';
+import { computed, effect, inject, Injectable, signal, untracked } from '@angular/core';
 import { Router } from '@angular/router';
+import { MenuItem, MessageService } from 'primeng/api';
+import { catchError, firstValueFrom, map, Observable, of, switchMap, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { LocalstorageService } from './localstorage.service';
 // import { SSEMainService } from './sseMain.service';
 
 // Generated services and models
-import { CookieConsentService } from './cookie-consent.service';
-import { EnumGender, GenderDropDown } from '../../shared/models/user';
 import {
     AuthService,
     ForgotPasswordInput,
@@ -44,8 +42,8 @@ import {
     UserUpdateDTO
 } from '../../../api';
 import { ResponseDTO } from '../models/response-dto';
-import { BrowserModule } from '@angular/platform-browser';
 import { CustomTableState } from '../models/TableColumn ';
+import { CookieConsentService } from './cookie-consent.service';
 
 /**
  * service pour gérer les utilisateurs.
@@ -85,6 +83,8 @@ export class UserMainService {
 
     refreshAccessToken = signal<string | null>(null);
     token = signal<string>('');
+    allLanguages = signal<LanguageResponseDTO[]>([]);
+    allAccountStatuses = signal<StatusAccountDTO[]>([]);
 
     constructor() {
         effect(() => {
@@ -151,26 +151,34 @@ export class UserMainService {
             }
 
             const untrackedUser = untracked(this.userConnected);
+            console.log(untrackedUser.roles);
+
             if (untrackedUser.email) {
                 this.authNavItems.set([
                     {
                         label: 'Profil',
-                        icon: 'pi pi-user'
+                        icon: 'pi pi-user',
+                        routerLink: untrackedUser.roles.find((role) => role.name.toLowerCase() === 'teacher'.toLowerCase()) ? ['/teacher/profile/me'] : ['/student/profile/me']
                     },
                     {
                         label: 'Déconnexion',
-                        icon: 'pi pi-sign-out'
+                        icon: 'pi pi-sign-out',
+                        command: () => {
+                            this.logout();
+                        }
                     }
                 ]);
             } else {
                 this.authNavItems.set([
                     {
                         label: 'Se connecter',
-                        icon: 'pi pi-sign-in'
+                        icon: 'pi pi-sign-in',
+                        routerLink: ['/auth/login']
                     },
                     {
                         label: "S'inscrire",
-                        icon: 'pi pi-user-plus'
+                        icon: 'pi pi-user-plus',
+                        routerLink: ['/auth/register']
                     }
                 ]);
             }
@@ -357,6 +365,7 @@ export class UserMainService {
         this.userConnected.set({} as UserResponseDTO);
         this.token.set('');
     }
+
     async logout(): Promise<void> {
         this.reset();
         await firstValueFrom(
@@ -394,6 +403,13 @@ export class UserMainService {
 
     // status account
     getStatusAccount(CustomTableState: CustomTableState): Observable<ResponseDTO<StatusAccountDTO[]>> {
+        if (this.allAccountStatuses().length > 0) {
+            return of({
+                message: 'Account statuses fetched from cache',
+                status: 200,
+                data: this.allAccountStatuses()
+            });
+        }
         return this.statusAccountService.statusaccountAllPost(CustomTableState).pipe(
             switchMap((response: StatusAccountResponseDTOListResponseDTO) => {
                 const legacyResponse: ResponseDTO<StatusAccountDTO[]> = {
@@ -401,6 +417,7 @@ export class UserMainService {
                     status: response.status || 200,
                     data: response.data as StatusAccountDTO[]
                 };
+                this.allAccountStatuses.set(legacyResponse.data ?? []);
                 return of(legacyResponse);
             })
         );
@@ -458,6 +475,13 @@ export class UserMainService {
     }
     // languages
     getLanguages(CustomTableState: CustomTableState): Observable<ResponseDTO<LanguageResponseDTO[]>> {
+        if (this.allLanguages().length > 0) {
+            return of({
+                message: 'Languages fetched from cache',
+                status: 200,
+                data: this.allLanguages()
+            });
+        }
         return this.languageService.languagesAllPost(CustomTableState).pipe(
             switchMap((response: LanguageResponseDTOListResponseDTO) => {
                 const legacyResponse: ResponseDTO<LanguageResponseDTO[]> = {
@@ -465,6 +489,7 @@ export class UserMainService {
                     status: response.status || 200,
                     data: response.data as LanguageResponseDTO[]
                 };
+                this.allLanguages.set(legacyResponse.data ?? []);
                 return of(legacyResponse);
             })
         );

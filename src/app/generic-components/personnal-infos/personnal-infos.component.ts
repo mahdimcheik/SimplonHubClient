@@ -1,20 +1,20 @@
+import { TitleCasePipe } from '@angular/common';
 import { Component, computed, DestroyRef, inject, linkedSignal, model, OnInit, signal } from '@angular/core';
-import { SmartSectionComponent } from '../smart-section/smart-section.component';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { FormGroup } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { MessageService } from 'primeng/api';
 import { Image } from 'primeng/image';
+import { firstValueFrom } from 'rxjs';
 import { UserResponseDTO, UserUpdateDTO } from '../../../api';
+import { CursusesMainService } from '../../shared/services/cursuses-main.service';
+import { LanguagesMainService } from '../../shared/services/languages.store.service';
+import { UserMainService } from '../../shared/services/userMain.service';
+import { BaseSideModalComponent } from '../base-side-modal/base-side-modal.component';
 import { ChipsListComponent } from '../chips-list/chips-list.component';
 import { ConfigurableFormComponent } from '../configurable-form/configurable-form.component';
 import { Structure } from '../configurable-form/related-models';
-import { LanguagesMainService } from '../../shared/services/languages.store.service';
-import { UserMainService } from '../../shared/services/userMain.service';
-import { firstValueFrom } from 'rxjs';
-import { FormGroup } from '@angular/forms';
-import { MessageService } from 'primeng/api';
-import { CursusesMainService } from '../../shared/services/cursuses-main.service';
-import { ActivatedRoute } from '@angular/router';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { TitleCasePipe } from '@angular/common';
-import { BaseSideModalComponent } from '../base-side-modal/base-side-modal.component';
+import { SmartSectionComponent } from '../smart-section/smart-section.component';
 
 @Component({
     selector: 'app-personnal-infos',
@@ -99,7 +99,6 @@ export class PersonnalInfosComponent implements OnInit {
                 this.userId.set(teacherId);
                 this.editMode.set(false);
             }
-            var userId = this.userId();
             this.loadUserData();
         });
     }
@@ -114,8 +113,10 @@ export class PersonnalInfosComponent implements OnInit {
             await this.languagesService.getLanguageByUserId(this.userId());
             await this.languagesService.getProgrammingLanguageByUserId(this.userId());
             // charger les categories et les niveaux de cursus
-            await this.cursusService.loadAllCategories();
-            await this.cursusService.loadAllLevels();
+            if (this.editMode()) {
+                await this.cursusService.loadAllCategories();
+                await this.cursusService.loadAllLevels();
+            }
         } catch {}
     }
 
