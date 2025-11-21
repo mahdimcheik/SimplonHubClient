@@ -41,7 +41,14 @@
         <p-divider layout="horizontal" type="solid" [style]="{width:'100%'}"></p-divider>
         @for(item of authItems(); track $index) {
         <li>
-            <a [routerLink]="item.routerLink" pRipple class="px-0 py-4 text-surface-900 dark:text-surface-0 font-medium text-xl menu-link" routerLinkActive="active-route" [routerLinkActiveOptions]="{ exact: false }">
+            <a
+                [routerLink]="item.routerLink ?? ''"
+                (click)="excuteCommand(item)"
+                pRipple
+                class="px-0 py-4 text-surface-900 dark:text-surface-0 font-medium text-xl menu-link"
+                routerLinkActive="active-route"
+                [routerLinkActiveOptions]="{ exact: false }"
+            >
                 <i [ngClass]="'pi pi-home'" class="layout-menuitem-icon"></i>
                 <span class="layout-menuitem-text">{{item.label}}</span>
             </a>

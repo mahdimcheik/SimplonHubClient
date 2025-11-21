@@ -1,22 +1,20 @@
 import { Component, inject, signal, ViewChild } from '@angular/core';
-import { StyleClassModule } from 'primeng/styleclass';
 import { Router, RouterModule } from '@angular/router';
-import { RippleModule } from 'primeng/ripple';
 import { ButtonModule } from 'primeng/button';
+import { RippleModule } from 'primeng/ripple';
+import { StyleClassModule } from 'primeng/styleclass';
 import { LayoutService } from '../../../../layout/service/layout.service';
 import { UserMainService } from '../../../../shared/services/userMain.service';
 
-import { LocalstorageService } from '../../../../shared/services/localstorage.service';
-import { AvatarModule } from 'primeng/avatar';
-import { MenuModule } from 'primeng/menu';
-import { MenuItem } from 'primeng/api';
-import { Menu } from 'primeng/menu';
-import { TooltipModule } from 'primeng/tooltip';
 import { CommonModule } from '@angular/common';
-import { DrawerModule } from 'primeng/drawer';
-import { BaseSideModalComponent } from '../../../../generic-components/base-side-modal/base-side-modal.component';
-import { MenubarModule } from 'primeng/menubar';
+import { MenuItem } from 'primeng/api';
+import { AvatarModule } from 'primeng/avatar';
 import { Divider } from 'primeng/divider';
+import { DrawerModule } from 'primeng/drawer';
+import { Menu, MenuModule } from 'primeng/menu';
+import { MenubarModule } from 'primeng/menubar';
+import { TooltipModule } from 'primeng/tooltip';
+import { LocalstorageService } from '../../../../shared/services/localstorage.service';
 
 @Component({
     selector: 'topbar-widget',
@@ -45,16 +43,9 @@ export class TopbarWidget {
         this.mobileMenuVisible.update((v) => !v);
     }
 
-    toggleMenu(event: Event) {
-        this.menu.toggle(event);
-    }
-
-    goToProfile() {
-        this.router.navigate(['/profile/me']);
-    }
-
-    logout() {
-        // this.authService.logout();
-        this.router.navigate(['/auth/login']);
+    excuteCommand(item: MenuItem) {
+        if (item.command) {
+            item.command({});
+        }
     }
 }

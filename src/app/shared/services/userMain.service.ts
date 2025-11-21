@@ -149,26 +149,34 @@ export class UserMainService {
             }
 
             const untrackedUser = untracked(this.userConnected);
+            console.log(untrackedUser.roles);
+
             if (untrackedUser.email) {
                 this.authNavItems.set([
                     {
                         label: 'Profil',
-                        icon: 'pi pi-user'
+                        icon: 'pi pi-user',
+                        routerLink: untrackedUser.roles.find((role) => role.name.toLowerCase() === 'teacher'.toLowerCase()) ? ['/teacher/profile/me'] : ['/student/profile/me']
                     },
                     {
                         label: 'Déconnexion',
-                        icon: 'pi pi-sign-out'
+                        icon: 'pi pi-sign-out',
+                        command: () => {
+                            this.logout();
+                        }
                     }
                 ]);
             } else {
                 this.authNavItems.set([
                     {
                         label: 'Se connecter',
-                        icon: 'pi pi-sign-in'
+                        icon: 'pi pi-sign-in',
+                        routerLink: ['/auth/login']
                     },
                     {
                         label: "S'inscrire",
-                        icon: 'pi pi-user-plus'
+                        icon: 'pi pi-user-plus',
+                        routerLink: ['/auth/register']
                     }
                 ]);
             }
