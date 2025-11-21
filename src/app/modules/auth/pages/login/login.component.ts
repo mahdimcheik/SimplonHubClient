@@ -1,20 +1,19 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { UserMainService } from '../../../../shared/services/userMain.service';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { catchError } from 'rxjs';
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { FluidModule } from 'primeng/fluid';
+import { catchError } from 'rxjs';
+import { UserMainService } from '../../../../shared/services/userMain.service';
 
+import { InputTextModule } from 'primeng/inputtext';
 import { MessageModule } from 'primeng/message';
 import { PasswordModule } from 'primeng/password';
-import { InputTextModule } from 'primeng/inputtext';
-import { LogoComponent } from '../../../../pages/landing/components/logo/logo.component';
-import { Structure } from '../../../../generic-components/configurable-form/related-models';
-import { ConfigurableFormComponent } from '../../../../generic-components/configurable-form/configurable-form.component';
-import { environment } from '../../../../../environments/environment';
 import { UserLoginDTO } from '../../../../../api';
+import { ConfigurableFormComponent } from '../../../../generic-components/configurable-form/configurable-form.component';
+import { Structure } from '../../../../generic-components/configurable-form/related-models';
+import { LogoComponent } from '../../../../pages/landing/components/logo/logo.component';
 
 @Component({
     selector: 'app-login',
@@ -104,7 +103,9 @@ export class LoginComponent implements OnInit {
                 this.messageService.add({
                     summary: 'Connexion réussie',
                     detail: `Bienvenue`,
-                    severity: 'success'
+                    severity: 'success',
+                    life: 500,
+                    icon: 'pi pi-check-circle'
                 });
 
                 this.router.navigate(['/']);
