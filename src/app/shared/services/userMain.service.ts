@@ -83,6 +83,8 @@ export class UserMainService {
 
     refreshAccessToken = signal<string | null>(null);
     token = signal<string>('');
+    allLanguages = signal<LanguageResponseDTO[]>([]);
+    allAccountStatuses = signal<StatusAccountDTO[]>([]);
 
     constructor() {
         effect(() => {
@@ -401,6 +403,13 @@ export class UserMainService {
 
     // status account
     getStatusAccount(CustomTableState: CustomTableState): Observable<ResponseDTO<StatusAccountDTO[]>> {
+        if (this.allAccountStatuses().length > 0) {
+            return of({
+                message: 'Account statuses fetched from cache',
+                status: 200,
+                data: this.allAccountStatuses()
+            });
+        }
         return this.statusAccountService.statusaccountAllPost(CustomTableState).pipe(
             switchMap((response: StatusAccountResponseDTOListResponseDTO) => {
                 const legacyResponse: ResponseDTO<StatusAccountDTO[]> = {
@@ -408,6 +417,7 @@ export class UserMainService {
                     status: response.status || 200,
                     data: response.data as StatusAccountDTO[]
                 };
+                this.allAccountStatuses.set(legacyResponse.data ?? []);
                 return of(legacyResponse);
             })
         );
@@ -465,6 +475,13 @@ export class UserMainService {
     }
     // languages
     getLanguages(CustomTableState: CustomTableState): Observable<ResponseDTO<LanguageResponseDTO[]>> {
+        if (this.allLanguages().length > 0) {
+            return of({
+                message: 'Languages fetched from cache',
+                status: 200,
+                data: this.allLanguages()
+            });
+        }
         return this.languageService.languagesAllPost(CustomTableState).pipe(
             switchMap((response: LanguageResponseDTOListResponseDTO) => {
                 const legacyResponse: ResponseDTO<LanguageResponseDTO[]> = {
@@ -472,6 +489,7 @@ export class UserMainService {
                     status: response.status || 200,
                     data: response.data as LanguageResponseDTO[]
                 };
+                this.allLanguages.set(legacyResponse.data ?? []);
                 return of(legacyResponse);
             })
         );

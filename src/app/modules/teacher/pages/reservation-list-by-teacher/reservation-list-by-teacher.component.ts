@@ -1,16 +1,13 @@
-import { Component, computed, effect, inject, signal, Type } from '@angular/core';
-import { AdminMainService } from '../../../../shared/services/admin-main.service';
-import { UserMainService } from '../../../../shared/services/userMain.service';
+import { DatePipe } from '@angular/common';
+import { Component, computed, effect, inject, signal, Type, untracked } from '@angular/core';
+import { BookingDetailsDTO, TeacherResponseDTO } from '../../../../../api';
 import { ActionButtonRendererComponent, CustomTableState, DynamicColDef, ICellRendererAngularComp, INITIAL_STATE, SmartGridComponent } from '../../../../generic-components/smart-grid';
 import { OptionsRendererComponent } from '../../../../generic-components/smart-grid/options-component';
-import { BookingDetailsDTO, LanguageResponseDTO, RoleAppResponseDTO, StatusAccountDTO, TeacherResponseDTO } from '../../../../../api';
-import { CardUserComponent } from '../../../admin/pages/users-list/card-user/card-user.component';
-import { firstValueFrom } from 'rxjs';
-import { SmartGridModernizedComponent } from '../../../../generic-components/smart-grid-modernized/smart-grid-modernized.component';
-import { SlotMainService } from '../../../../shared/services/slot-main.service';
-import { DatePipe } from '@angular/common';
-import { DateTime } from 'luxon';
 import { DurationPipe } from '../../../../shared/pipes/duration.pipe';
+import { AdminMainService } from '../../../../shared/services/admin-main.service';
+import { SlotMainService } from '../../../../shared/services/slot-main.service';
+import { UserMainService } from '../../../../shared/services/userMain.service';
+import { CardUserComponent } from '../../../admin/pages/users-list/card-user/card-user.component';
 import { ModalReservationDetailComponent } from '../../../components/modal-reservation-detail/modal-reservation-detail.component';
 
 @Component({
@@ -108,7 +105,8 @@ export class ReservationListByTeacherComponent {
     async loadUsers(state: CustomTableState) {
         try {
             this.loading.set(true);
-            state.filters = { ...state.filters, teacherId: { value: this.userService.userConnected().id!, matchMode: 'equals' } };
+            const untrackedUser = untracked(() => this.userService.userConnected());
+            state.filters = { ...state.filters, teacherId: { value: untrackedUser.id!, matchMode: 'equals' } };
             const response = await this.slotService.getBookings(state);
             this.bookings.set(response.data ?? []);
             this.totalRecords.set(response.count ?? 0);
