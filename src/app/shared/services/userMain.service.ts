@@ -1,14 +1,12 @@
-import { Injectable, computed, effect, inject, signal, untracked } from '@angular/core';
-import { catchError, firstValueFrom, map, Observable, of, switchMap, tap } from 'rxjs';
-import { MenuItem, MessageService } from 'primeng/api';
+import { computed, effect, inject, Injectable, signal, untracked } from '@angular/core';
 import { Router } from '@angular/router';
+import { MenuItem, MessageService } from 'primeng/api';
+import { catchError, firstValueFrom, map, Observable, of, switchMap, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { LocalstorageService } from './localstorage.service';
 // import { SSEMainService } from './sseMain.service';
 
 // Generated services and models
-import { CookieConsentService } from './cookie-consent.service';
-import { EnumGender, GenderDropDown } from '../../shared/models/user';
 import {
     AuthService,
     ForgotPasswordInput,
@@ -44,8 +42,8 @@ import {
     UserUpdateDTO
 } from '../../../api';
 import { ResponseDTO } from '../models/response-dto';
-import { BrowserModule } from '@angular/platform-browser';
 import { CustomTableState } from '../models/TableColumn ';
+import { CookieConsentService } from './cookie-consent.service';
 
 /**
  * service pour gérer les utilisateurs.

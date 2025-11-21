@@ -16,7 +16,7 @@ import { PublicReportComponent } from '../../../../generic-components/public-rep
 
 @Component({
     selector: 'app-profile-teacher',
-    imports: [SmartSectionComponent, ButtonModule, FormationsListComponent, AddressesListComponent, PersonnalInfosComponent, ChipsListComponent, CursusesListComponent, SmartKpiComponent, PublicReportComponent],
+    imports: [SmartSectionComponent, ButtonModule, FormationsListComponent, AddressesListComponent, PersonnalInfosComponent, ChipsListComponent, CursusesListComponent, PublicReportComponent],
     templateUrl: './profile-teacher.component.html',
     styleUrl: './profile-teacher.component.scss'
 })
