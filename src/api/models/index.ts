@@ -1197,6 +1197,7 @@ export interface TeacherResponseDTO {
     title?: string | null;
     description?: string | null;
     phoneNumber?: string | null;
+    imgUrl?: string | null;
     status?: StatusAccountDTO;
     gender?: GenderDTO;
     roles: RoleAppResponseDTO[];
@@ -1296,6 +1297,7 @@ export interface UserApp {
     privacyPolicyConsent?: boolean;
     title?: string | null;
     description?: string | null;
+    imgUrl?: string | null;
     archivedAt?: Date | null;
     updatedAt?: Date | null;
     createdAt?: Date;
@@ -1400,6 +1402,7 @@ export interface UserResponseDTO {
     title?: string | null;
     description?: string | null;
     phoneNumber?: string | null;
+    imgUrl?: string | null;
     status?: StatusAccountDTO;
     gender?: GenderDTO;
     roles: RoleAppResponseDTO[];
