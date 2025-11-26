@@ -10,7 +10,7 @@
 import { HttpClient, HttpContext, HttpContextToken, HttpEvent, HttpHeaders, HttpParams, HttpResponse } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { ForgotPasswordInput, LoginOutputDTOResponseDTO, ObjectResponseDTO, PasswordRecoveryInput, PasswordResetResponseDTOResponseDTO, RequestOptions, StringResponseDTO, UserCreateDTO, UserInfosWithtokenResponseDTO, UserLoginDTO, UserPublicReportResponseDTO, UserResponseDTOResponseDTO, UserUpdateDTO } from "../models";
+import { FileUrlResponseDTO, ForgotPasswordInput, LoginOutputDTOResponseDTO, ObjectResponseDTO, PasswordRecoveryInput, PasswordResetResponseDTOResponseDTO, RequestOptions, StringResponseDTO, UserCreateDTO, UserInfosWithtokenResponseDTO, UserLoginDTO, UserPublicReportResponseDTO, UserResponseDTOResponseDTO, UserUpdateDTO } from "../models";
 import { BASE_PATH_DEFAULT, CLIENT_CONTEXT_TOKEN_DEFAULT } from "../tokens";
 import { HttpParamsBuilder } from "../utils/http-params-builder";
 
@@ -244,9 +244,9 @@ export class AuthService {
         return this.httpClient.get(url, requestOptions);
     }
 
-    authUploadAvatarPost(file?: Blob, requestBody?: Record<string, any>, observe?: 'body', options?: RequestOptions<'json'>): Observable<UserResponseDTOResponseDTO>;
-    authUploadAvatarPost(file?: Blob, requestBody?: Record<string, any>, observe?: 'response', options?: RequestOptions<'json'>): Observable<HttpResponse<UserResponseDTOResponseDTO>>;
-    authUploadAvatarPost(file?: Blob, requestBody?: Record<string, any>, observe?: 'events', options?: RequestOptions<'json'>): Observable<HttpEvent<UserResponseDTOResponseDTO>>;
+    authUploadAvatarPost(file?: Blob, requestBody?: Record<string, any>, observe?: 'body', options?: RequestOptions<'json'>): Observable<FileUrlResponseDTO>;
+    authUploadAvatarPost(file?: Blob, requestBody?: Record<string, any>, observe?: 'response', options?: RequestOptions<'json'>): Observable<HttpResponse<FileUrlResponseDTO>>;
+    authUploadAvatarPost(file?: Blob, requestBody?: Record<string, any>, observe?: 'events', options?: RequestOptions<'json'>): Observable<HttpEvent<FileUrlResponseDTO>>;
     authUploadAvatarPost(file?: Blob, requestBody?: Record<string, any>, observe?: 'body' | 'events' | 'response', options?: RequestOptions<'arraybuffer' | 'blob' | 'json' | 'text'>): Observable<any> {
         const url = `${this.basePath}/auth/upload-avatar`;
 

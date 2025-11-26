@@ -517,6 +517,17 @@ export interface FavoriteUpdateDTO {
     note?: string | null;
 }
 
+export interface FileUrl {
+    url?: string | null;
+}
+
+export interface FileUrlResponseDTO {
+    message: string;
+    status: number;
+    data?: FileUrl;
+    count?: number | null;
+}
+
 export interface FilterItem {
     value: any | null;
     matchMode: string | null;

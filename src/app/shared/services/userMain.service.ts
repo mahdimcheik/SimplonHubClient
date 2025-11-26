@@ -9,6 +9,8 @@ import { LocalstorageService } from './localstorage.service';
 // Generated services and models
 import {
     AuthService,
+    FileUrl,
+    FileUrlResponseDTO,
     ForgotPasswordInput,
     LanguageResponseDTO,
     LanguageResponseDTOListResponseDTO,
@@ -397,6 +399,38 @@ export class UserMainService {
                     this.userConnected.set(res.data);
                     this.localStorageService.setUser(res.data);
                 }
+            })
+        );
+    }
+
+    updateAvatar(file: File): Observable<FileUrlResponseDTO> {
+        if (!file) {
+            return of({
+                message: 'No file provided',
+                status: 400,
+                data: {} as FileUrl
+            });
+        }
+        console.log(file);
+
+        // Create FormData manually to ensure proper file parameter name
+        const formData = new FormData();
+        formData.append('file', file, file.name);
+
+        // Use HttpClient directly to have full control over the request
+        return this.authService.authUploadAvatarPost(file).pipe(
+            tap((res) => {
+                if (res.data) {
+                    this.userConnected.update((user) => ({ ...user, profilePicture: res.data?.url }));
+                }
+            }),
+            catchError((error) => {
+                console.error('Error uploading avatar:', error);
+                return of({
+                    message: error.message || 'Error uploading avatar',
+                    status: error.status || 500,
+                    data: {} as FileUrl
+                });
             })
         );
     }

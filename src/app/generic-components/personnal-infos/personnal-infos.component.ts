@@ -206,6 +206,12 @@ export class PersonnalInfosComponent implements OnInit {
                 programmingLanguagesIds: infos.programmingLanguagesIds,
                 description: infos.description
             };
+
+            // gérer l'upload de l'image de profil
+            if (event.value.avatar) {
+                await firstValueFrom(this.userservice.updateAvatar(event.value.avatar.profilePicture));
+            }
+
             await firstValueFrom(this.userservice.updatePersonnalInfos(updatedUser));
 
             // recharger les infos de l'utilisateur
