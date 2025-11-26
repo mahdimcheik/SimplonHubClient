@@ -1,7 +1,7 @@
 import { TitleCasePipe } from '@angular/common';
 import { Component, computed, DestroyRef, inject, linkedSignal, model, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { Image } from 'primeng/image';
@@ -50,41 +50,108 @@ export class PersonnalInfosComponent implements OnInit {
         const programmingLanguagesOptions = this.programmingLanguagesOptions();
 
         return {
-            id: 'personnal-infos-form',
-            name: 'personnal-infos-form',
+            id: 'personnalInfos',
+            name: 'personnalInfos',
             label: 'Informations personnelles',
-            description: "Formulaire pour éditer les informations personnelles de l'utilisateur",
-            icon: 'pi pi-user',
-            hideCancelButton: false,
-            hideSubmitButton: false,
-            formFields: [
-                { id: 'firstName', label: 'Prénom', name: 'firstName', type: 'text', required: true, value: this.user().firstName },
-                { id: 'lastName', label: 'Nom', name: 'lastName', type: 'text', required: true, value: this.user().lastName },
-                { id: 'dateOfBirth', label: 'Date de naissance', name: 'dateOfBirth', type: 'date', required: true, fullWidth: true, value: new Date(this.user().dateOfBirth ?? '') },
-                { id: 'title', label: 'Titre', name: 'title', type: 'text', required: true, fullWidth: true, value: this.user().title },
+            description: 'Veuillez remplir les champs obligatoires',
+
+            formFieldGroups: [
                 {
-                    id: 'languagesIds',
-                    label: 'Langues parlées',
-                    name: 'languagesIds',
-                    type: 'multiselect',
-                    compareKey: 'id',
-                    displayKey: 'name',
-                    value: this.languages().map((l) => l.id),
-                    fullWidth: true,
-                    options: languagesOptions
+                    id: 'personnalInfos',
+                    name: 'personnalInfos',
+                    label: 'Informations personnelles',
+                    description: 'Veuillez remplir les champs obligatoires',
+                    fields: [
+                        {
+                            id: 'firstName',
+                            name: 'firstName',
+                            label: 'Prénom',
+                            type: 'text',
+                            placeholder: 'Prénom',
+                            required: true,
+                            value: this.user().firstName,
+                            validation: [Validators.required, Validators.minLength(3), Validators.maxLength(20)],
+                            order: 1
+                        },
+                        {
+                            id: 'lastName',
+                            name: 'lastName',
+                            label: 'Nom',
+                            type: 'text',
+                            placeholder: 'Nom',
+                            required: true,
+                            value: this.user().lastName,
+                            order: 2
+                        },
+                        {
+                            id: 'dateOfBirth',
+                            name: 'dateOfBirth',
+                            label: 'Date de naissance',
+                            type: 'date',
+                            placeholder: 'Date de naissance',
+                            required: true,
+                            fullWidth: true,
+                            value: new Date(this.user().dateOfBirth ?? ''),
+                            order: 3
+                        },
+                        {
+                            id: 'title',
+                            name: 'title',
+                            label: 'Titre',
+                            type: 'text',
+                            placeholder: 'Titre',
+                            order: 5,
+                            value: this.user().title,
+                            fullWidth: true
+                        },
+                        {
+                            id: 'description',
+                            name: 'description',
+                            label: 'Description',
+                            type: 'textarea',
+                            placeholder: 'Description',
+                            value: this.user().description,
+                            order: 6
+                        },
+                        {
+                            id: 'phoneNumber',
+                            name: 'phoneNumber',
+                            label: 'Numéro de téléphone',
+                            type: 'text',
+                            placeholder: 'Numéro de téléphone',
+                            value: this.user().phoneNumber ?? '',
+                            order: 7,
+                            fullWidth: true
+                        }
+                    ]
                 },
                 {
-                    id: 'programmingLanguagesIds',
-                    label: 'Langages de programmation',
-                    name: 'programmingLanguagesIds',
-                    type: 'multiselect',
-                    compareKey: 'id',
-                    displayKey: 'name',
-                    value: this.programmingLanguages().map((l) => l.id),
-                    fullWidth: true,
-                    options: programmingLanguagesOptions
-                },
-                { id: 'description', label: 'Description', name: 'description', type: 'textarea', required: false, value: this.user().description }
+                    id: 'avatar',
+                    name: 'avatar',
+                    label: 'Avatar',
+                    description: 'Veuillez remplir votre avatar',
+                    fields: [
+                        {
+                            id: 'profilePicture',
+                            name: 'profilePicture',
+                            label: 'Image de profil',
+                            type: 'file',
+                            placeholder: 'Choisir votre image de profil',
+                            accept: 'image/*',
+                            maxFileSize: 1000000,
+                            multiple: false,
+                            mode: 'basic',
+                            chooseLabel: 'Choose Image',
+                            uploadLabel: 'Téléverser',
+                            cancelLabel: 'Annuler',
+                            emptyMessage: 'Glissez et déposez votre image ici',
+                            order: 1,
+                            showUploadButton: false,
+                            fullWidth: true,
+                            url: (this.user()?.imgUrl ? this.user()?.imgUrl : undefined) ?? undefined
+                        }
+                    ]
+                }
             ]
         };
     });
@@ -128,14 +195,15 @@ export class PersonnalInfosComponent implements OnInit {
 
     async submit(event: FormGroup<any>) {
         try {
+            const infos = event.value.personnalInfos;
             const updatedUser: UserUpdateDTO = {
-                firstName: event.value.firstName,
-                lastName: event.value.lastName,
-                dateOfBirth: event.value.dateOfBirth,
-                title: event.value.title,
-                languagesIds: event.value.languagesIds,
-                programmingLanguagesIds: event.value.programmingLanguagesIds,
-                description: event.value.description
+                firstName: infos.firstName,
+                lastName: infos.lastName,
+                dateOfBirth: infos.dateOfBirth,
+                title: infos.title,
+                languagesIds: infos.languagesIds,
+                programmingLanguagesIds: infos.programmingLanguagesIds,
+                description: infos.description
             };
             await firstValueFrom(this.userservice.updatePersonnalInfos(updatedUser));
 

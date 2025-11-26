@@ -1,6 +1,6 @@
-import { Component, Input, forwardRef, signal, OnInit } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { Component, OnInit, forwardRef, input, model, signal } from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { FileUploadModule } from 'primeng/fileupload';
 
 @Component({
@@ -16,18 +16,18 @@ import { FileUploadModule } from 'primeng/fileupload';
     ],
     template: `
         <p-fileupload
-            [id]="id"
-            [name]="name"
-            [chooseLabel]="chooseLabel"
-            [showUploadButton]="showUploadButton"
-            [uploadLabel]="uploadLabel"
-            [cancelLabel]="cancelLabel"
-            [multiple]="multiple"
-            [accept]="accept"
-            [maxFileSize]="maxFileSize"
-            [mode]="mode"
-            [url]="url"
-            [showCancelButton]="showCancelButton"
+            [id]="id()"
+            [name]="name()"
+            [chooseLabel]="chooseLabel()"
+            [showUploadButton]="showUploadButton()"
+            [uploadLabel]="uploadLabel()"
+            [cancelLabel]="cancelLabel()"
+            [multiple]="multiple()"
+            [accept]="accept()"
+            [maxFileSize]="maxFileSize()"
+            [mode]="mode()"
+            [url]="url()"
+            [showCancelButton]="showCancelButton()"
             [auto]="auto"
             [disabled]="disabled()"
             (onUpload)="onUpload($event)"
@@ -35,19 +35,19 @@ import { FileUploadModule } from 'primeng/fileupload';
             (onRemove)="onRemove($event)"
             (onClear)="onClear($event)"
             class="w-full"
-            [class.p-invalid]="invalid"
+            [class.p-invalid]="invalid()"
         >
             <ng-template #empty>
                 <div class="text-center p-4 text-gray-500 flex flex-row items-center justify-center rounded border border-dashed border-gray-300 p-4">
                     <span class="flex-1  text-center flex items-center justify-center ">
-                        {{ emptyMessage }}
+                        {{ emptyMessage() }}
                     </span>
-                    @if (url) {
-                        <div class="flex flex-col items-center ml-4 flex-1 justify-center">
-                            <span>Votre avatar</span>
-                            <img src="{{ url }}" alt="" class=" mx-auto mt-2 max-h-24 object-contain border rounded-2" />
-                        </div>
-                    }
+                    <!-- @if (url) { -->
+                    <div class="flex flex-col items-center ml-4 flex-1 justify-center">
+                        <span>Votre avatar</span>
+                        <img [src]="url()" alt="" class=" mx-auto mt-2 max-h-24 object-contain border rounded-2" />
+                    </div>
+                    <!-- } -->
                 </div>
             </ng-template>
             <ng-template #content>
@@ -73,21 +73,21 @@ import { FileUploadModule } from 'primeng/fileupload';
 })
 export class CustomUploadFileComponent implements ControlValueAccessor, OnInit {
     // Input properties for file upload configuration
-    @Input() id: string = '';
-    @Input() name: string = '';
-    @Input() accept: string = '*';
-    @Input() multiple: boolean = false;
-    @Input() maxFileSize: number = 1000000;
-    @Input() chooseLabel: string = 'Choisir';
-    @Input() uploadLabel: string = 'Téléverser';
-    @Input() cancelLabel: string = 'Annuler';
-    @Input() emptyMessage: string = 'Sélectionnez et glissez vos fichiers ici';
-    @Input() mode: 'basic' | 'advanced' = 'advanced';
-    @Input() url: string = '';
-    @Input() showUploadButton: boolean = false;
-    @Input() showCancelButton: boolean = true;
-    @Input() auto: boolean = false;
-    @Input() invalid: boolean = false;
+    id = input<string>('');
+    name = input<string>('');
+    accept = input<string>('*');
+    multiple = input<boolean>(false);
+    maxFileSize = input<number>(1000000);
+    chooseLabel = input<string>('Choisir');
+    uploadLabel = input<string>('Téléverser');
+    cancelLabel = input<string>('Annuler');
+    emptyMessage = input<string>('Sélectionnez et glissez vos fichiers ici');
+    mode = input<'basic' | 'advanced'>('advanced');
+    url = model<string>('');
+    showUploadButton = input<boolean>(false);
+    showCancelButton = input<boolean>(true);
+    auto = input<boolean>(false);
+    invalid = input<boolean>(false);
 
     // Internal state
     uploadedFiles = signal<File[]>([]);
@@ -153,10 +153,11 @@ export class CustomUploadFileComponent implements ControlValueAccessor, OnInit {
         this.onTouched();
 
         // Emit the appropriate value based on multiple flag
-        if (this.multiple) {
+        if (this.multiple()) {
             this.onChange(files.length > 0 ? files : null);
         } else {
             this.onChange(files.length > 0 ? files[0] : null);
+            this.url.set(files[0] ? URL.createObjectURL(files[0]) : '');
         }
     }
 
