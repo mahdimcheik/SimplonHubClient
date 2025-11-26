@@ -20,6 +20,7 @@ import { FileUploadModule } from 'primeng/fileupload';
             [name]="name()"
             [chooseLabel]="chooseLabel()"
             [showUploadButton]="showUploadButton()"
+            [showCancelButton]="showCancelButton()"
             [uploadLabel]="uploadLabel()"
             [cancelLabel]="cancelLabel()"
             [multiple]="multiple()"
@@ -37,25 +38,33 @@ import { FileUploadModule } from 'primeng/fileupload';
             class="w-full"
             [class.p-invalid]="invalid()"
         >
-            <ng-template #empty>
+            <ng-template pTemplate="empty">
                 <div class="text-center p-4 text-gray-500 flex flex-row items-center justify-center rounded border border-dashed border-gray-300 p-4">
                     <span class="flex-1  text-center flex items-center justify-center ">
                         {{ emptyMessage() }}
                     </span>
-                    <!-- @if (url) { -->
-                    <div class="flex flex-col items-center ml-4 flex-1 justify-center">
-                        <span>Votre avatar</span>
-                        <img [src]="url()" alt="" class=" mx-auto mt-2 max-h-24 object-contain border rounded-2" />
-                    </div>
-                    <!-- } -->
+                    @if (url()) {
+                        <div class="flex flex-col items-center ml-4 flex-1 justify-center">
+                            <span>Votre avatar</span>
+                            <img [src]="url()" alt="" class=" mx-auto mt-2 max-h-24 object-contain border rounded-2" />
+                        </div>
+                    }
                 </div>
             </ng-template>
-            <ng-template #content>
+            <ng-template pTemplate="content" let-files>
                 <div class="space-y-2">
-                    @for (file of uploadedFiles(); track file.name) {
-                        <div class="flex items-center justify-between p-2 bg-gray-50 rounded border">
-                            <span class="text-sm truncate">{{ file.name }}</span>
-                            <span class="text-xs text-gray-500">{{ file.size | number }} bytes</span>
+                    @if (files && files.length > 0) {
+                        @for (file of files; track file.name) {
+                            <div class="flex items-center justify-between p-2 bg-gray-50 rounded border">
+                                <span class="text-sm truncate">{{ file.name }}</span>
+                                <span class="text-xs text-gray-500">{{ file.size | number }} bytes</span>
+                            </div>
+                        }
+                    }
+                    @if (url() && files && files.length > 0) {
+                        <div class="flex flex-col items-center mt-4">
+                            <span class="mb-2">Aperçu:</span>
+                            <img [src]="url()" alt="Preview" class="max-h-48 object-contain border rounded" />
                         </div>
                     }
                 </div>
@@ -84,7 +93,7 @@ export class CustomUploadFileComponent implements ControlValueAccessor, OnInit {
     emptyMessage = input<string>('Sélectionnez et glissez vos fichiers ici');
     mode = input<'basic' | 'advanced'>('advanced');
     url = model<string>('');
-    showUploadButton = input<boolean>(false);
+    showUploadButton = input<boolean>(true);
     showCancelButton = input<boolean>(true);
     auto = input<boolean>(false);
     invalid = input<boolean>(false);
@@ -157,7 +166,7 @@ export class CustomUploadFileComponent implements ControlValueAccessor, OnInit {
             this.onChange(files.length > 0 ? files : null);
         } else {
             this.onChange(files.length > 0 ? files[0] : null);
-            this.url.set(files[0] ? URL.createObjectURL(files[0]) : '');
+            this.url.set(files[0] ? URL.createObjectURL(files[0]) : 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/User_icon_2.svg/250px-User_icon_2.svg.png');
         }
     }
 

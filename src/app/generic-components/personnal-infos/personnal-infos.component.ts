@@ -139,16 +139,17 @@ export class PersonnalInfosComponent implements OnInit {
                             placeholder: 'Choisir votre image de profil',
                             accept: 'image/*',
                             maxFileSize: 1000000,
+                            showCancelButton: true,
                             multiple: false,
-                            mode: 'basic',
-                            chooseLabel: 'Choose Image',
+                            mode: 'advanced',
+                            chooseLabel: 'Choisir votre image',
                             uploadLabel: 'Téléverser',
                             cancelLabel: 'Annuler',
                             emptyMessage: 'Glissez et déposez votre image ici',
                             order: 1,
-                            showUploadButton: false,
+                            showUploadButton: true,
                             fullWidth: true,
-                            url: (this.user()?.imgUrl ? this.user()?.imgUrl : undefined) ?? undefined
+                            url: this.user()?.imgUrl ? this.user()?.imgUrl! : 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/User_icon_2.svg/250px-User_icon_2.svg.png'
                         }
                     ]
                 }
