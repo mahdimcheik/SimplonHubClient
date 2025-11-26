@@ -2,11 +2,12 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit, forwardRef, input, model, signal } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { FileUploadModule } from 'primeng/fileupload';
+import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
     selector: 'app-custom-upload-file',
     standalone: true,
-    imports: [CommonModule, FileUploadModule],
+    imports: [CommonModule, FileUploadModule, TooltipModule],
     providers: [
         {
             provide: NG_VALUE_ACCESSOR,
@@ -37,6 +38,7 @@ import { FileUploadModule } from 'primeng/fileupload';
             (onClear)="onClear($event)"
             class="w-full"
             [class.p-invalid]="invalid()"
+            #uploader
         >
             <ng-template pTemplate="empty">
                 <div class="text-center p-4 text-gray-500 flex flex-row items-center justify-center rounded border border-dashed border-gray-300 p-4">
@@ -62,10 +64,15 @@ import { FileUploadModule } from 'primeng/fileupload';
                         }
                     }
                     @if (url() && files && files.length > 0) {
-                        <div class="flex flex-col items-center mt-4">
-                            <span class="mb-2">Aperçu:</span>
-                            <img [src]="url()" alt="Preview" class="max-h-48 object-contain border rounded" />
-                        </div>
+                        @for (file of files; track file.name) {
+                            <div class="flex flex-col items-center mt-4">
+                                <div class="flex justify-between w-full">
+                                    <span class="mb-2">Aperçu:</span>
+                                    <i class="pi pi-times" [pTooltip]="'Annuler'" (click)="remove(file); uploader.clear()"></i>
+                                </div>
+                                <img [src]="url()" alt="Preview" class="max-h-48 object-contain border rounded" />
+                            </div>
+                        }
                     }
                 </div>
             </ng-template>
@@ -151,6 +158,9 @@ export class CustomUploadFileComponent implements ControlValueAccessor, OnInit {
         } else {
             this.handleFileChange([]);
         }
+    }
+    remove(file?: File) {
+        this.handleFileChange([]);
     }
 
     onClear(event: any) {
