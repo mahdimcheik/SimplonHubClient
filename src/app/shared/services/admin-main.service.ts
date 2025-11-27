@@ -1,35 +1,10 @@
-import { Injectable, computed, effect, inject, signal } from '@angular/core';
-import { catchError, firstValueFrom, map, Observable, of, switchMap, tap } from 'rxjs';
-import { MenuItem, MessageService } from 'primeng/api';
-import { Router } from '@angular/router';
+import { inject, Injectable } from '@angular/core';
+import { firstValueFrom, map } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { LocalstorageService } from './localstorage.service';
 // import { SSEMainService } from './sseMain.service';
 
 // Generated services and models
-import { CookieConsentService } from './cookie-consent.service';
-import { EnumGender, GenderDropDown } from '../models/user';
-import {
-    AuthService,
-    ForgotPasswordInput,
-    LoginOutputDTO,
-    LoginOutputDTOResponseDTO,
-    PasswordRecoveryInput,
-    PasswordResetResponseDTO,
-    PasswordResetResponseDTOResponseDTO,
-    RoleAppResponseDTOListResponseDTO,
-    RoleAppService,
-    StringResponseDTO,
-    UserCreateDTO,
-    UserInfosWithtoken,
-    UserInfosWithtokenResponseDTO,
-    UserLoginDTO,
-    UserResponseDTO,
-    UserResponseDTOListResponseDTO,
-    UserResponseDTOResponseDTO,
-    UsersService,
-    UserUpdateDTO
-} from '../../../api';
+import { UserResponseDTO, UserResponseDTOListResponseDTO, UsersService } from '../../../api';
 import { ResponseDTO } from '../models/response-dto';
 import { CustomTableState } from '../models/TableColumn ';
 
@@ -87,6 +62,20 @@ export class AdminMainService {
                     })
                 )
             );
+        } catch (error) {
+            console.error('Error loading users:', error);
+            return {
+                message: 'Erreur lors du chargement des utilisateurs',
+                status: 500,
+                data: [],
+                count: 0
+            };
+        }
+    }
+
+    getCandidats(CustomTableState: CustomTableState) {
+        try {
+            return firstValueFrom(this.userService.usersListCandidatsPost(CustomTableState));
         } catch (error) {
             console.error('Error loading users:', error);
             return {

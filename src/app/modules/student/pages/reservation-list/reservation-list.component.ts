@@ -124,7 +124,6 @@ export class ReservationListComponent {
     }
     // on row click
     onRowClick(event: any) {
-        console.log('onRowClick', event);
         this.selectedReservation.set(event);
         this.modalDetailVisible.set(true);
     }

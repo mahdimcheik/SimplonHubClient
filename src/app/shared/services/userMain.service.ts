@@ -98,7 +98,8 @@ export class UserMainService {
                     { label: 'Réservations', icon: 'pi pi-fw pi-list', routerLink: ['/dashboard/reservation/list'] },
                     { label: 'Calendrier', icon: 'pi pi-fw pi-calendar', routerLink: ['/dashboard/reservation/calendar-for-teacher'] },
                     { label: 'Utilisateurs', icon: 'pi pi-users', routerLink: ['/dashboard/students-list'] },
-                    { label: 'Profil', icon: 'pi pi-fw pi-calendar', routerLink: ['/dashboard/profile/me'] }
+                    { label: 'Profil', icon: 'pi pi-fw pi-calendar', routerLink: ['/dashboard/profile/me'] },
+                    { label: 'Demandes', icon: 'pi pi-cog', routerLink: ['/admin/request-list'] }
                 ]);
                 this.landingNavItems.set([
                     { label: 'Accueil', icon: 'pi pi-home', routerLink: ['/'] },
@@ -109,7 +110,8 @@ export class UserMainService {
                 this.sideNavItems.set([
                     { label: 'Tableau de bord', icon: 'pi pi-fw pi-home', routerLink: ['/admin'] },
                     { label: 'Utilisateurs', icon: 'pi pi-users', routerLink: ['/admin/users-list'] },
-                    { label: 'Paramètres', icon: 'pi pi-cog', routerLink: ['/admin/adminitration'] }
+                    { label: 'Paramètres', icon: 'pi pi-cog', routerLink: ['/admin/adminitration'] },
+                    { label: 'Demandes', icon: 'pi pi-cog', routerLink: ['/admin/request-list'] }
                 ]);
                 this.landingNavItems.set([
                     { label: 'Accueil', icon: 'pi pi-home', routerLink: ['/'] },

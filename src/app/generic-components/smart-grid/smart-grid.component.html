@@ -156,7 +156,7 @@
                                 <!-- Default rendering based on type -->
                                 @switch (column.type) {
                                     @case ('date') {
-                                        {{ column.valueFormatter ? column.valueFormatter(item[column.field]) : (item[column.field] | date: 'dd/MM/yyyy HH:mm') }}
+                                        {{ column.valueFormatter ? column.valueFormatter(item) : (item[column.field] | date: 'dd/MM/yyyy HH:mm') }}
                                     }
                                     @case ('boolean') {
                                         <i
@@ -168,10 +168,10 @@
                                         ></i>
                                     }
                                     @case ('number') {
-                                        {{ column.valueFormatter ? column.valueFormatter(item[column.field]) : (item[column.field] | number: '1.0-2') }}
+                                        {{ column.valueFormatter ? column.valueFormatter(item) : (item[column.field] | number: '1.0-2') }}
                                     }
                                     @default {
-                                        {{ column.valueFormatter ? column.valueFormatter(item[column.field]) : item[column.field] }}
+                                        {{ column.valueFormatter ? column.valueFormatter(item) : item[column.field] }}
                                     }
                                 }
                             }

@@ -3,31 +3,32 @@ import { AppLayout } from './app/layout/component/app.layout';
 import { Landing } from './app/pages/landing/landing';
 import { Notfound } from './app/pages/notfound/notfound';
 import { SettingsComponent } from './app/pages/settings/settings.component';
-import { canNotLoginGuard, isConnectedGuard, isNotConnectedGuard } from './app/shared/guards/can-login.guard';
+import { isConnectedGuard, isNotConnectedGuard } from './app/shared/guards/can-login.guard';
 
 // Auth components
-import { AuthLayoutComponent } from './app/modules/auth/pages/auth-layout/auth-layout.component';
-import { LoginComponent } from './app/modules/auth/pages/login/login.component';
-import { ForgotPasswordComponent } from './app/modules/auth/pages/forgot-password/forgot-password.component';
-import { ChangePasswordComponent } from './app/modules/auth/pages/change-password/change-password.component';
 import { AccountConfirmationComponent } from './app/modules/auth/pages/account-confirmation/account-confirmation.component';
-import { InscriptionComponent } from './app/modules/auth/pages/inscription/inscription.component';
 import { AccountCreatedSuccessfullyComponent } from './app/modules/auth/pages/account-created-successfully/account-created-successfully.component';
+import { AuthLayoutComponent } from './app/modules/auth/pages/auth-layout/auth-layout.component';
+import { ChangePasswordComponent } from './app/modules/auth/pages/change-password/change-password.component';
+import { ForgotPasswordComponent } from './app/modules/auth/pages/forgot-password/forgot-password.component';
+import { InscriptionComponent } from './app/modules/auth/pages/inscription/inscription.component';
+import { LoginComponent } from './app/modules/auth/pages/login/login.component';
 import { PasswordResetSuccessfullyComponent } from './app/modules/auth/pages/password-reset-successfully/password-reset-successfully.component';
 
 // Landing components
-import { MainComponent } from './app/pages/landing/sub-pages/main/main.component';
-import { MentionsLegalesComponent } from './app/pages/landing/sub-pages/mentions-legales/mentions-legales.component';
-import { ProfileTeacherComponent } from './app/modules/teacher/pages/profile-teacher/profile-teacher.component';
+import { AdminitrationComponent } from './app/modules/admin/pages/adminitration/adminitration.component';
+import { RequestListComponent } from './app/modules/admin/pages/request-list/request-list.component';
 import { UsersListComponent } from './app/modules/admin/pages/users-list/users-list.component';
+import { CalendarStudentComponent } from './app/modules/student/pages/calendar-student/calendar-student.component';
+import { ReservationListComponent } from './app/modules/student/pages/reservation-list/reservation-list.component';
+import { StudentFavoritesComponent } from './app/modules/student/pages/student-favorites/student-favorites.component';
+import { TeacherListComponent } from './app/modules/student/pages/teacher-list/teacher-list.component';
 import { CalendarTeacherComponent } from './app/modules/teacher/pages/calendar-teacher/calendar-teacher.component';
 import { GestionCursusesComponent } from './app/modules/teacher/pages/gestion-cursuses/gestion-cursuses.component';
-import { AdminitrationComponent } from './app/modules/admin/pages/adminitration/adminitration.component';
-import { CalendarStudentComponent } from './app/modules/student/pages/calendar-student/calendar-student.component';
-import { TeacherListComponent } from './app/modules/student/pages/teacher-list/teacher-list.component';
-import { StudentFavoritesComponent } from './app/modules/student/pages/student-favorites/student-favorites.component';
-import { ReservationListComponent } from './app/modules/student/pages/reservation-list/reservation-list.component';
+import { ProfileTeacherComponent } from './app/modules/teacher/pages/profile-teacher/profile-teacher.component';
 import { ReservationListByTeacherComponent } from './app/modules/teacher/pages/reservation-list-by-teacher/reservation-list-by-teacher.component';
+import { MainComponent } from './app/pages/landing/sub-pages/main/main.component';
+import { MentionsLegalesComponent } from './app/pages/landing/sub-pages/mentions-legales/mentions-legales.component';
 
 // Define path constants
 const TEACHER_PATH = 'teacher';
@@ -117,7 +118,8 @@ export const appRoutes: Routes = [
         children: [
             { path: SETTINGS_PATH, component: SettingsComponent },
             { path: 'users-list', component: UsersListComponent },
-            { path: 'adminitration', component: AdminitrationComponent }
+            { path: 'adminitration', component: AdminitrationComponent },
+            { path: 'request-list', component: RequestListComponent }
         ]
     },
     {
