@@ -125,14 +125,11 @@ export class AdminitrationComponent {
         this.showEditModalLanguage.set(true);
     }
     onEditClickLanguage(language: LanguageResponseDTO) {
-        // edition mode
-        console.log('onEditClickLanguage', language);
         this.selectedLanguage.set(language);
         this.showEditModalLanguage.set(true);
     }
 
     onEditClickRole(role: RoleAppResponseDTO) {
-        console.log('onEditClickRole', role);
         this.selectedRole.set(role);
         this.showEditModalRole.set(true);
     }
@@ -144,10 +141,6 @@ export class AdminitrationComponent {
     onEditClickStatus(Status: StatusAccountResponseDTO) {
         this.selectedStatus.set(Status);
         this.showEditModalStatus.set(true);
-    }
-
-    onDeleteClickRole(role: RoleAppResponseDTO) {
-        console.log('onDeleteClickRole', role);
     }
 
     // submits modals

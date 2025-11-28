@@ -1,25 +1,27 @@
-<app-smart-section [title]="'Profil Utilisateur'" [editMode]="false">
-    <ng-template #main>
-        <div class="space-y-4">
-            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                <div class="flex items-center gap-4 max-w-6xl w-6xl">
-                    <p-image [src]="user()?.imgUrl ?? 'assets/user.png'" alt="Image" [preview]="true" class="w-20 h-20 rounded-full" />
-                    <div>
-                        <h4 class="text-xl font-bold !mb-0">{{ user()?.firstName }} {{ user()?.lastName }}</h4>
-                        <p class="text-sm text-gray-500 !mb-0">{{ user()?.email }}</p>
-                    </div>
-                </div>
-
-                <div class="p-4 rounded-lg">
-                    <label class="text-sm font-semibold text-gray-600 dark:text-gray-50">Langages</label>
-                    <app-chips-list [chips]="programmingLanguages()"></app-chips-list>
+<div class="flex gap-2 flex-col w-full">
+    <div class="w-full lg:w-[300px]">
+        <div class="flex flex-col items-center w-full gap-4">
+            <div class="flex flex-col justify-center items-center gap-4 w-full">
+                <p-image [src]="user()?.imgUrl ?? 'assets/user.png'" alt="Image" [preview]="true" class="w-[250px] h-auto rounded-full" />
+                <div class="w-full">
+                    <h4 class="text-xl font-bold !mb-0">{{ user()?.firstName }} {{ user()?.lastName }}</h4>
+                    <p class="text-sm text-gray-500 !mb-0">{{ user()?.email }}</p>
                 </div>
             </div>
 
-            <div class="grid gap-4">
-                <label class="text-sm font-semibold text-gray-600">Description</label>
-                <p>{{ user()?.description }}</p>
+            <div class="w-full">
+                <label class="text-sm font-semibold text-gray-600 dark:text-gray-200">Langages</label>
+                <app-chips-list [chips]="programmingLanguages()"></app-chips-list>
+            </div>
+            <div class="w-full">
+                <label class="text-sm font-semibold text-gray-600 dark:text-gray-200">Description</label>
+                @if (user()?.description) {
+                    <p>{{ user()?.description }}</p>
+                } @else {
+                    <p>Pas de description fournie</p>
+                }
             </div>
         </div>
-    </ng-template>
-</app-smart-section>
+    </div>
+    <div class="w-full lg:flex-1"></div>
+</div>

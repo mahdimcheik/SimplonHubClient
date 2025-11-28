@@ -30,7 +30,7 @@ import { TooltipModule } from 'primeng/tooltip';
             [mode]="mode()"
             [url]="url()"
             [showCancelButton]="showCancelButton()"
-            [auto]="auto"
+            [auto]="auto()"
             [disabled]="disabled()"
             (onUpload)="onUpload($event)"
             (onSelect)="onSelect($event)"

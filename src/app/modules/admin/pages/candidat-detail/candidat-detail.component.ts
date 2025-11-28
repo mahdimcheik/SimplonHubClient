@@ -4,13 +4,12 @@ import { ActivatedRoute } from '@angular/router';
 import { Image } from 'primeng/image';
 import { TeacherResponseDTO } from '../../../../../api';
 import { ChipsListComponent } from '../../../../generic-components/chips-list/chips-list.component';
-import { SmartSectionComponent } from '../../../../generic-components/smart-section/smart-section.component';
 import { LanguagesMainService } from '../../../../shared/services/languages.store.service';
 import { UserMainService } from '../../../../shared/services/userMain.service';
 
 @Component({
     selector: 'app-candidat-detail',
-    imports: [SmartSectionComponent, Image, ChipsListComponent],
+    imports: [Image, ChipsListComponent],
     templateUrl: './candidat-detail.component.html',
     styleUrl: './candidat-detail.component.scss'
 })
