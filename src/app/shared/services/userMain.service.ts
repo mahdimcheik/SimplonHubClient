@@ -438,8 +438,8 @@ export class UserMainService {
     }
 
     // status account
-    getStatusAccount(CustomTableState: CustomTableState): Observable<ResponseDTO<StatusAccountDTO[]>> {
-        if (this.allAccountStatuses().length > 0) {
+    getStatusAccount(CustomTableState: CustomTableState, forceReload: boolean = false): Observable<ResponseDTO<StatusAccountDTO[]>> {
+        if (this.allAccountStatuses().length > 0 && !forceReload) {
             return of({
                 message: 'Account statuses fetched from cache',
                 status: 200,
@@ -510,8 +510,8 @@ export class UserMainService {
         );
     }
     // languages
-    getLanguages(CustomTableState: CustomTableState): Observable<ResponseDTO<LanguageResponseDTO[]>> {
-        if (this.allLanguages().length > 0) {
+    getLanguages(CustomTableState: CustomTableState, forceReload: boolean = false): Observable<ResponseDTO<LanguageResponseDTO[]>> {
+        if (this.allLanguages().length > 0 && !forceReload) {
             return of({
                 message: 'Languages fetched from cache',
                 status: 200,

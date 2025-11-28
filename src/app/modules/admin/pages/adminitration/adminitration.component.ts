@@ -93,7 +93,6 @@ export class AdminitrationComponent {
             // roles
             this.loadingRoles.set(true);
             const roles = await firstValueFrom(this.userService.getRoles(this.tableStateRoles()));
-            const statusesAccount = await firstValueFrom(this.userService.getStatusAccount(this.tableStateStatusesAccount()));
             this.roles.set(roles.data ?? []);
             this.totalRecordsRoles.set(roles.count ?? 0);
             this.loadingRoles.set(false);
@@ -159,7 +158,7 @@ export class AdminitrationComponent {
 
     async reloadLanguages() {
         this.loadingLanguages.set(true);
-        const languages = await firstValueFrom(this.userService.getLanguages(this.tableStateLanguages()));
+        const languages = await firstValueFrom(this.userService.getLanguages(this.tableStateLanguages(), true));
         this.languages.set(languages.data ?? []);
         this.totalRecordsLanguages.set(languages.count ?? 0);
         this.loadingLanguages.set(false);
@@ -173,7 +172,7 @@ export class AdminitrationComponent {
     }
     async reloadStatusesAccount() {
         this.loadingStatusesAccount.set(true);
-        const statusesAccount = await firstValueFrom(this.userService.getStatusAccount(this.tableStateStatusesAccount()));
+        const statusesAccount = await firstValueFrom(this.userService.getStatusAccount(this.tableStateStatusesAccount(), true));
         this.statusesAccount.set(statusesAccount.data ?? []);
         this.totalRecordsStatusesAccount.set(statusesAccount.count ?? 0);
         this.loadingStatusesAccount.set(false);
