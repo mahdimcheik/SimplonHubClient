@@ -1211,6 +1211,7 @@ export interface TeacherResponseDTO {
     imgUrl?: string | null;
     status?: StatusAccountDTO;
     gender?: GenderDTO;
+    createdAt?: Date;
     roles: RoleAppResponseDTO[];
     languages?: LanguageResponseDTO[];
     programmingLanguages?: ProgrammingLanguageResponseDTO[];
@@ -1416,6 +1417,7 @@ export interface UserResponseDTO {
     imgUrl?: string | null;
     status?: StatusAccountDTO;
     gender?: GenderDTO;
+    createdAt?: Date;
     roles: RoleAppResponseDTO[];
     languages?: LanguageResponseDTO[];
     programmingLanguages?: ProgrammingLanguageResponseDTO[];

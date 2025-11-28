@@ -17,6 +17,7 @@ import { PasswordResetSuccessfullyComponent } from './app/modules/auth/pages/pas
 
 // Landing components
 import { AdminitrationComponent } from './app/modules/admin/pages/adminitration/adminitration.component';
+import { CandidatDetailComponent } from './app/modules/admin/pages/candidat-detail/candidat-detail.component';
 import { RequestListComponent } from './app/modules/admin/pages/request-list/request-list.component';
 import { UsersListComponent } from './app/modules/admin/pages/users-list/users-list.component';
 import { CalendarStudentComponent } from './app/modules/student/pages/calendar-student/calendar-student.component';
@@ -119,7 +120,8 @@ export const appRoutes: Routes = [
             { path: SETTINGS_PATH, component: SettingsComponent },
             { path: 'users-list', component: UsersListComponent },
             { path: 'adminitration', component: AdminitrationComponent },
-            { path: 'request-list', component: RequestListComponent }
+            { path: 'request-list', component: RequestListComponent },
+            { path: 'request-list/:id', component: CandidatDetailComponent }
         ]
     },
     {
