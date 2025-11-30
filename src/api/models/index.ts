@@ -368,6 +368,24 @@ export interface CursusUpdateDTO {
     categoryIds?: string[];
 }
 
+export interface Document {
+    id: string;
+    createdAt: Date;
+    updatedAt?: Date | null;
+    archivedAt?: Date | null;
+    name?: string | null;
+    originalName?: string | null;
+    note?: string | null;
+    size?: number;
+    typeId?: string;
+    type?: TypeDocument;
+    extension?: string | null;
+    ownerId?: string;
+    owner?: UserApp;
+    adminId?: string;
+    admin?: UserApp;
+}
+
 export interface Experience {
     id: string;
     createdAt: Date;
@@ -1159,10 +1177,10 @@ export interface StatusBooking {
     createdAt: Date;
     updatedAt?: Date | null;
     archivedAt?: Date | null;
-    name?: string | null;
-    displayName?: string | null;
-    color?: string | null;
+    name: string;
+    color: string;
     icon?: string | null;
+    displayName?: string | null;
 }
 
 export interface StatusBookingDTO {
@@ -1224,6 +1242,16 @@ export interface TeacherResponseDTOListResponseDTO {
     status: number;
     data?: TeacherResponseDTO[];
     count?: number | null;
+}
+
+export interface TypeDocument {
+    id: string;
+    createdAt: Date;
+    updatedAt?: Date | null;
+    archivedAt?: Date | null;
+    name: string;
+    color: string;
+    icon?: string | null;
 }
 
 export interface TypeSlot {
@@ -1328,6 +1356,7 @@ export interface UserApp {
     userRoles?: GuidIdentityUserRole[];
     favoriteTeachers?: Favorite[];
     fanStudents?: Favorite[];
+    documents?: Document[];
 }
 
 export interface UserAppDynamicFilters {
