@@ -9,7 +9,7 @@
             <button pButton class="p-button-sm" outlined (click)="onDeleteClick.emit()" severity="danger">
                 <i [class]="deleteButtonIcon()" pButtonIcon></i>
             </button>
-            <button pButton class="p-button-sm" (click)="onEditClick.emit()">
+            <button pButton outlined class="p-button-sm" (click)="onEditClick.emit()" severity="primary">
                 <i [class]="editButtonIcon()" pButtonIcon></i>
             </button>
         }

@@ -7,9 +7,9 @@
                 <ng-container [ngTemplateOutlet]="rightContent()"></ng-container>
             }
             @if (editMode()) {
-                <button pButton class="p-button-sm" (click)="onAddClick.emit()">
+                <p-button variant="text" class="p-button-sm" (click)="onAddClick.emit()">
                     <i [class]="buttonIcon()" pButtonIcon></i>
-                </button>
+                </p-button>
             }
         </div>
     </header>

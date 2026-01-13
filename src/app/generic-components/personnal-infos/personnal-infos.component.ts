@@ -95,12 +95,32 @@ export class PersonnalInfosComponent implements OnInit {
                             order: 3
                         },
                         {
+                            id: 'languagesIds',
+                            name: 'languagesIds',
+                            label: 'Langues',
+                            type: 'multiselect',
+                            fullWidth: true,
+                            options: languagesOptions.map((lang) => ({ label: lang.name, value: lang.id })),
+                            value: this.user().languages?.map((lang) => lang.id) ?? [],
+                            order: 4
+                        },
+                        {
+                            id: 'programmingLanguagesIds',
+                            name: 'programmingLanguagesIds',
+                            label: 'Langages de programmation',
+                            type: 'multiselect',
+                            fullWidth: true,
+                            options: programmingLanguagesOptions.map((lang) => ({ label: lang.name, value: lang.id })),
+                            value: this.user().programmingLanguages?.map((lang) => lang.id) ?? [],
+                            order: 5
+                        },
+                        {
                             id: 'title',
                             name: 'title',
                             label: 'Titre',
                             type: 'text',
                             placeholder: 'Titre',
-                            order: 5,
+                            order: 6,
                             value: this.user().title,
                             fullWidth: true
                         },
@@ -111,7 +131,7 @@ export class PersonnalInfosComponent implements OnInit {
                             type: 'textarea',
                             placeholder: 'Description',
                             value: this.user().description,
-                            order: 6
+                            order: 7
                         },
                         {
                             id: 'phoneNumber',
@@ -120,7 +140,7 @@ export class PersonnalInfosComponent implements OnInit {
                             type: 'text',
                             placeholder: 'Numéro de téléphone',
                             value: this.user().phoneNumber ?? '',
-                            order: 7,
+                            order: 8,
                             fullWidth: true
                         }
                     ]
