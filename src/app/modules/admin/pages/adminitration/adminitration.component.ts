@@ -1,16 +1,15 @@
 import { Component, computed, effect, inject, model, signal, Type } from '@angular/core';
-import { ActionButtonRendererComponent, CustomTableState, DynamicColDef, ICellRendererAngularComp, INITIAL_STATE, SmartGridComponent } from '../../../../generic-components/smart-grid';
-import { SmartSectionComponent } from '../../../../generic-components/smart-section/smart-section.component';
-import { SmartElementComponent } from '../../../../generic-components/smart-element/smart-element.component';
-import { UserMainService } from '../../../../shared/services/userMain.service';
-import { AdminMainService } from '../../../../shared/services/admin-main.service';
-import { LanguageResponseDTO, RoleAppResponseDTO, StatusAccountDTO, StatusAccountResponseDTO } from '../../../../../api/models';
 import { ButtonModule } from 'primeng/button';
 import { firstValueFrom } from 'rxjs';
-import { ColorGridComponent } from '../../../../generic-components/smart-grid/color-grid.component';
+import { LanguageResponseDTO, RoleAppResponseDTO, StatusAccountDTO, StatusAccountResponseDTO } from '../../../../../api/models';
 import { ModalCreateEditLanguageComponent } from '../../../../generic-components/modal-create-edit-language/modal-create-edit-language';
-import { ModalEditRoleComponent } from '../../../../generic-components/modal-edit-role/modal-edit-role';
 import { ModalCreateEditStatusComponent } from '../../../../generic-components/modal-create-edit-status/modal-create-edit-status';
+import { ModalEditRoleComponent } from '../../../../generic-components/modal-edit-role/modal-edit-role';
+import { ActionButtonRendererComponent, CustomTableState, DynamicColDef, ICellRendererAngularComp, INITIAL_STATE, SmartGridComponent } from '../../../../generic-components/smart-grid';
+import { ColorGridComponent } from '../../../../generic-components/smart-grid/color-grid.component';
+import { SmartSectionComponent } from '../../../../generic-components/smart-section/smart-section.component';
+import { AdminMainService } from '../../../../shared/services/admin-main.service';
+import { UserMainService } from '../../../../shared/services/userMain.service';
 
 @Component({
     selector: 'app-adminitration',
@@ -59,8 +58,8 @@ export class AdminitrationComponent {
         return [
             { field: 'name', header: 'Nom', type: 'text' },
             { field: 'color', header: 'Couleur', type: 'array', cellRenderer: 'color', cellRendererParams: { editMode: this.editModeLanguages() } },
-            { field: 'createdAt', header: 'Créé le', type: 'date', valueFormatter: (data: any) => new Date(data).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' }) },
-            { field: 'updatedAt', header: 'Mis à jour le', type: 'date', valueFormatter: (data: any) => (data ? new Date(data).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' }) : 'Pas de date') },
+            { field: 'createdAt', header: 'Créé le', type: 'date', valueFormatter: (data: any) => new Date(data.createdAt).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' }) },
+            { field: 'updatedAt', header: 'Mis à jour le', type: 'date', valueFormatter: (data: any) => (data ? new Date(data.updatedAt).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' }) : 'Pas de date') },
             { field: 'id', header: 'Actions', type: 'text', cellRenderer: 'Default', cellRendererParams: { showEdit: true, showDelete: false, onEdit: this.onEditClickLanguage.bind(this) } }
         ];
     });
@@ -70,8 +69,8 @@ export class AdminitrationComponent {
         return [
             { field: 'name', header: 'Nom', type: 'text' },
             { field: 'color', header: 'Couleur', type: 'array', cellRenderer: 'color', cellRendererParams: { editMode: this.editModeLanguages() } },
-            { field: 'createdAt', header: 'Créé le', type: 'date', valueFormatter: (data: any) => new Date(data).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' }) },
-            { field: 'updatedAt', header: 'Mis à jour le', type: 'date', valueFormatter: (data: any) => (data ? new Date(data).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' }) : 'Pas de date') },
+            { field: 'createdAt', header: 'Créé le', type: 'date', valueFormatter: (data: any) => new Date(data.createdAt).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' }) },
+            { field: 'updatedAt', header: 'Mis à jour le', type: 'date', valueFormatter: (data: any) => (data ? new Date(data.updatedAt).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' }) : 'Pas de date') },
             { field: 'id', header: 'Actions', type: 'text', cellRenderer: 'Default', cellRendererParams: { showEdit: true, showDelete: false, onEdit: this.onEditClickRole.bind(this) } }
         ];
     });
@@ -82,8 +81,8 @@ export class AdminitrationComponent {
             { field: 'name', header: 'Nom', type: 'text' },
             { field: 'color', header: 'Couleur', type: 'array', cellRenderer: 'color', cellRendererParams: { editMode: this.showEditModalStatus() } },
 
-            { field: 'createdAt', header: 'Créé le', type: 'date', valueFormatter: (data: any) => new Date(data).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' }) },
-            { field: 'updatedAt', header: 'Mis à jour le', type: 'date', valueFormatter: (data: any) => (data ? new Date(data).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' }) : 'Pas de date') },
+            { field: 'createdAt', header: 'Créé le', type: 'date', valueFormatter: (data: any) => new Date(data.createdAt).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' }) },
+            { field: 'updatedAt', header: 'Mis à jour le', type: 'date', valueFormatter: (data: any) => (data ? new Date(data.updatedAt).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' }) : 'Pas de date') },
             { field: 'id', header: 'Actions', type: 'text', cellRenderer: 'Default', cellRendererParams: { showEdit: true, showDelete: false, onEdit: this.onEditClickStatus.bind(this) } }
         ];
     });
@@ -94,7 +93,6 @@ export class AdminitrationComponent {
             // roles
             this.loadingRoles.set(true);
             const roles = await firstValueFrom(this.userService.getRoles(this.tableStateRoles()));
-            const statusesAccount = await firstValueFrom(this.userService.getStatusAccount(this.tableStateStatusesAccount()));
             this.roles.set(roles.data ?? []);
             this.totalRecordsRoles.set(roles.count ?? 0);
             this.loadingRoles.set(false);
@@ -126,14 +124,11 @@ export class AdminitrationComponent {
         this.showEditModalLanguage.set(true);
     }
     onEditClickLanguage(language: LanguageResponseDTO) {
-        // edition mode
-        console.log('onEditClickLanguage', language);
         this.selectedLanguage.set(language);
         this.showEditModalLanguage.set(true);
     }
 
     onEditClickRole(role: RoleAppResponseDTO) {
-        console.log('onEditClickRole', role);
         this.selectedRole.set(role);
         this.showEditModalRole.set(true);
     }
@@ -145,10 +140,6 @@ export class AdminitrationComponent {
     onEditClickStatus(Status: StatusAccountResponseDTO) {
         this.selectedStatus.set(Status);
         this.showEditModalStatus.set(true);
-    }
-
-    onDeleteClickRole(role: RoleAppResponseDTO) {
-        console.log('onDeleteClickRole', role);
     }
 
     // submits modals
@@ -167,7 +158,7 @@ export class AdminitrationComponent {
 
     async reloadLanguages() {
         this.loadingLanguages.set(true);
-        const languages = await firstValueFrom(this.userService.getLanguages(this.tableStateLanguages()));
+        const languages = await firstValueFrom(this.userService.getLanguages(this.tableStateLanguages(), true));
         this.languages.set(languages.data ?? []);
         this.totalRecordsLanguages.set(languages.count ?? 0);
         this.loadingLanguages.set(false);
@@ -181,7 +172,7 @@ export class AdminitrationComponent {
     }
     async reloadStatusesAccount() {
         this.loadingStatusesAccount.set(true);
-        const statusesAccount = await firstValueFrom(this.userService.getStatusAccount(this.tableStateStatusesAccount()));
+        const statusesAccount = await firstValueFrom(this.userService.getStatusAccount(this.tableStateStatusesAccount(), true));
         this.statusesAccount.set(statusesAccount.data ?? []);
         this.totalRecordsStatusesAccount.set(statusesAccount.count ?? 0);
         this.loadingStatusesAccount.set(false);

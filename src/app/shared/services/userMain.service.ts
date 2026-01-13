@@ -9,6 +9,8 @@ import { LocalstorageService } from './localstorage.service';
 // Generated services and models
 import {
     AuthService,
+    FileUrl,
+    FileUrlResponseDTO,
     ForgotPasswordInput,
     LanguageResponseDTO,
     LanguageResponseDTOListResponseDTO,
@@ -96,7 +98,8 @@ export class UserMainService {
                     { label: 'Réservations', icon: 'pi pi-fw pi-list', routerLink: ['/dashboard/reservation/list'] },
                     { label: 'Calendrier', icon: 'pi pi-fw pi-calendar', routerLink: ['/dashboard/reservation/calendar-for-teacher'] },
                     { label: 'Utilisateurs', icon: 'pi pi-users', routerLink: ['/dashboard/students-list'] },
-                    { label: 'Profil', icon: 'pi pi-fw pi-calendar', routerLink: ['/dashboard/profile/me'] }
+                    { label: 'Profil', icon: 'pi pi-fw pi-calendar', routerLink: ['/dashboard/profile/me'] },
+                    { label: 'Demandes', icon: 'pi pi-cog', routerLink: ['/admin/request-list'] }
                 ]);
                 this.landingNavItems.set([
                     { label: 'Accueil', icon: 'pi pi-home', routerLink: ['/'] },
@@ -107,7 +110,8 @@ export class UserMainService {
                 this.sideNavItems.set([
                     { label: 'Tableau de bord', icon: 'pi pi-fw pi-home', routerLink: ['/admin'] },
                     { label: 'Utilisateurs', icon: 'pi pi-users', routerLink: ['/admin/users-list'] },
-                    { label: 'Paramètres', icon: 'pi pi-cog', routerLink: ['/admin/adminitration'] }
+                    { label: 'Paramètres', icon: 'pi pi-cog', routerLink: ['/admin/adminitration'] },
+                    { label: 'Demandes', icon: 'pi pi-cog', routerLink: ['/admin/request-list'] }
                 ]);
                 this.landingNavItems.set([
                     { label: 'Accueil', icon: 'pi pi-home', routerLink: ['/'] },
@@ -151,7 +155,6 @@ export class UserMainService {
             }
 
             const untrackedUser = untracked(this.userConnected);
-            console.log(untrackedUser.roles);
 
             if (untrackedUser.email) {
                 this.authNavItems.set([
@@ -401,9 +404,40 @@ export class UserMainService {
         );
     }
 
+    updateAvatar(file: File): Observable<FileUrlResponseDTO> {
+        if (!file) {
+            return of({
+                message: 'No file provided',
+                status: 400,
+                data: {} as FileUrl
+            });
+        }
+
+        // Create FormData manually to ensure proper file parameter name
+        const formData = new FormData();
+        formData.append('file', file, file.name);
+
+        // Use HttpClient directly to have full control over the request
+        return this.authService.authUploadAvatarPost(file).pipe(
+            tap((res) => {
+                if (res.data) {
+                    this.userConnected.update((user) => ({ ...user, profilePicture: res.data?.url }));
+                }
+            }),
+            catchError((error) => {
+                console.error('Error uploading avatar:', error);
+                return of({
+                    message: error.message || 'Error uploading avatar',
+                    status: error.status || 500,
+                    data: {} as FileUrl
+                });
+            })
+        );
+    }
+
     // status account
-    getStatusAccount(CustomTableState: CustomTableState): Observable<ResponseDTO<StatusAccountDTO[]>> {
-        if (this.allAccountStatuses().length > 0) {
+    getStatusAccount(CustomTableState: CustomTableState, forceReload: boolean = false): Observable<ResponseDTO<StatusAccountDTO[]>> {
+        if (this.allAccountStatuses().length > 0 && !forceReload) {
             return of({
                 message: 'Account statuses fetched from cache',
                 status: 200,
@@ -474,8 +508,8 @@ export class UserMainService {
         );
     }
     // languages
-    getLanguages(CustomTableState: CustomTableState): Observable<ResponseDTO<LanguageResponseDTO[]>> {
-        if (this.allLanguages().length > 0) {
+    getLanguages(CustomTableState: CustomTableState, forceReload: boolean = false): Observable<ResponseDTO<LanguageResponseDTO[]>> {
+        if (this.allLanguages().length > 0 && !forceReload) {
             return of({
                 message: 'Languages fetched from cache',
                 status: 200,

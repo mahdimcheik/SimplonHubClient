@@ -5,6 +5,7 @@
     "ng": "ng serve --ssl true --ssl-key key.pem --ssl-cert cert.pem --port 4201",
     "start": "ng serve",
     "build": "ng build",
+    "dev": "ng serve --ssl true --ssl-key key.pem --ssl-cert cert.pem --port 4201",
     "build:prod": "ng build --configuration production",
     "watch": "ng build --watch --configuration development",
     "format": "prettier --write \"**/*.{js,mjs,ts,mts,d.ts,html}\" --cache",

@@ -368,6 +368,24 @@ export interface CursusUpdateDTO {
     categoryIds?: string[];
 }
 
+export interface Document {
+    id: string;
+    createdAt: Date;
+    updatedAt?: Date | null;
+    archivedAt?: Date | null;
+    name?: string | null;
+    originalName?: string | null;
+    note?: string | null;
+    size?: number;
+    typeId?: string;
+    type?: TypeDocument;
+    extension?: string | null;
+    ownerId?: string;
+    owner?: UserApp;
+    adminId?: string;
+    admin?: UserApp;
+}
+
 export interface Experience {
     id: string;
     createdAt: Date;
@@ -515,6 +533,17 @@ export interface FavoriteResponseDTOResponseDTO {
 export interface FavoriteUpdateDTO {
     /** Note ou commentaire */
     note?: string | null;
+}
+
+export interface FileUrl {
+    url?: string | null;
+}
+
+export interface FileUrlResponseDTO {
+    message: string;
+    status: number;
+    data?: FileUrl;
+    count?: number | null;
 }
 
 export interface FilterItem {
@@ -1148,10 +1177,10 @@ export interface StatusBooking {
     createdAt: Date;
     updatedAt?: Date | null;
     archivedAt?: Date | null;
-    name?: string | null;
-    displayName?: string | null;
-    color?: string | null;
+    name: string;
+    color: string;
     icon?: string | null;
+    displayName?: string | null;
 }
 
 export interface StatusBookingDTO {
@@ -1197,8 +1226,10 @@ export interface TeacherResponseDTO {
     title?: string | null;
     description?: string | null;
     phoneNumber?: string | null;
+    imgUrl?: string | null;
     status?: StatusAccountDTO;
     gender?: GenderDTO;
+    createdAt?: Date;
     roles: RoleAppResponseDTO[];
     languages?: LanguageResponseDTO[];
     programmingLanguages?: ProgrammingLanguageResponseDTO[];
@@ -1211,6 +1242,16 @@ export interface TeacherResponseDTOListResponseDTO {
     status: number;
     data?: TeacherResponseDTO[];
     count?: number | null;
+}
+
+export interface TypeDocument {
+    id: string;
+    createdAt: Date;
+    updatedAt?: Date | null;
+    archivedAt?: Date | null;
+    name: string;
+    color: string;
+    icon?: string | null;
 }
 
 export interface TypeSlot {
@@ -1296,6 +1337,7 @@ export interface UserApp {
     privacyPolicyConsent?: boolean;
     title?: string | null;
     description?: string | null;
+    imgUrl?: string | null;
     archivedAt?: Date | null;
     updatedAt?: Date | null;
     createdAt?: Date;
@@ -1314,6 +1356,7 @@ export interface UserApp {
     userRoles?: GuidIdentityUserRole[];
     favoriteTeachers?: Favorite[];
     fanStudents?: Favorite[];
+    documents?: Document[];
 }
 
 export interface UserAppDynamicFilters {
@@ -1400,8 +1443,10 @@ export interface UserResponseDTO {
     title?: string | null;
     description?: string | null;
     phoneNumber?: string | null;
+    imgUrl?: string | null;
     status?: StatusAccountDTO;
     gender?: GenderDTO;
+    createdAt?: Date;
     roles: RoleAppResponseDTO[];
     languages?: LanguageResponseDTO[];
     programmingLanguages?: ProgrammingLanguageResponseDTO[];
