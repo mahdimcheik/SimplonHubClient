@@ -53,7 +53,7 @@ export class ReservationListComponent {
                 type: 'text',
                 sortField: 'teacher',
                 valueFormatter: (data: any) => {
-                    const teacher = data.teacher as TeacherResponseDTO;
+                    const teacher = data.slot.teacher as TeacherResponseDTO;
                     return teacher ? `${teacher.firstName} ${teacher.lastName}` : '';
                 },
                 filterable: true,
