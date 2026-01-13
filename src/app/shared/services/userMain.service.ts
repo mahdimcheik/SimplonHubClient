@@ -155,7 +155,6 @@ export class UserMainService {
             }
 
             const untrackedUser = untracked(this.userConnected);
-            console.log(untrackedUser.roles);
 
             if (untrackedUser.email) {
                 this.authNavItems.set([
@@ -413,7 +412,6 @@ export class UserMainService {
                 data: {} as FileUrl
             });
         }
-        console.log(file);
 
         // Create FormData manually to ensure proper file parameter name
         const formData = new FormData();

@@ -53,7 +53,7 @@ export class ReservationListByTeacherComponent {
                 type: 'text',
                 sortField: 'student',
                 valueFormatter: (data: any) => {
-                    const student = data as TeacherResponseDTO;
+                    const student = data.student as TeacherResponseDTO;
                     return student ? `${student.firstName} ${student.lastName}` : '';
                 },
                 filterable: true,
@@ -79,7 +79,7 @@ export class ReservationListByTeacherComponent {
                 header: 'Date de début',
                 type: 'date',
                 valueFormatter: (data: any) => {
-                    const date = new Date(data.dateFrom);
+                    const date = new Date(data.slot.dateFrom);
                     return this.datePipe.transform(date, 'dd/MM/yyyy HH:mm') ?? 'pas défini';
                 },
                 filterable: true,
@@ -91,8 +91,8 @@ export class ReservationListByTeacherComponent {
                 header: 'Durée en heures',
                 type: 'text',
                 valueFormatter: (data: any) => {
-                    const date = new Date(data.dateTo);
-                    const startTime = new Date(data.dateFrom);
+                    const date = new Date(data.slot.dateTo);
+                    const startTime = new Date(data.slot.dateFrom);
                     return this.durationPipe.transform(date, startTime) ?? 'pas défini';
                 }
             }

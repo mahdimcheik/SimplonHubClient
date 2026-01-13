@@ -79,7 +79,7 @@ export class ReservationListComponent {
                 header: 'Date de début',
                 type: 'date',
                 valueFormatter: (data: any) => {
-                    const date = new Date(data.dateFrom);
+                    const date = new Date(data.slot.dateFrom);
                     return this.datePipe.transform(date, 'dd/MM/yyyy HH:mm') ?? 'pas défini';
                 },
                 filterable: true,
@@ -91,8 +91,8 @@ export class ReservationListComponent {
                 header: 'Durée en heures',
                 type: 'text',
                 valueFormatter: (data: any) => {
-                    const date = new Date(data.dateTo);
-                    const startTime = new Date(data.dateFrom);
+                    const date = new Date(data.slot.dateTo);
+                    const startTime = new Date(data.slot.dateFrom);
                     return this.durationPipe.transform(date, startTime) ?? 'pas défini';
                 }
             }
