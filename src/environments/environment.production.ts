@@ -1,3 +1,3 @@
 export const environment = {
-    API_URL: 'https://api.just-add.click'
+    API_URL: 'https://simplonhub-api.bonprof.fr'
 };
