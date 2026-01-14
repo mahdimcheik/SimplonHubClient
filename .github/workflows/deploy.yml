@@ -11,7 +11,7 @@ jobs:
     steps:
       - name: Set version
         id: set_version
-        run: echo "FRONT_IMAGE_VERSION=prod" >> $GITHUB_ENV
+        run: echo "FRONT_IMAGE_VERSION=0.1" >> $GITHUB_ENV
 
       - name: Checkout the branch
         uses: actions/checkout@v4
