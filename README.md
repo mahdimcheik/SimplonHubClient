@@ -102,3 +102,15 @@ build the project => npm run build --prod
 add android => npx cap add android
 sync => npx cap sync android
 run => npx cap open android
+
+
+# VPS
+-   pour me connecter sur mon proxy : 
+ssh -L 8181:127.0.0.1:81  user@ip
+où 
+.   8181 est le port sur le post de travail
+.   81 est le port sur le vps
+
+-   le port 9000 est le port utilisé pour upload/download sur minio
+-   le port 9090 pour consultation manuelle 
+
